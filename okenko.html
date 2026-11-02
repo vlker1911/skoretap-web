@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skoretap — zápasy klubu</title>
+<!--
+  Okénko na webu klubu (rozhodnuti/043, kapitola 2).
+  Klub vloží:
+    <iframe src="https://skoretap.com/okenko.html?klub=<id>" style="width:100%;height:520px;border:0"></iframe>
+  Volby v adrese: &lang=en (anglicky), &vzhled=svetly (světlé pozadí).
+  Data jsou ze serverové funkce `okenko` — jen zápasy hráčů, kteří to
+  klubu povolili; jména jen se souhlasem. Stránka nic neukládá.
+-->
+<style>
+  :root { --pozadi: #14141A; --karta: rgba(255,255,255,.06); --text: #FFFFFF; --tlumeny: rgba(255,255,255,.6); --micek: #C8F000; --cara: rgba(255,255,255,.1); }
+  :root.svetly { --pozadi: #FFFFFF; --karta: #F2F2F5; --text: #14141A; --tlumeny: rgba(20,20,26,.6); --micek: #6E8A00; --cara: rgba(20,20,26,.1); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 15px/1.4 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { padding: 12px; }
+  .hlava { display: flex; align-items: baseline; justify-content: space-between; margin: 0 4px 10px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 12px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--tlumeny); margin: 14px 4px 6px; }
+  .zapas { background: var(--karta); border-radius: 14px; padding: 8px 12px; margin-bottom: 8px; }
+  .radek { display: flex; align-items: center; gap: 8px; padding: 4px 0; }
+  .radek + .radek { border-top: 1px solid var(--cara); }
+  .proužek { width: 6px; align-self: stretch; border-radius: 3px; flex: none; }
+  .jmena { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
+  .micek { width: 9px; height: 9px; border-radius: 50%; background: var(--micek); flex: none; }
+  .cisla { display: flex; gap: 10px; font-variant-numeric: tabular-nums; font-weight: 700; }
+  .cisla span { min-width: 1.2em; text-align: center; }
+  .cisla .set { color: var(--tlumeny); font-weight: 600; }
+  .cisla .vyhral { color: var(--text); }
+  .cisla .body { color: var(--micek); min-width: 2.2em; }
+  .pata { color: var(--tlumeny); font-size: 12px; margin-top: 2px; }
+  .ziveTecka { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: #FF3B2F; margin-right: 6px; vertical-align: middle; }
+  .prazdno { color: var(--tlumeny); margin: 24px 4px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="hlava"><span class="znacka">SKORETAP</span><span class="pata" id="obnoveno"></span></div>
+  <div id="obsah"><p class="prazdno" id="nacitam"></p></div>
+</main>
+<script>
+  var FUNKCE = 'https://pvnajakrgtbzbuqxjecx.supabase.co/functions/v1/okenko';
+  var p = new URLSearchParams(location.search);
+  var klub = p.get('klub') || '';
+  var en = p.get('lang') === 'en';
+  if (p.get('vzhled') === 'svetly') document.documentElement.classList.add('svetly');
+  document.documentElement.lang = en ? 'en' : 'cs';
+
+  var T = en ? {
+    zive: 'Live', dohrane: 'Finished', nic: 'No matches right now.', spatne: 'The club address in the link is wrong.',
+    nacitam: 'Loading…', chyba: 'Could not load. Trying again…', pred: 'min ago', ted: 'just now',
+    barvy: { MODRA: 'Blue', CERVENA: 'Red', ZELENA: 'Green', ZLUTA: 'Yellow', BILA: 'White', CERNA: 'Black' }
+  } : {
+    zive: 'Živě', dohrane: 'Dohrané', nic: 'Teď se nic nehraje.', spatne: 'Adresa klubu v odkazu není správně.',
+    nacitam: 'Načítám…', chyba: 'Nepodařilo se načíst. Zkouším znovu…', pred: 'min', ted: 'teď',
+    barvy: { MODRA: 'Modří', CERVENA: 'Červení', ZELENA: 'Zelení', ZLUTA: 'Žlutí', BILA: 'Bílí', CERNA: 'Černí' }
+  };
+  // Stejné barvy jako v aplikaci (Motiv.kt, barvaTymu).
+  var BARVY = { MODRA: '#003D7C', CERVENA: '#E30613', ZELENA: '#1E7A3C', ZLUTA: '#E0B400', BILA: '#E9E9EE', CERNA: '#3A3A46' };
+
+  function el(tag, trida, text) {
+    var e = document.createElement(tag);
+    if (trida) e.className = trida;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function radek(z, i) {
+    var t = (z.tymy || [])[i] || {};
+    var r = el('div', 'radek');
+    var pr = el('span', 'proužek'); pr.style.background = BARVY[t.barva] || '#888';
+    r.appendChild(pr);
+    // Jména jen když je server pustil (souhlas hráče); jinak barva týmu.
+    var jmena = (t.hraci && t.hraci.length) ? t.hraci.join(' / ') : (T.barvy[t.barva] || '?');
+    r.appendChild(el('span', 'jmena', jmena));
+    if (!z.dohrano && z.podava === i) r.appendChild(el('span', 'micek'));
+    var c = el('span', 'cisla');
+    (z.sety || []).forEach(function (s) {
+      c.appendChild(el('span', 'set' + (s[i] > s[1 - i] ? ' vyhral' : ''), String(s[i])));
+    });
+    if (!z.dohrano) {
+      c.appendChild(el('span', '', String((z.gemy || [0, 0])[i])));
+      c.appendChild(el('span', 'body', String((z.body || ['', ''])[i])));
+    }
+    r.appendChild(c);
+    return r;
+  }
+
+  function karta(z) {
+    var k = el('div', 'zapas');
+    k.appendChild(radek(z, 0));
+    k.appendChild(radek(z, 1));
+    var min = Math.round((Date.now() - Date.parse(z.upraven)) / 60000);
+    var pata = el('div', 'pata');
+    if (!z.dohrano) pata.appendChild(el('span', 'ziveTecka'));
+    pata.appendChild(document.createTextNode(min < 1 ? T.ted : (en ? min + ' ' + T.pred : 'před ' + min + ' ' + T.pred)));
+    k.appendChild(pata);
+    return k;
+  }
+
+  function vykresli(zapasy) {
+    var o = document.getElementById('obsah');
+    o.textContent = '';
+    var zive = zapasy.filter(function (z) { return !z.dohrano; });
+    var dohrane = zapasy.filter(function (z) { return z.dohrano; });
+    if (!zapasy.length) { o.appendChild(el('p', 'prazdno', T.nic)); return; }
+    if (zive.length) { o.appendChild(el('h2', '', T.zive)); zive.forEach(function (z) { o.appendChild(karta(z)); }); }
+    if (dohrane.length) { o.appendChild(el('h2', '', T.dohrane)); dohrane.forEach(function (z) { o.appendChild(karta(z)); }); }
+  }
+
+  function nacti() {
+    fetch(FUNKCE + '?klub=' + encodeURIComponent(klub))
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (d) {
+        vykresli(d.zapasy || []);
+        document.getElementById('obnoveno').textContent = new Date().toLocaleTimeString(en ? 'en-GB' : 'cs-CZ', { hour: '2-digit', minute: '2-digit' });
+      })
+      .catch(function () {
+        var o = document.getElementById('obsah');
+        if (!o.querySelector('.zapas')) { o.textContent = ''; o.appendChild(el('p', 'prazdno', T.chyba)); }
+      });
+  }
+
+  if (!/^[a-z0-9_]{2,40}$/.test(klub)) {
+    document.getElementById('nacitam').textContent = T.spatne;
+  } else {
+    document.getElementById('nacitam').textContent = T.nacitam;
+    nacti();
+    // Živé skóre: každých 10 vteřin. Server odpověď krátce drží (5 s).
+    setInterval(nacti, 10000);
+  }
+</script>
+</body>
+</html>

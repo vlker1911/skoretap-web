@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Skoretap — televize v klubu</title>
+<!--
+  Televize v klubu (rozhodnuti/043, kapitola 4).
+  Klub otevře na televizi: https://skoretap.com/tv.html?klub=<id>
+  Volba v adrese: &lang=en (anglicky).
+  Data jsou tatáž jako v okénku (serverová funkce `okenko`): jen zápasy hráčů,
+  kteří to klubu povolili, jména jen se souhlasem. Stránka nic neukládá.
+
+  Skript je napsaný postaru a velikosti počítá sám, protože prohlížeče
+  v televizích bývají staré. Čte se to z pěti metrů, ovládat se to nedá.
+-->
+<style>
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; overflow: hidden; }
+  body { display: flex; flex-direction: column; background: #14141A; color: #FFFFFF; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .hlava { flex: none; display: flex; align-items: center; justify-content: space-between; padding: 1.6vh 2.4vw 0; font-size: 3.4vh; font-weight: 700; }
+  .znacka { color: #C8F000; font-weight: 800; letter-spacing: .08em; }
+  .nadpis { color: rgba(255,255,255,.65); }
+  .hodiny { color: rgba(255,255,255,.65); font-variant-numeric: tabular-nums; }
+  .vypadek { flex: none; margin: 1.2vh 2.4vw 0; padding: 1vh 1.6vw; border-radius: 1vh; background: #E30613; font-size: 3vh; font-weight: 700; }
+  #obsah { flex: 1; display: flex; flex-wrap: wrap; align-content: stretch; min-height: 0; padding: 1vh 1.8vw 1.6vh; }
+  .misto { padding: .8vh .6vw; }
+  .zapas { display: flex; flex-direction: column; height: 100%; padding: 0 .5em; border-radius: .25em; background: rgba(255,255,255,.07); overflow: hidden; }
+  .radek { flex: 1; display: flex; align-items: center; min-height: 0; }
+  .radek + .radek { border-top: 2px solid rgba(255,255,255,.12); }
+  .prouzek { flex: none; width: .22em; height: 66%; margin-right: .3em; border-radius: .08em; }
+  .jmena { flex: 1; min-width: 0; font-size: .56em; font-weight: 600; line-height: 1.2; }
+  .jmena div { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .micek { flex: none; width: .28em; height: .28em; margin: 0 .25em; border-radius: 50%; background: #C8F000; }
+  .misto-micku { flex: none; width: .78em; }
+  .cislo { flex: none; width: 1.25em; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .set { font-weight: 600; color: rgba(255,255,255,.5); }
+  .set.vyhral { color: rgba(255,255,255,.9); }
+  .body { flex: none; width: 2.1em; margin-left: .2em; padding: .04em 0; border-radius: .14em; background: #C8F000; color: #14141A; text-align: center; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .pata { flex: none; padding-bottom: .22em; font-size: .3em; color: rgba(255,255,255,.6); }
+  .ziveTecka { display: inline-block; width: .7em; height: .7em; margin-right: .4em; border-radius: 50%; background: #FF3B2F; }
+  .prazdno { margin: auto; font-size: 6vh; color: rgba(255,255,255,.6); text-align: center; }
+  .strana { flex: none; position: fixed; right: 2.4vw; bottom: .6vh; font-size: 2.2vh; color: rgba(255,255,255,.5); }
+</style>
+</head>
+<body>
+<div class="hlava"><span class="znacka">SKORETAP</span><span class="nadpis" id="nadpis"></span><span class="hodiny" id="hodiny"></span></div>
+<div class="vypadek" id="vypadek" style="display:none"></div>
+<div id="obsah"><p class="prazdno" id="nacitam"></p></div>
+<div class="strana" id="strana"></div>
+<script>
+  var FUNKCE = 'https://pvnajakrgtbzbuqxjecx.supabase.co/functions/v1/okenko';
+  var OBNOVA_MS = 10000;
+  var STRIDANI_MS = 15000;
+  // Víc se na televizi z dálky nepřečte, zbytek se střídá po stranách.
+  var NA_STRANU = 6;
+  // Stejně jako na Padel Česku: po hodině ticha zápas mezi běžící nepatří.
+  var TICHO_MS = 60 * 60 * 1000;
+  // Tři nevyšlé dotazy za sebou. Jeden výpadek hlásit nestojí za to.
+  var VYPADEK_MS = 3 * OBNOVA_MS;
+
+  var p = new URLSearchParams(location.search);
+  var klub = p.get('klub') || '';
+  var en = p.get('lang') === 'en';
+  document.documentElement.lang = en ? 'en' : 'cs';
+
+  var T = en ? {
+    zive: 'Live', dohrane: 'Latest results', nic: 'No matches right now.', spatne: 'The club address in the link is wrong.',
+    nacitam: 'Loading…', vypadek: 'No connection. Last update at ', konec: 'Finished', ted: 'just now', pred: function (m) { return m + ' min ago'; },
+    barvy: { MODRA: 'Blue', CERVENA: 'Red', ZELENA: 'Green', ZLUTA: 'Yellow', BILA: 'White', CERNA: 'Black' }
+  } : {
+    zive: 'Živě', dohrane: 'Poslední výsledky', nic: 'Teď se nic nehraje.', spatne: 'Adresa klubu v odkazu není správně.',
+    nacitam: 'Načítám…', vypadek: 'Bez spojení. Poslední stav v ', konec: 'Dohráno', ted: 'teď', pred: function (m) { return 'před ' + m + ' min'; },
+    barvy: { MODRA: 'Modří', CERVENA: 'Červení', ZELENA: 'Zelení', ZLUTA: 'Žlutí', BILA: 'Bílí', CERNA: 'Černí' }
+  };
+  // Stejné barvy jako v aplikaci (Motiv.kt, barvaTymu) a v okénku.
+  var BARVY = { MODRA: '#003D7C', CERVENA: '#E30613', ZELENA: '#1E7A3C', ZLUTA: '#E0B400', BILA: '#E9E9EE', CERNA: '#3A3A46' };
+
+  var zapasy = [];
+  var mame = false;
+  var strana = 0;
+  var posledniOdpoved = 0;
+  var bylVypadek = false;
+
+  function el(tag, trida, text) {
+    var e = document.createElement(tag);
+    if (trida) e.className = trida;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function cas(ms) {
+    return new Date(ms).toLocaleTimeString(en ? 'en-GB' : 'cs-CZ', { hour: '2-digit', minute: '2-digit' });
+  }
+
+  function radek(z, i) {
+    var t = (z.tymy || [])[i] || {};
+    var r = el('div', 'radek');
+    var pr = el('span', 'prouzek');
+    pr.style.background = BARVY[t.barva] || '#888';
+    r.appendChild(pr);
+
+    // Jména jen když je server pustil (souhlas hráče); jinak barva týmu.
+    var jmena = el('div', 'jmena');
+    var kdo = (t.hraci && t.hraci.length) ? t.hraci : [T.barvy[t.barva] || '?'];
+    kdo.forEach(function (j) { jmena.appendChild(el('div', '', j)); });
+    r.appendChild(jmena);
+
+    r.appendChild(el('span', !z.dohrano && z.podava === i ? 'micek' : 'misto-micku'));
+
+    (z.sety || []).forEach(function (s) {
+      r.appendChild(el('span', 'cislo set' + (s[i] > s[1 - i] ? ' vyhral' : ''), String(s[i])));
+    });
+    if (!z.dohrano) {
+      r.appendChild(el('span', 'cislo', String((z.gemy || [0, 0])[i])));
+      r.appendChild(el('span', 'body', String((z.body || ['', ''])[i])));
+    }
+    return r;
+  }
+
+  function karta(z) {
+    var k = el('div', 'zapas');
+    k.appendChild(radek(z, 0));
+    k.appendChild(radek(z, 1));
+    var pata = el('div', 'pata');
+    if (z.dohrano) {
+      pata.textContent = T.konec;
+    } else {
+      pata.appendChild(el('span', 'ziveTecka'));
+      var min = Math.round((Date.now() - Date.parse(z.upraven)) / 60000);
+      pata.appendChild(document.createTextNode(min < 1 ? T.ted : T.pred(min)));
+    }
+    k.appendChild(pata);
+    return k;
+  }
+
+  /** Mřížka podle počtu zápasů. Karta je široká, tak se dvě dají pod sebe. */
+  function mrizka(n) {
+    if (n <= 2) return { sloupce: 1, radky: n };
+    if (n <= 4) return { sloupce: 2, radky: 2 };
+    return { sloupce: 2, radky: 3 };
+  }
+
+  /** Písmo tak velké, jak se do karty vejde jméno i všechna čísla. */
+  function pismo(sirka, vyska, nejvicCisel) {
+    var naSirku = sirka / (6.8 + 1.25 * nejvicCisel + 2.3);
+    var naVysku = vyska / 3.6;
+    return Math.floor(Math.min(naSirku, naVysku));
+  }
+
+  function vykresli() {
+    var o = document.getElementById('obsah');
+    var ted = Date.now();
+    var zive = zapasy.filter(function (z) { return !z.dohrano && ted - Date.parse(z.upraven) < TICHO_MS; });
+    var vypis = zive.length ? zive : zapasy.filter(function (z) { return z.dohrano; }).slice(0, NA_STRANU);
+
+    o.textContent = '';
+    document.getElementById('nadpis').textContent = !mame ? '' : (zive.length ? T.zive : (vypis.length ? T.dohrane : ''));
+    document.getElementById('strana').textContent = '';
+    if (!vypis.length) {
+      o.appendChild(el('p', 'prazdno', mame ? T.nic : T.nacitam));
+      return;
+    }
+
+    var stran = Math.ceil(vypis.length / NA_STRANU);
+    if (strana >= stran) strana = 0;
+    var naStrane = vypis.slice(strana * NA_STRANU, (strana + 1) * NA_STRANU);
+    if (stran > 1) document.getElementById('strana').textContent = (strana + 1) + ' / ' + stran;
+
+    var m = mrizka(naStrane.length);
+    var sirka = o.clientWidth - 2 * parseFloat(getComputedStyle(o).paddingLeft);
+    var vyska = o.clientHeight - parseFloat(getComputedStyle(o).paddingTop) - parseFloat(getComputedStyle(o).paddingBottom);
+    var w = sirka / m.sloupce;
+    var h = vyska / m.radky;
+    var nejvicCisel = 0;
+    naStrane.forEach(function (z) {
+      nejvicCisel = Math.max(nejvicCisel, (z.sety || []).length + (z.dohrano ? 0 : 1));
+    });
+    var f = pismo(w - 40, h - 20, nejvicCisel);
+
+    naStrane.forEach(function (z) {
+      var misto = el('div', 'misto');
+      misto.style.width = w + 'px';
+      misto.style.height = h + 'px';
+      misto.style.fontSize = f + 'px';
+      misto.appendChild(karta(z));
+      o.appendChild(misto);
+    });
+  }
+
+  function hodiny() {
+    document.getElementById('hodiny').textContent = cas(Date.now());
+    var v = document.getElementById('vypadek');
+    var bez = !!posledniOdpoved && Date.now() - posledniOdpoved > VYPADEK_MS;
+    v.style.display = bez ? 'block' : 'none';
+    // Staré skóre se nesmí tvářit jako živé.
+    if (bez) v.textContent = T.vypadek + cas(posledniOdpoved);
+    // Pruh ubere místo, karty se musí přepočítat, jinak je spodek uříznutý.
+    if (bez !== bylVypadek) {
+      bylVypadek = bez;
+      vykresli();
+    }
+  }
+
+  function nacti() {
+    fetch(FUNKCE + '?klub=' + encodeURIComponent(klub))
+      .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+      .then(function (d) {
+        zapasy = d.zapasy || [];
+        mame = true;
+        posledniOdpoved = Date.now();
+        hodiny();
+        vykresli();
+      })
+      .catch(function () { hodiny(); });
+  }
+
+  hodiny();
+  setInterval(hodiny, 5000);
+  if (!/^[a-z0-9_]{2,40}$/.test(klub)) {
+    document.getElementById('nacitam').textContent = T.spatne;
+  } else {
+    document.getElementById('nacitam').textContent = T.nacitam;
+    nacti();
+    setInterval(nacti, OBNOVA_MS);
+    setInterval(function () { strana++; vykresli(); }, STRIDANI_MS);
+    window.addEventListener('resize', vykresli);
+  }
+</script>
+</body>
+</html>

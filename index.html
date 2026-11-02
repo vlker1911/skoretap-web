@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skoretap — skóre v padelu</title>
+<!--
+  Úvodní stránka skoretap.com. Slibuje jen to, co aplikace umí
+  (obchod/popis.md). Žádné skripty, žádné cizí soubory, žádné měření
+  návštěvnosti — zásady slibují „žádná analytika".
+-->
+<style>
+  :root { --pozadi: #14141A; --text: #FFFFFF; --tlumeny: rgba(255,255,255,.72); --micek: #C8F000; --modra: #003D7C; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 48px 16px 64px; }
+  .logo { display: flex; align-items: center; gap: 14px; }
+  .ikona { width: 56px; height: 56px; border-radius: 14px; flex: none; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .06em; font-size: 22px; }
+  h1 { font-size: 34px; line-height: 1.2; margin: 32px 0 16px; }
+  p, li { color: var(--tlumeny); }
+  strong { color: var(--text); }
+  ul { padding-left: 20px; }
+  footer { margin-top: 56px; font-size: 15px; }
+  footer a { color: var(--micek); margin-right: 18px; }
+  hr { border: 0; border-top: 1px solid rgba(255,255,255,.12); margin: 48px 0; }
+</style>
+</head>
+<body>
+<main>
+
+<div class="logo">
+  <!-- Ikona „Ťuk", stejný tvar jako nastroje/IkonaTuk.java (výřez 72 × 72). -->
+  <svg class="ikona" viewBox="18 18 72 72" aria-hidden="true">
+    <rect x="18" y="18" width="72" height="72" fill="#003D7C"/>
+    <circle cx="54" cy="54" r="31" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="3.5"/>
+    <circle cx="54" cy="54" r="23" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="3.5"/>
+    <clipPath id="micek"><circle cx="54" cy="54" r="14"/></clipPath>
+    <circle cx="54" cy="54" r="14" fill="#C8F000"/>
+    <g clip-path="url(#micek)" fill="none" stroke="#003D7C" stroke-opacity=".55" stroke-width="2.24" stroke-linecap="round">
+      <path d="M39.3 46.3 Q52.6 54 39.3 61.7"/><path d="M68.7 46.3 Q55.4 54 68.7 61.7"/>
+    </g>
+  </svg>
+  <div class="znacka">SKORETAP</div>
+</div>
+
+<h1>Skóre v padelu ťuknutím nebo z hodinek.</h1>
+
+<ul>
+  <li><strong>Počítá se v telefonu</strong>, bez internetu. Bez signálu se zápas dohraje stejně.</li>
+  <li><strong>Hodinky Wear OS:</strong> spodní tlačítko jednou pro jeden tým, dvakrát pro druhý.</li>
+  <li><strong>Pravidla padelu:</strong> golden point, star point, tie-break, super tie-break, Americano.</li>
+  <li><strong>Průběh a statistiky</strong>, se souhlasem i tep, kroky a kalorie z hodinek.</li>
+  <li><strong>Fotka a video se skóre</strong>, rovnou ke sdílení.</li>
+</ul>
+
+<p>Aplikace pro Android se připravuje do Google Play.</p>
+
+<hr>
+
+<div lang="en">
+<h1>Padel scoring by tap or watch.</h1>
+
+<ul>
+  <li><strong>Runs on the phone</strong>, without internet. No signal makes no difference.</li>
+  <li><strong>Wear OS watch:</strong> the bottom button once for one team, twice for the other.</li>
+  <li><strong>Padel rules:</strong> golden point, star point, tie-break, super tie-break, Americano.</li>
+  <li><strong>Point-by-point progress and statistics</strong>, with consent also heart rate, steps and calories from the watch.</li>
+  <li><strong>Photo and video with the score</strong>, ready to share.</li>
+</ul>
+
+<p>The Android app is being prepared for Google Play.</p>
+</div>
+
+<footer>
+  <a href="faq.html">Časté otázky / FAQ</a>
+  <a href="soukromi.html">Zásady soukromí / Privacy</a>
+  <a href="smazani-uctu.html">Smazání účtu / Delete account</a>
+</footer>
+
+</main>
+</body>
+</html>
