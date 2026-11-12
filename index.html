@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skoretap — skóre v padelu</title>
+<meta name="description" content="Skóre v padelu ťuknutím nebo z hodinek. Počítá v telefonu, bez internetu.">
+<meta property="og:title" content="Skoretap — skóre v padelu">
+<meta property="og:description" content="Skóre v padelu ťuknutím nebo z hodinek. Počítá v telefonu, bez internetu.">
+<link rel="apple-touch-icon" href="app/ikona-180.png">
+<link rel="icon" href="app/ikona-192.png">
+<!--
+  Úvodní stránka skoretap.com. Slibuje jen to, co aplikace umí
+  (obchod/popis.md). Žádné cizí soubory, žádné měření návštěvnosti —
+  zásady slibují „žádná analytika". Jediný skript přepíná jazyk a pozná,
+  jestli je návštěvník přihlášený (jen podle toho, co má ve svém prohlížeči).
+  Roman 12. 11. 2026: přihlášení musí být vidět hned a stránka v sekcích.
+-->
+<style>
+  :root { --pozadi: #14141A; --pas: #1B1B23; --karta: rgba(255,255,255,.06); --text: #FFFFFF; --tlumeny: rgba(255,255,255,.7); --micek: #C8F000; --modra: #003D7C; --cervena: #E30613; --cara: rgba(255,255,255,.1); }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 17px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  a { color: var(--micek); }
+  /* Širší (Roman 12. 11. 2026: „víc na šířku"). */
+  .obal { max-width: 1320px; margin: 0 auto; padding: 0 24px; }
+
+  /* Lišta nahoře: značka, sekce, jazyk a přihlášení — vždycky vidět. */
+  header { position: sticky; top: 0; z-index: 5; background: rgba(20,20,26,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--cara); }
+  header .obal { display: flex; align-items: center; gap: 16px; height: 64px; }
+  .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; margin-right: auto; }
+  .ikona { width: 36px; height: 36px; border-radius: 9px; flex: none; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 17px; }
+  /* Záložky pod lištou — přepínají, která část stránky je vidět. Na
+     telefonu se dají posouvat do strany. (Roman 12. 11. 2026) */
+  .zalozky { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding: 0 24px 10px; max-width: 1320px; margin: 0 auto; }
+  .zalozky::-webkit-scrollbar { display: none; }
+  .zalozky a { flex: none; color: var(--tlumeny); text-decoration: none; font-size: 15px; font-weight: 700; padding: 8px 14px; border-radius: 999px; border: 1px solid var(--cara); }
+  .zalozky a:hover { color: var(--text); }
+  .zalozky a[aria-current="page"] { background: var(--micek); color: #14141A; border-color: var(--micek); }
+  [data-zalozka][hidden] { display: none; }
+  .jazyk { background: none; border: 1px solid var(--cara); color: var(--text); border-radius: 8px; padding: 6px 9px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .tlacitko { display: inline-block; border-radius: 12px; padding: 12px 20px; font-weight: 800; text-decoration: none; text-align: center; }
+  .tlacitko.hlavni { background: var(--micek); color: #14141A; }
+  .tlacitko.druhe { border: 1px solid var(--cara); color: var(--text); }
+  header .tlacitko { padding: 9px 14px; font-size: 15px; }
+
+  section { padding: 64px 0; }
+  section.pas { background: var(--pas); }
+  h1 { font-size: clamp(34px, 6vw, 56px); line-height: 1.08; letter-spacing: -.02em; margin: 0 0 18px; }
+  h2 { font-size: clamp(26px, 4vw, 36px); line-height: 1.15; letter-spacing: -.01em; margin: 0 0 10px; }
+  h3 { font-size: 19px; margin: 12px 0 6px; }
+  .uvod { color: var(--tlumeny); font-size: 19px; max-width: 34em; margin: 0 0 28px; }
+  .podnadpis { color: var(--tlumeny); max-width: 40em; margin: 0 0 32px; }
+  p { color: var(--tlumeny); margin: 0; }
+  .akce { display: flex; flex-wrap: wrap; gap: 12px; }
+  .drobne { color: var(--tlumeny); font-size: 14px; margin-top: 16px; }
+
+  /* Úvod: text vlevo, ukázka skóre vpravo. */
+  .hrdina { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: center; }
+  @media (max-width: 860px) { .hrdina { grid-template-columns: 1fr; } }
+  .tabule { background: #0E0E13; border: 1px solid var(--cara); border-radius: 22px; padding: 18px; box-shadow: 0 30px 60px rgba(0,0,0,.4); }
+  .tabule .hlavicka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 12px; margin-bottom: 10px; display: flex; justify-content: space-between; }
+  .tabule .zive { color: var(--text); }
+  .tabule .zive::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #FF3B2F; margin-right: 6px; vertical-align: 1px; }
+  .tabule .radek { display: flex; align-items: center; gap: 10px; padding: 12px 0; }
+  .tabule .radek + .radek { border-top: 1px solid var(--cara); }
+  .tabule .proužek { width: 6px; height: 34px; border-radius: 3px; }
+  .tabule .jmena { flex: 1; font-weight: 700; }
+  .tabule .podava::after { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: var(--micek); margin-left: 8px; }
+  .tabule .cisla { display: flex; gap: 8px; font-variant-numeric: tabular-nums; font-weight: 800; font-size: 22px; }
+  .tabule .cisla span { min-width: 26px; text-align: center; color: var(--tlumeny); }
+  .tabule .cisla .v { color: var(--text); }
+  .tabule .cisla .body { min-width: 52px; background: var(--micek); color: #14141A; border-radius: 8px; }
+  .tabule .prubeh { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--cara); color: var(--tlumeny); font-size: 13px; font-variant-numeric: tabular-nums; }
+  .tabule .prubeh b { color: var(--text); }
+  .tabule .prubeh .bb { font-size: 10px; font-weight: 800; background: var(--cara); color: var(--text); border-radius: 4px; padding: 1px 4px; }
+
+  /* Karty po třech. */
+  .karty { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+  .karty.dve { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 860px) { .karty, .karty.dve { grid-template-columns: 1fr; } }
+  .karta { background: var(--karta); border: 1px solid var(--cara); border-radius: 18px; padding: 22px; }
+  .karta .znak { width: 44px; height: 44px; border-radius: 12px; background: rgba(200,240,0,.12); display: flex; align-items: center; justify-content: center; }
+  .karta .znak svg { width: 24px; height: 24px; stroke: var(--micek); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+  .karta ul { margin: 10px 0 0; padding-left: 18px; color: var(--tlumeny); }
+  .karta li + li { margin-top: 4px; }
+  .karta .odkaz { display: inline-block; margin-top: 14px; font-weight: 700; }
+  .stitek { display: inline-block; font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #14141A; background: var(--micek); border-radius: 6px; padding: 2px 7px; margin-left: 6px; vertical-align: 2px; }
+  .stitek.brzy { background: var(--cara); color: var(--text); }
+
+  .ucet { display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: center; background: linear-gradient(0deg, rgba(200,240,0,.08), rgba(200,240,0,.08)), var(--karta); border: 1px solid rgba(200,240,0,.25); border-radius: 22px; padding: 28px; }
+  @media (max-width: 760px) { .ucet { grid-template-columns: 1fr; } }
+
+  footer { border-top: 1px solid var(--cara); padding: 32px 0 48px; color: var(--tlumeny); font-size: 15px; }
+  footer .obal { display: flex; flex-wrap: wrap; gap: 14px 22px; align-items: center; }
+  footer a { color: var(--tlumeny); }
+  footer .vpravo { margin-left: auto; }
+
+  /* Jazyk: oba texty jsou ve stránce, ukazuje se jeden. */
+  /* Česky jen česká část; v každém jiném jazyce anglická, přeložená
+     z app/texty/ (jazyky.js). */
+  html[lang="cs"] [lang="en"]:not(html), html:not([lang="cs"]) [lang="cs"]:not(html) { display: none !important; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="obal">
+    <a class="logo" href="#uvod">
+      <!-- Ikona „Ťuk", stejný tvar jako nastroje/IkonaTuk.java (výřez 72 × 72). -->
+      <svg class="ikona" viewBox="18 18 72 72" aria-hidden="true">
+        <rect x="18" y="18" width="72" height="72" fill="#003D7C"/>
+        <circle cx="54" cy="54" r="31" fill="none" stroke="#fff" stroke-opacity=".16" stroke-width="3.5"/>
+        <circle cx="54" cy="54" r="23" fill="none" stroke="#fff" stroke-opacity=".38" stroke-width="3.5"/>
+        <clipPath id="micek"><circle cx="54" cy="54" r="14"/></clipPath>
+        <circle cx="54" cy="54" r="14" fill="#C8F000"/>
+        <g clip-path="url(#micek)" fill="none" stroke="#003D7C" stroke-opacity=".55" stroke-width="2.24" stroke-linecap="round">
+          <path d="M39.3 46.3 Q52.6 54 39.3 61.7"/><path d="M68.7 46.3 Q55.4 54 68.7 61.7"/>
+        </g>
+      </svg>
+      <span class="znacka">SKORETAP</span>
+    </a>
+    <span class="jazyk" id="jazyk"></span>
+    <a class="tlacitko hlavni" href="ucet.html" id="prihlaseni"><span lang="cs">Přihlásit se</span><span lang="en">Sign in</span></a>
+  </div>
+  <nav class="zalozky" id="zalozky">
+    <a href="#uvod"><span lang="cs">Úvod</span><span lang="en">Home</span></a>
+    <a href="#pocitani"><span lang="cs">Jak počítat</span><span lang="en">How to score</span></a>
+    <a href="#po-zapase"><span lang="cs">Po zápase</span><span lang="en">After the match</span></a>
+    <a href="#ucet"><span lang="cs">Můj účet</span><span lang="en">My account</span></a>
+    <a href="#kluby"><span lang="cs">Pro kluby</span><span lang="en">For clubs</span></a>
+    <a href="faq.html"><span lang="cs">Otázky</span><span lang="en">FAQ</span></a>
+  </nav>
+</header>
+
+<main>
+
+<!-- 1. Úvod -->
+<section id="uvod" data-zalozka>
+  <div class="obal hrdina">
+    <div>
+      <h1><span lang="cs">Skóre v padelu ťuknutím nebo z hodinek.</span><span lang="en">Padel scoring by tap or watch.</span></h1>
+      <p class="uvod">
+        <span lang="cs">Počítá se v telefonu, i bez signálu. Po zápase pošleš kamarádům jeden odkaz se skóre, průběhem a tím, kdo kdy podával.</span>
+        <span lang="en">It counts on the phone, even without signal. After the match, send your friends one link with the score, the progress and who served when.</span>
+      </p>
+      <div class="akce">
+        <a class="tlacitko hlavni" href="app/"><span lang="cs">Počítat v prohlížeči</span><span lang="en">Score in the browser</span></a>
+        <a class="tlacitko druhe" href="ucet.html"><span lang="cs">Můj účet a zápasy</span><span lang="en">My account and matches</span></a>
+      </div>
+      <p class="drobne">
+        <span lang="cs">Aplikace pro Android s hodinkami se připravuje do Google Play. Na iPhonu funguje Skoretap v prohlížeči.</span>
+        <span lang="en">The Android app with watch support is coming to Google Play. On iPhone, Skoretap runs in the browser.</span>
+      </p>
+    </div>
+    <!-- Ukázka: tak vypadá skóre v aplikaci, na stránce zápasu i v přenosu. -->
+    <div class="tabule" aria-hidden="true">
+      <div class="hlavicka"><span>SKORETAP</span><span class="zive"><span lang="cs">ŽIVĚ</span><span lang="en">LIVE</span></span></div>
+      <div class="radek"><span class="proužek" style="background:var(--modra)"></span><span class="jmena podava">Roman / Ríša</span><span class="cisla"><span class="v">6</span><span>4</span><span class="v">3</span><span class="body">AD1</span></span></div>
+      <div class="radek"><span class="proužek" style="background:var(--cervena)"></span><span class="jmena">Honza / Tomáš</span><span class="cisla"><span>4</span><span class="v">6</span><span>2</span><span class="body">40</span></span></div>
+      <div class="prubeh"><b>6. gem</b> · <span lang="cs">podává Ríša</span><span lang="en">Ríša serving</span> · 15:0 30:0 30:15 40:15 <span class="bb">BB</span> 40:30 40:40 AD1:40</div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. Jak se počítá -->
+<section id="pocitani" data-zalozka>
+  <div class="obal">
+    <h2><span lang="cs">Počítej, jak se ti hodí</span><span lang="en">Score the way that suits you</span></h2>
+    <p class="podnadpis"><span lang="cs">Pravidla jsou všude stejná: star point, golden point, výhody, tie-break, super tie-break, Americano i volná hra do konce kurtu.</span><span lang="en">The rules are the same everywhere: star point, golden point, advantage, tie-break, super tie-break, Americano and free play until the court time ends.</span></p>
+    <div class="karty">
+      <div class="karta">
+        <div class="znak"><svg viewBox="0 0 24 24"><rect x="6" y="2" width="12" height="20" rx="2.5"/><path d="M11 18h2"/></svg></div>
+        <h3><span lang="cs">Telefon</span><span lang="en">Phone</span><span class="stitek brzy"><span lang="cs">Android</span><span lang="en">Android</span></span></h3>
+        <p><span lang="cs">Ťukni na půlku týmu, který vyhrál bod. Telefon může skóre číst nahlas a umí krok zpět.</span><span lang="en">Tap the half of the team that won the point. The phone can read the score aloud and has undo.</span></p>
+      </div>
+      <div class="karta">
+        <div class="znak"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="3"/><path d="M9 6V2h6v4M9 18v4h6v-4"/></svg></div>
+        <h3><span lang="cs">Hodinky</span><span lang="en">Watch</span><span class="stitek brzy">Wear OS</span></h3>
+        <p><span lang="cs">Spodní tlačítko jednou pro jeden tým, dvakrát pro druhý. Telefon může zůstat v tašce.</span><span lang="en">The bottom button once for one team, twice for the other. The phone can stay in your bag.</span></p>
+      </div>
+      <div class="karta">
+        <div class="znak"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></div>
+        <h3><span lang="cs">Prohlížeč a iPhone</span><span lang="en">Browser and iPhone</span><span class="stitek"><span lang="cs">Hned</span><span lang="en">Now</span></span></h3>
+        <p><span lang="cs">Bez instalace a bez signálu. V Safari Sdílet → Přidat na plochu a máš ho jako aplikaci.</span><span lang="en">No install and no signal needed. In Safari, Share → Add to Home Screen keeps it as an app.</span></p>
+        <a class="odkaz" href="app/"><span lang="cs">Otevřít Skoretap →</span><span lang="en">Open Skoretap →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. Po zápase -->
+<section id="po-zapase" data-zalozka>
+  <div class="obal">
+    <h2><span lang="cs">Po zápase</span><span lang="en">After the match</span></h2>
+    <p class="podnadpis"><span lang="cs">Zápas žije v telefonu. Ven jde jen to, co sám zveřejníš — a jména jen s tvým souhlasem.</span><span lang="en">The match lives on your phone. Only what you publish goes out — and names only with consent.</span></p>
+    <div class="karty">
+      <div class="karta">
+        <div class="znak"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></svg></div>
+        <h3><span lang="cs">Stránka zápasu</span><span lang="en">Match page</span></h3>
+        <p><span lang="cs">Skóre, sety a průběh po gemech na jednom odkazu. Otevře se na každém telefonu, i během hry.</span><span lang="en">Score, sets and game-by-game progress on one link. Opens on any phone, even during play.</span></p>
+      </div>
+      <div class="karta">
+        <div class="znak"><svg viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h3><span lang="cs">Průběh a statistiky</span><span lang="en">Progress and stats</span></h3>
+        <p><span lang="cs">Kdo kdy podával, brejky, délky setů. Se souhlasem i tep, kroky a kalorie z hodinek.</span><span lang="en">Who served when, breaks, set lengths. With consent also heart rate, steps and calories from the watch.</span></p>
+      </div>
+      <div class="karta">
+        <div class="znak"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3v10l-6-3"/></svg></div>
+        <h3><span lang="cs">Fotka, video a YouTube</span><span lang="en">Photo, video and YouTube</span></h3>
+        <p><span lang="cs">Skóre přes fotku nebo video ke sdílení. Telefon na stativu vysílá zápas živě na tvůj kanál YouTube.</span><span lang="en">The score over a photo or video to share. A phone on a tripod streams the match live to your YouTube channel.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Můj účet -->
+<section id="ucet" data-zalozka>
+  <div class="obal">
+    <h2><span lang="cs">Můj účet</span><span lang="en">My account</span></h2>
+    <p class="podnadpis"><span lang="cs">Stejný účet jako v aplikaci. Přihlásíš se účtem, který už máš, nebo odkazem do e-mailu. Žádné nové heslo.</span><span lang="en">The same account as in the app. Sign in with an account you already have or with a link by e-mail. No new password.</span></p>
+    <div class="ucet">
+      <div>
+        <h3 style="margin-top:0"><span lang="cs">Všechny tvoje zápasy na jednom místě</span><span lang="en">All your matches in one place</span></h3>
+        <ul style="margin:8px 0 0;padding-left:18px;color:var(--tlumeny)">
+          <li><span lang="cs">Zápasy zazálohované z telefonu, s průběhem po gemech.</span><span lang="en">Matches backed up from your phone, with game-by-game progress.</span></li>
+          <li><span lang="cs">Odkazy na zveřejněné zápasy, které pošleš kamarádům.</span><span lang="en">Links to published matches to send to friends.</span></li>
+          <li><span lang="cs">Tvoje jméno a kód hráče.</span><span lang="en">Your name and player code.</span></li>
+        </ul>
+      </div>
+      <a class="tlacitko hlavni" href="ucet.html"><span lang="cs">Přihlásit se</span><span lang="en">Sign in</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 5. Kluby -->
+<section id="kluby" data-zalozka>
+  <div class="obal">
+    <h2><span lang="cs">Pro kluby a pořadatele</span><span lang="en">For clubs and organisers</span></h2>
+    <p class="podnadpis"><span lang="cs">Hráči počítají, klub ukazuje. Jen zápasy hráčů, kteří to klubu sami povolili.</span><span lang="en">Players keep score, the club shows it. Only matches of players who allowed it.</span></p>
+    <div class="karty dve">
+      <div class="karta">
+        <h3><span lang="cs">Okénko na web a televize v klubu</span><span lang="en">Website widget and club TV</span></h3>
+        <ul>
+          <li><span lang="cs">Živé a poslední zápasy na webu klubu jedním řádkem.</span><span lang="en">Live and recent matches on the club website with one line of code.</span></li>
+          <li><span lang="cs">Velké skóre přes celou televizi na baru.</span><span lang="en">Big full-screen score on the TV by the bar.</span></li>
+          <li><span lang="cs">QR kód na plakát: hráč klub zapne jedním naskenováním.</span><span lang="en">QR code poster: players switch the club on with one scan.</span></li>
+        </ul>
+      </div>
+      <div class="karta">
+        <h3><span lang="cs">Napojení na váš systém</span><span lang="en">Connect your system</span></h3>
+        <ul>
+          <li><span lang="cs">Výsledky do vašeho systému klíčem, jen se souhlasem hráče.</span><span lang="en">Results into your system with a key, only with the player's consent.</span></li>
+          <li><span lang="cs">V Česku přes Padel Česko, hlavního partnera.</span><span lang="en">In Czechia through Padel Česko, our main partner.</span></li>
+        </ul>
+        <a class="odkaz" href="mailto:roman@romanvlk.cz"><span lang="cs">Napište nám →</span><span lang="en">Get in touch →</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="obal">
+    <a href="ucet.html"><span lang="cs">Můj účet</span><span lang="en">My account</span></a>
+    <a href="app/"><span lang="cs">Skoretap v prohlížeči</span><span lang="en">Skoretap in the browser</span></a>
+    <a href="faq.html"><span lang="cs">Časté otázky</span><span lang="en">FAQ</span></a>
+    <a href="soukromi.html"><span lang="cs">Zásady soukromí</span><span lang="en">Privacy</span></a>
+    <a href="smazani-uctu.html"><span lang="cs">Smazání účtu</span><span lang="en">Delete account</span></a>
+    <span class="vpravo">© Skoretap</span>
+  </div>
+</footer>
+
+<script>
+  // Jazyk: 26 jazyků jako v aplikaci (app/jazyky.js). Hned teď jen hrubě
+  // čeština, nebo angličtina, ať cizinec nevidí na okamžik česky;
+  // překlad do jeho jazyka se dosadí, jakmile se načte (na konci skriptu).
+  var h = document.documentElement;
+  var volba = new URLSearchParams(location.search).get('lang');
+  try { volba = volba || localStorage.getItem('skoretap.jazyk'); } catch (e) { /* bez paměti */ }
+  h.lang = (volba || (navigator.language || 'cs')).slice(0, 2).toLowerCase() === 'cs' ? 'cs' : 'en';
+  // Záložky: vidět je vždycky jedna část. Adresa nese #, takže jde poslat
+  // odkaz rovnou na „Pro kluby" a funguje tlačítko Zpět.
+  var casti = Array.prototype.slice.call(document.querySelectorAll('[data-zalozka]'));
+  function zalozka() {
+    var id = location.hash.slice(1);
+    if (!casti.some(function (c) { return c.id === id; })) id = 'uvod';
+    casti.forEach(function (c) { c.hidden = c.id !== id; });
+    document.querySelectorAll('#zalozky a').forEach(function (a) {
+      if (a.getAttribute('href') === '#' + id) {
+        a.setAttribute('aria-current', 'page');
+        // Na telefonu se řada záložek posouvá — ať je vybraná vidět.
+        a.parentNode.scrollLeft = a.offsetLeft - (a.parentNode.clientWidth - a.offsetWidth) / 2;
+      } else {
+        a.removeAttribute('aria-current');
+      }
+    });
+    window.scrollTo(0, 0);
+  }
+  window.addEventListener('hashchange', zalozka);
+  zalozka();
+  // Přihlášený (má relaci z ucet.html v tomhle prohlížeči) vidí „Můj účet".
+  try {
+    if (localStorage.getItem('skoretap.ucet')) {
+      document.getElementById('prihlaseni').innerHTML = '<span lang="cs">Můj účet</span><span lang="en">My account</span>';
+      // Přihlášený nechce reklamu na účet, ale svůj účet: záložka vede rovnou tam.
+      document.querySelector('#zalozky a[href="#ucet"]').setAttribute('href', 'ucet.html');
+    }
+  } catch (e) { /* bez paměti */ }
+  // Až teď překlad — „Můj účet" výš už musí být na stránce.
+  import('./app/jazyky.js').then(async function (J) {
+    var k = J.zvolenyJazyk();
+    J.vyberJazyka(document.getElementById('jazyk'), k);
+    J.prelozStranku(k, await J.nactiSlovnik(k, 'app/'));
+  });
+</script>
+</body>
+</html>

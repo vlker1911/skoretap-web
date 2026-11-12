@@ -1,0 +1,1960 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skoretap — časté otázky / FAQ</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  VYROBENO nastroje/web.mjs z obchod/faq.md, obchod/faq-en.md a z otázek
+  v aplikaci (strings.xml, 24 dalších jazyků).
+  Neupravovat ručně — změna patří do těch souborů.
+-->
+<style>
+  :root { --pozadi: #14141A; --text: #FFFFFF; --tlumeny: rgba(255,255,255,.72); --micek: #C8F000; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .06em; font-size: 14px; }
+  h1 { font-size: 28px; margin: 8px 0 24px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; }
+  p, li, td { color: var(--tlumeny); }
+  strong, th { color: var(--text); }
+  ul { padding-left: 20px; }
+  code { font-size: 15px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 6px 8px; border-bottom: 1px solid rgba(255,255,255,.12); vertical-align: top; }
+  nav a, a { color: var(--micek); }
+  hr { border: 0; border-top: 1px solid rgba(255,255,255,.12); margin: 48px 0; }
+</style>
+<style>
+  .hlava { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .hlava a { text-decoration: none; }
+  .jazyk { border: 1px solid rgba(255,255,255,.2); border-radius: 8px; padding: 6px 9px; font-size: 13px; font-weight: 700; }
+</style>
+</head>
+<body>
+<main>
+
+<div class="hlava"><a class="znacka" href="/">SKORETAP</a><span class="jazyk" id="jazyk"></span></div>
+<nav id="anglickyNiz"><a href="#en" lang="en">English below</a></nav>
+
+<section data-jazyk="cs" lang="cs">
+<h1>Časté otázky</h1>
+
+<h2>Které hodinky a telefony Skoretap umí?</h2>
+
+<p>Telefony s Androidem a hodinky s Wear OS, například Samsung Galaxy Watch.
+Na iPhonu, Apple Watch ani hodinkách Garmin zatím nefunguje.</p>
+
+<h2>Jak dostanu Skoretap do hodinek?</h2>
+
+<p>Hodinky musí být spárované s telefonem. Nainstaluj Skoretap z Google Play do
+telefonu a potom i do hodinek. Na hodinkách nefunguje sám, potřebuje telefon.</p>
+
+<h2>Jak začnu zápas s hodinkami?</h2>
+
+<p>Zápas založ v telefonu a na hodinkách otevři Skoretap. Hodinky si samy zjistí,
+jak zápas stojí. Když píšou <strong>Hledám telefon…</strong>, ještě se nespojily s telefonem.</p>
+
+<h2>Jak se na hodinkách připisují body?</h2>
+
+<ul>
+  <li><strong>Spodní tlačítko jednou:</strong> bod pro tým nahoře.</li>
+  <li><strong>Spodní tlačítko dvakrát rychle za sebou:</strong> bod pro tým dole.</li>
+  <li>Hodinky zavibrují a ukážou, komu bod šel.</li>
+  <li><strong>Spletl ses?</strong> Ťukni na <strong>ZPĚT</strong>.</li>
+</ul>
+
+<p>Otočný prstenec body schválně nepřidává. Mohl by ses o něj otřít při hře
+a připsal by se bod, o kterém nikdo neví.</p>
+
+<h2>Co když se hodinky odpojí od telefonu?</h2>
+
+<p>Skóre drží telefon, hodinky jsou jeho ovladač. Když se spojení přeruší,
+hodinky ukážou <strong>bez telefonu</strong> a ťukání si pamatují. Nápis <strong>čeká 3</strong> znamená,
+že tři ťuknutí čekají na odeslání. Odešlou se samy, jakmile se hodinky
+s telefonem spojí.</p>
+
+<h2>Co znamená „Telefon neodpovídá“?</h2>
+
+<p>Telefon nepotvrdil tvůj bod. Otevři Skoretap v telefonu. Hodinky to budou
+zkoušet dál, ťuknutí se neztratí.</p>
+
+<h2>Odešel jsem z aplikace na hodinkách. Ztratil jsem zápas?</h2>
+
+<p>Ne. Zápas je v telefonu a běží dál. Na hodinkách otevři Skoretap ze seznamu
+aplikací a pokračuj. Během zápasu spodní tlačítko z aplikace neodejde, jen
+připisuje body.</p>
+
+<h2>Proč hodinky chtějí povolení?</h2>
+
+<ul>
+  <li><strong>Oznámení:</strong> díky nim hodinky vědí, že běží zápas. Když se ptají, povol to.</li>
+  <li><strong>Tep a pohyb:</strong> jen pokud chceš měřit tep, kroky a kalorie. Body se počítají i bez toho.</li>
+</ul>
+
+<p>Povolení změníš v nastavení hodinek u aplikace Skoretap.</p>
+
+<h2>Proč mám v Samsung Health vypnout rozpoznávání cvičení?</h2>
+
+<p>Na hodinkách Samsung si může Samsung Health během zápasu samo spustit sledování
+cvičení a vzít měření tepu a kalorií. Skoretap pak nemá co změřit. V aplikaci
+Samsung Health na hodinkách otevři nastavení a vypni automatické rozpoznávání
+cvičení. Hodinky tuto radu ukážou jen jednou, proto je i tady.</p>
+
+<h2>Proč se mi nezměřil tep nebo kalorie?</h2>
+
+<ul>
+  <li>Měření se zapíná souhlasem v telefonu. Zkontroluj, že je zapnuté.</li>
+  <li>Hodinky musí mít povolený tep a pohyb.</li>
+  <li>Měření mohla vzít jiná aplikace. Telefon to po zápase napíše. Pomůže rada o Samsung Health o odstavec výš.</li>
+</ul>
+
+<h2>Musím mít internet?</h2>
+
+<p>Ne. Zápas se počítá v telefonu a bez signálu se dohraje stejně. Internet je
+potřeba jen na zveřejnění zápasu, zálohu a přihlášení.</p>
+
+<h2>Zveřejní se můj zápas sám?</h2>
+
+<p>Ne. Výchozí nastavení je <strong>Nesdílet</strong>. Zápas se zveřejní, jen když si to
+zapneš, a může být i bez jmen.</p>
+
+<h2>Můžu rozehraný zápas dohrát jindy?</h2>
+
+<p>Ano. Zvol <strong>Dohrát příště</strong>. Zápas zůstane v telefonu mezi rozehranými
+zápasy a pokračuješ, kde jsi skončil.</p>
+
+<h2>Umí Skoretap skóre číst nahlas?</h2>
+
+<p>Ano, telefon čte skóre ve všech 26 jazycích aplikace. Jazyk hlasu zvolíš
+v přípravě a jde změnit i během zápasu. Když telefon hlas pro ten jazyk
+nemá, aplikace to řekne. Body se hlasem zadávat nedají, jen dotykem
+a z hodinek.</p>
+
+<h2>Jak vysílám zápas na YouTube?</h2>
+
+<ul>
+  <li>Na YouTube si jednou zapni přenosy. První aktivace může trvat až 24 hodin.</li>
+  <li>V YouTube Studiu najdi klíč streamu. V zápase otevři <strong>Průběh zápasu</strong>, ťukni na <strong>Živě na YouTube</strong> a klíč vlož.</li>
+  <li>Telefon dej na stativ, připoj powerbanku a počítej asi se 2 GB dat za 90 minut. Skoretap musí zůstat na obrazovce. Během přenosu zadávej body z hodinek.</li>
+  <li>Video jde bez zvuku. Skóre je v obraze. Když je zápas na webu, zkopíruješ si odkaz na statistiky do popisu videa.</li>
+</ul>
+
+<h2>Může skóre zadávat jiný telefon, než který natáčí?</h2>
+
+<p>Ano. Skóre počítá jeden telefon (tvůj s hodinkami, nebo rozhodčího), druhý
+stojí na stativu jako kamera.</p>
+
+<ul>
+  <li>Na telefonu, který počítá, ťukni v zápase na <strong>Kamera na jiném telefonu</strong> a <strong>Vytvořit kód</strong>. Musíš být přihlášený k účtu Skoretap.</li>
+  <li>Na telefonu s kamerou ťukni na první obrazovce na <strong>Kamera k zápasu</strong>, opiš kód a spusť přenos. Účet tu není potřeba.</li>
+  <li>Skóre jde přes internet, v obraze je asi vteřinu po bodu. Body zadává vždycky jen jeden telefon, aby se žádný nezapsal dvakrát.</li>
+  <li>Hodinky můžou zůstat spojené s telefonem u kurtu. Kamera může stát dál, třeba za sklem.</li>
+</ul>
+
+<h2>Jak smažu účet a data?</h2>
+
+<p>Postup je na stránce <a href="smazani-uctu.html">Smazání účtu</a>. Co ukládáme a proč, je
+v <a href="soukromi.html">zásadách soukromí</a>.</p>
+</section>
+
+<hr id="oddelovac">
+
+<section id="en" data-jazyk="en" lang="en">
+<h1>Frequently asked questions</h1>
+
+<h2>Which watches and phones does Skoretap work on?</h2>
+
+<p>Android phones and Wear OS watches, such as the Samsung Galaxy Watch.
+It does not work on iPhone, Apple Watch or Garmin yet.</p>
+
+<h2>How do I get Skoretap on my watch?</h2>
+
+<p>The watch must be paired with your phone. Install Skoretap from Google Play on
+the phone, then on the watch as well. It does not work on the watch alone, it
+needs the phone.</p>
+
+<h2>How do I start a match with the watch?</h2>
+
+<p>Create the match on the phone and open Skoretap on the watch. The watch finds
+out the score by itself. <strong>Looking for the phone…</strong> means it has not connected
+to the phone yet.</p>
+
+<h2>How do I add points on the watch?</h2>
+
+<ul>
+  <li><strong>Bottom button once:</strong> point for the top team.</li>
+  <li><strong>Bottom button twice quickly:</strong> point for the bottom team.</li>
+  <li>The watch vibrates and shows who got the point.</li>
+  <li><strong>Made a mistake?</strong> Tap <strong>UNDO</strong>.</li>
+</ul>
+
+<p>The rotating bezel adds no points on purpose. You could brush against it during
+play and add a point nobody knows about.</p>
+
+<h2>What if the watch loses the phone?</h2>
+
+<p>The phone keeps the score and the watch is its remote. When the connection
+drops, the watch shows <strong>no phone</strong> and remembers your presses. <strong>queued 3</strong>
+means three presses are waiting to be sent. They go out by themselves as soon
+as the watch reconnects.</p>
+
+<h2>What does "Phone not responding" mean?</h2>
+
+<p>The phone has not confirmed your point. Open Skoretap on the phone. The watch
+keeps trying and your presses are not lost.</p>
+
+<h2>I left the app on my watch. Did I lose the match?</h2>
+
+<p>No. The match is on the phone and keeps going. Open Skoretap from the app list
+on the watch and carry on. During a match the bottom button does not leave the
+app, it only adds points.</p>
+
+<h2>Why does the watch ask for permissions?</h2>
+
+<ul>
+  <li><strong>Notifications:</strong> they let the watch know a match is running. Allow them when asked.</li>
+  <li><strong>Heart rate and activity:</strong> only if you want to measure heart rate, steps and calories. Points work without them.</li>
+</ul>
+
+<p>You can change permissions in the watch settings under Skoretap.</p>
+
+<h2>Why should I turn off workout detection in Samsung Health?</h2>
+
+<p>On Samsung watches, Samsung Health can start tracking a workout by itself during
+a match and take over heart rate and calorie measurement. Skoretap then has
+nothing to measure. Open Samsung Health on the watch, go to its settings and turn
+off automatic workout detection. The watch shows this tip only once, so it is
+here as well.</p>
+
+<h2>Why were my heart rate or calories not measured?</h2>
+
+<ul>
+  <li>Measuring is turned on with your consent in the phone app. Check that it is on.</li>
+  <li>The watch must have permission for heart rate and activity.</li>
+  <li>Another app may have taken over measuring. The phone tells you after the match. The Samsung Health tip above helps.</li>
+</ul>
+
+<h2>Do I need internet?</h2>
+
+<p>No. The match is counted on the phone and finishes the same without signal.
+You only need internet to publish a match, back up and sign in.</p>
+
+<h2>Is my match published automatically?</h2>
+
+<p>No. The default is <strong>Do not share</strong>. A match is published only if you turn that
+on, and it can be published without names.</p>
+
+<h2>Can I finish a match later?</h2>
+
+<p>Yes. Choose <strong>Finish it later</strong>. The match stays on the phone among your
+unfinished matches and you carry on where you stopped.</p>
+
+<h2>Can Skoretap read the score aloud?</h2>
+
+<p>Yes, the phone reads the score in all 26 languages of the app. Pick the voice
+language when you set up the match; you can change it during the match too.
+If the phone has no voice for that language, the app tells you. Points cannot
+be entered by voice, only by touch and from the watch.</p>
+
+<h2>How do I stream a match on YouTube?</h2>
+
+<ul>
+  <li>Turn on live streaming on YouTube once. The first activation can take up to 24 hours.</li>
+  <li>Find your stream key in YouTube Studio. In the match open <strong>Match progress</strong>, tap <strong>Live on YouTube</strong> and paste the key.</li>
+  <li>Put the phone on a tripod, connect a power bank and count on about 2 GB of data for 90 minutes. Skoretap must stay on the screen. Enter points from the watch during the stream.</li>
+  <li>The video has no sound. The score is in the picture. If the match is on the web, you can copy the link to the statistics into the video description.</li>
+</ul>
+
+<h2>Can a different phone keep the score than the one filming?</h2>
+
+<p>Yes. One phone keeps the score (yours with the watch, or the referee's), the
+other stands on a tripod as the camera.</p>
+
+<ul>
+  <li>On the scoring phone, tap <strong>Camera on another phone</strong> in the match, then <strong>Create code</strong>. You need to be signed in to a Skoretap account.</li>
+  <li>On the camera phone, tap <strong>Camera for a match</strong> on the first screen, type in the code and start the stream. No account is needed there.</li>
+  <li>The score goes over the internet and shows in the picture about a second after the point. Only one phone enters points, so none is counted twice.</li>
+  <li>The watch can stay connected to the phone next to the court. The camera can stand further away, for example behind glass.</li>
+</ul>
+
+<h2>How do I delete my account and data?</h2>
+
+<p>The steps are on the <a href="smazani-uctu.html">Delete account</a> page. What we store and
+why is in the <a href="soukromi.html">privacy policy</a>.</p>
+</section>
+
+<section data-jazyk="de" lang="de" hidden>
+<h1>Häufige Fragen</h1>
+
+<h2>Auf welchen Uhren und Telefonen läuft Skoretap?</h2>
+<p>Auf Android-Telefonen und Wear OS-Uhren, zum Beispiel der Samsung Galaxy Watch. Auf iPhone, Apple Watch oder Garmin-Uhren funktioniert es noch nicht.</p>
+
+<h2>Wie bekomme ich Skoretap auf meine Uhr?</h2>
+<p>Die Uhr muss mit deinem Telefon gekoppelt sein. Installiere Skoretap aus Google Play auf dem Telefon und danach auch auf der Uhr. Auf der Uhr allein funktioniert es nicht, es braucht das Telefon.</p>
+
+<h2>Wie starte ich ein Match mit der Uhr?</h2>
+<p>Lege das Match auf dem Telefon an und öffne Skoretap auf der Uhr. Die Uhr erfährt selbst, wie es steht. Wenn dort „Suche das Telefon…“ steht, ist sie noch nicht mit dem Telefon verbunden.</p>
+
+<h2>Wie zähle ich Punkte auf der Uhr?</h2>
+<p>Untere Taste einmal: Punkt für das obere Team.</p>
+<p>Untere Taste zweimal schnell hintereinander: Punkt für das untere Team.</p>
+<p>Die Uhr vibriert und zeigt, wer den Punkt bekommen hat.</p>
+<p>Vertippt? Tippe auf „ZURÜCK“.</p>
+<p>Die drehbare Lünette vergibt absichtlich keine Punkte. Du könntest beim Spielen daran hängen bleiben, und es würde ein Punkt gezählt, von dem niemand weiß.</p>
+
+<h2>Was ist, wenn die Uhr das Telefon verliert?</h2>
+<p>Das Telefon führt den Spielstand, die Uhr ist seine Fernbedienung. Wenn die Verbindung abbricht, zeigt die Uhr „kein Telefon“ und merkt sich deine Tastendrücke. „wartet 3“ bedeutet, dass drei Tastendrücke aufs Senden warten. Sie gehen von selbst raus, sobald die Uhr wieder mit dem Telefon verbunden ist.</p>
+
+<h2>Was bedeutet „Telefon antwortet nicht“?</h2>
+<p>Das Telefon hat deinen Punkt nicht bestätigt. Öffne Skoretap auf dem Telefon. Die Uhr versucht es weiter, nichts geht verloren.</p>
+
+<h2>Ich habe die App auf der Uhr verlassen. Ist das Match weg?</h2>
+<p>Nein. Das Match liegt auf dem Telefon und läuft weiter. Öffne Skoretap auf der Uhr in der App-Liste und mach weiter. Während eines Matches verlässt die untere Taste die App nicht, sie zählt nur Punkte.</p>
+
+<h2>Warum fragt die Uhr nach Berechtigungen?</h2>
+<p>Benachrichtigungen: Damit weiß die Uhr, dass ein Match läuft. Erlaube sie, wenn du gefragt wirst.</p>
+<p>Herzfrequenz und Aktivität: Nur, wenn du Puls, Schritte und Kalorien messen willst. Punkte zählen auch ohne.</p>
+<p>Berechtigungen änderst du in den Uhreneinstellungen unter Skoretap.</p>
+
+<h2>Warum soll ich in Samsung Health die Trainingserkennung ausschalten?</h2>
+<p>Auf Samsung-Uhren kann Samsung Health während eines Matches von selbst ein Training starten und Puls und Kalorien übernehmen. Dann kann Skoretap nichts mehr messen. Öffne Samsung Health auf der Uhr, geh in die Einstellungen und schalte die automatische Trainingserkennung aus. Die Uhr zeigt diesen Tipp nur einmal, deshalb steht er auch hier.</p>
+
+<h2>Warum wurden Puls oder Kalorien nicht gemessen?</h2>
+<p>Das Messen schaltest du mit deiner Einwilligung in der Telefon-App ein. Prüfe, ob sie an ist.</p>
+<p>Die Uhr braucht die Berechtigung für Herzfrequenz und Aktivität.</p>
+<p>Vielleicht hat eine andere App das Messen übernommen. Das Telefon sagt es dir nach dem Match. Der Samsung Health-Tipp oben hilft.</p>
+
+<h2>Brauche ich Internet?</h2>
+<p>Nein. Das Match wird auf dem Telefon gezählt und ohne Empfang ganz normal zu Ende gespielt. Internet brauchst du nur zum Veröffentlichen eines Matches, für die Sicherung und zum Anmelden.</p>
+
+<h2>Wird mein Match automatisch veröffentlicht?</h2>
+<p>Nein. Voreingestellt ist „Nicht teilen“. Ein Match wird nur veröffentlicht, wenn du es einschaltest, und das geht auch ohne Namen.</p>
+
+<h2>Kann ich ein angefangenes Match später zu Ende spielen?</h2>
+<p>Ja. Wähle „Später zu Ende spielen“. Das Match bleibt auf dem Telefon bei deinen angefangenen Matches, und du machst dort weiter, wo du aufgehört hast.</p>
+
+<h2>Kann Skoretap den Spielstand vorlesen?</h2>
+<p>Ja, das Telefon liest den Spielstand in allen 26 Sprachen der App vor. Die Sprache wählst du bei der Vorbereitung, ändern geht auch während des Matches. Hat das Telefon für die Sprache keine Stimme, sagt es dir die App. Punkte lassen sich nicht per Sprache eingeben, nur per Touch und von der Uhr aus.</p>
+
+<h2>Wie streame ich ein Match auf YouTube?</h2>
+<p>Schalte auf YouTube einmal Livestreams ein. Die erste Aktivierung kann bis zu 24 Stunden dauern.</p>
+<p>Finde in YouTube Studio deinen Streamschlüssel. Öffne im Match „Spielverlauf“, tippe auf „Live auf YouTube“ und füge den Schlüssel ein.</p>
+<p>Stelle das Telefon auf ein Stativ, schließe eine Powerbank an und rechne mit etwa 2 GB Daten für 90 Minuten. Skoretap muss auf dem Bildschirm bleiben. Gib Punkte während des Livestreams auf der Uhr ein.</p>
+<p>Das Video hat keinen Ton. Der Spielstand ist im Bild. Wenn das Match im Web ist, kannst du den Link zur Statistik in die Videobeschreibung kopieren.</p>
+
+<h2>Kann ein anderes Handy zählen als das, das filmt?</h2>
+<p>Ja. Ein Handy zählt (deins mit der Uhr oder das des Schiedsrichters), das andere steht als Kamera auf dem Stativ.</p>
+<p>Tippe auf dem zählenden Handy im Match auf „Kamera auf anderem Handy“ und „Code erstellen“. Du musst bei einem Skoretap-Konto angemeldet sein.</p>
+<p>Tippe auf dem Kamera-Handy auf dem Startbildschirm auf „Kamera für ein Match“, gib den Code ein und starte die Übertragung. Ein Konto ist dort nicht nötig.</p>
+<p>Der Spielstand kommt übers Internet und ist etwa eine Sekunde nach dem Punkt im Bild. Punkte gibt immer nur ein Handy ein, damit nichts doppelt zählt.</p>
+
+<h2>Wie lösche ich mein Konto und meine Daten?</h2>
+<p>Wenn du angemeldet bist, gibt es in der Match-Vorbereitung die Schaltfläche „Konto löschen“. Ohne die App kannst du die Löschung unter skoretap.com/smazani-uctu.html beantragen. Was wir speichern und warum, steht in der Datenschutzerklärung unter skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="es" lang="es" hidden>
+<h1>Preguntas frecuentes</h1>
+
+<h2>¿En qué relojes y móviles funciona Skoretap?</h2>
+<p>En móviles Android y relojes Wear OS, como el Samsung Galaxy Watch. De momento no funciona en iPhone, Apple Watch ni Garmin.</p>
+
+<h2>¿Cómo pongo Skoretap en el reloj?</h2>
+<p>El reloj tiene que estar emparejado con el móvil. Instala Skoretap desde Google Play en el móvil y después también en el reloj. No funciona solo en el reloj, necesita el móvil.</p>
+
+<h2>¿Cómo empiezo un partido con el reloj?</h2>
+<p>Crea el partido en el móvil y abre Skoretap en el reloj. El reloj averigua solo cómo va el marcador. Si pone “Buscando el teléfono…”, todavía no se ha conectado al móvil.</p>
+
+<h2>¿Cómo sumo puntos en el reloj?</h2>
+<p>Botón de abajo una vez: punto para el equipo de arriba.</p>
+<p>Botón de abajo dos veces rápido: punto para el equipo de abajo.</p>
+<p>El reloj vibra y muestra quién ha ganado el punto.</p>
+<p>¿Te has equivocado? Toca “DESHACER”.</p>
+<p>El bisel giratorio no suma puntos a propósito. Podrías rozarlo mientras juegas y se sumaría un punto que nadie sabe.</p>
+
+<h2>¿Y si el reloj pierde el móvil?</h2>
+<p>El móvil guarda el marcador y el reloj es su mando. Si se corta la conexión, el reloj muestra “sin teléfono” y recuerda tus pulsaciones. “en cola 3” significa que hay tres pulsaciones esperando a enviarse. Salen solas en cuanto el reloj se vuelve a conectar.</p>
+
+<h2>¿Qué significa “El teléfono no responde”?</h2>
+<p>El móvil no ha confirmado tu punto. Abre Skoretap en el móvil. El reloj sigue intentándolo y tus pulsaciones no se pierden.</p>
+
+<h2>He salido de la app en el reloj. ¿He perdido el partido?</h2>
+<p>No. El partido está en el móvil y sigue en marcha. Abre Skoretap desde la lista de apps del reloj y continúa. Durante un partido, el botón de abajo no te saca de la app, solo suma puntos.</p>
+
+<h2>¿Por qué el reloj pide permisos?</h2>
+<p>Notificaciones: así el reloj sabe que hay un partido en marcha. Permítelas cuando te lo pida.</p>
+<p>Frecuencia cardíaca y actividad: solo si quieres medir el pulso, los pasos y las calorías. Los puntos funcionan sin ellos.</p>
+<p>Puedes cambiar los permisos en los ajustes del reloj, en Skoretap.</p>
+
+<h2>¿Por qué desactivar la detección de ejercicio en Samsung Health?</h2>
+<p>En los relojes Samsung, Samsung Health puede iniciar por su cuenta el seguimiento de un entrenamiento durante un partido y quedarse con la medición de la frecuencia cardíaca y las calorías. Entonces Skoretap no tiene nada que medir. Abre Samsung Health en el reloj, entra en sus ajustes y desactiva la detección automática de ejercicio. El reloj muestra este consejo solo una vez, por eso también está aquí.</p>
+
+<h2>¿Por qué no se midió mi pulso o mis calorías?</h2>
+<p>La medición se activa con tu consentimiento en la app del móvil. Comprueba que está activada.</p>
+<p>El reloj debe tener permiso para la frecuencia cardíaca y la actividad.</p>
+<p>Puede que otra app se haya quedado con la medición. El móvil te lo dice después del partido. El consejo de Samsung Health de arriba ayuda.</p>
+
+<h2>¿Necesito internet?</h2>
+<p>No. El partido se cuenta en el móvil y se termina igual sin cobertura. Solo necesitas internet para publicar un partido, hacer copia de seguridad e iniciar sesión.</p>
+
+<h2>¿Mi partido se publica solo?</h2>
+<p>No. Lo predeterminado es “No compartir”. Un partido solo se publica si lo activas, y se puede publicar sin nombres.</p>
+
+<h2>¿Puedo terminar un partido otro día?</h2>
+<p>Sí. Elige “Terminarlo otro día”. El partido se queda en el móvil entre tus partidos sin terminar y sigues donde lo dejaste.</p>
+
+<h2>¿Skoretap puede leer el marcador en voz alta?</h2>
+<p>Sí, el móvil lee el marcador en los 26 idiomas de la app. El idioma de la voz se elige al preparar el partido y se puede cambiar durante el partido. Si el móvil no tiene voz para ese idioma, la app te avisa. Los puntos no se introducen por voz, solo tocando la pantalla y desde el reloj.</p>
+
+<h2>¿Cómo transmito un partido en directo en YouTube?</h2>
+<p>Activa una vez las transmisiones en directo en YouTube. La primera activación puede tardar hasta 24 horas.</p>
+<p>Busca tu clave de transmisión en YouTube Studio. En el partido abre “Desarrollo del partido”, toca “En directo en YouTube” y pega la clave.</p>
+<p>Pon el móvil en un trípode, conecta una batería externa y cuenta con unos 2 GB de datos por 90 minutos. Skoretap tiene que seguir en la pantalla. Durante la transmisión, anota los puntos desde el reloj.</p>
+<p>El vídeo no lleva sonido. El marcador va en la imagen. Si el partido está en la web, puedes copiar el enlace a las estadísticas en la descripción del vídeo.</p>
+
+<h2>¿Puede llevar el marcador un móvil distinto del que graba?</h2>
+<p>Sí. Un móvil lleva el marcador (el tuyo con el reloj o el del árbitro) y el otro está en un trípode como cámara.</p>
+<p>En el móvil que cuenta, toca en el partido «Cámara en otro móvil» y «Crear código». Tienes que haber iniciado sesión en una cuenta de Skoretap.</p>
+<p>En el móvil con la cámara, toca «Cámara para un partido» en la pantalla de inicio, escribe el código e inicia la emisión. Ahí no hace falta cuenta.</p>
+<p>El marcador va por internet y aparece en la imagen un segundo después del punto. Solo un móvil introduce los puntos, para que ninguno cuente dos veces.</p>
+
+<h2>¿Cómo elimino mi cuenta y mis datos?</h2>
+<p>Si has iniciado sesión, la pantalla de preparar el partido tiene un botón “Eliminar cuenta”. Sin la app, puedes pedir la eliminación en skoretap.com/smazani-uctu.html. Lo que guardamos y por qué está en la política de privacidad en skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="fr" lang="fr" hidden>
+<h1>Questions fréquentes</h1>
+
+<h2>Sur quelles montres et quels téléphones ça marche ?</h2>
+<p>Sur les téléphones Android et les montres Wear OS, comme la Samsung Galaxy Watch. Pour l'instant, ça ne marche pas sur iPhone, Apple Watch ni Garmin.</p>
+
+<h2>Comment mettre Skoretap sur ma montre ?</h2>
+<p>La montre doit être associée à ton téléphone. Installe Skoretap depuis Google Play sur le téléphone, puis aussi sur la montre. Il ne fonctionne pas sur la montre seule, il a besoin du téléphone.</p>
+
+<h2>Comment lancer un match avec la montre ?</h2>
+<p>Crée le match sur le téléphone et ouvre Skoretap sur la montre. La montre retrouve toute seule le score. Si elle affiche « Recherche du téléphone… », elle n'est pas encore connectée au téléphone.</p>
+
+<h2>Comment ajouter des points sur la montre ?</h2>
+<p>Bouton du bas, une fois : point pour l'équipe du haut.</p>
+<p>Bouton du bas, deux fois vite : point pour l'équipe du bas.</p>
+<p>La montre vibre et montre qui a marqué le point.</p>
+<p>Tu t'es trompé ? Appuie sur « ANNULER ».</p>
+<p>La lunette tournante n'ajoute aucun point, exprès. Tu pourrais la frôler en jouant et un point que personne ne connaît serait ajouté.</p>
+
+<h2>Et si la montre perd le téléphone ?</h2>
+<p>Le téléphone garde le score, la montre n'est que sa télécommande. Quand la connexion coupe, la montre affiche « pas de téléphone » et se souvient de tes appuis. « en attente 3 » veut dire que trois appuis attendent d'être envoyés. Ils partent tout seuls dès que la montre se reconnecte.</p>
+
+<h2>Que veut dire « Le téléphone ne répond pas » ?</h2>
+<p>Le téléphone n'a pas confirmé ton point. Ouvre Skoretap sur le téléphone. La montre continue d'essayer et tes appuis ne sont pas perdus.</p>
+
+<h2>J'ai quitté l'appli sur la montre. Ai-je perdu le match ?</h2>
+<p>Non. Le match est sur le téléphone et continue. Ouvre Skoretap depuis la liste des applis de la montre et reprends. Pendant un match, le bouton du bas ne quitte pas l'appli, il ajoute seulement des points.</p>
+
+<h2>Pourquoi la montre demande des autorisations ?</h2>
+<p>Notifications : elles permettent à la montre de savoir qu'un match est en cours. Autorise-les quand elle te le demande.</p>
+<p>Rythme cardiaque et activité : seulement si tu veux mesurer ton rythme cardiaque, tes pas et tes calories. Les points marchent aussi sans.</p>
+<p>Tu peux modifier les autorisations dans les réglages de la montre, sous Skoretap.</p>
+
+<h2>Pourquoi désactiver la détection d'entraînement dans Samsung Health ?</h2>
+<p>Sur les montres Samsung, Samsung Health peut lancer tout seul le suivi d'un entraînement pendant un match et prendre la main sur la mesure du rythme cardiaque et des calories. Skoretap n'a alors plus rien à mesurer. Ouvre Samsung Health sur la montre, va dans ses réglages et désactive la détection automatique des entraînements. La montre n'affiche ce conseil qu'une seule fois, c'est pourquoi il est aussi ici.</p>
+
+<h2>Pourquoi mon rythme cardiaque ou mes calories n'ont pas été mesurés ?</h2>
+<p>La mesure s'active avec ton accord dans l'appli du téléphone. Vérifie qu'elle est activée.</p>
+<p>La montre doit avoir l'autorisation pour le rythme cardiaque et l'activité.</p>
+<p>Une autre appli a peut-être pris la main sur la mesure. Le téléphone te le dit après le match. Le conseil sur Samsung Health ci-dessus aide.</p>
+
+<h2>Faut-il Internet ?</h2>
+<p>Non. Le match est compté sur le téléphone et se termine pareil sans réseau. Internet ne sert qu'à publier un match, à faire une sauvegarde et à se connecter.</p>
+
+<h2>Mon match est-il publié tout seul ?</h2>
+<p>Non. Le réglage par défaut est « Ne pas partager ». Un match n'est publié que si tu l'actives, et il peut l'être sans les noms.</p>
+
+<h2>Puis-je finir un match plus tard ?</h2>
+<p>Oui. Choisis « Le finir plus tard ». Le match reste sur le téléphone parmi tes matchs en cours et tu reprends là où tu t'étais arrêté.</p>
+
+<h2>Skoretap peut-il lire le score à voix haute ?</h2>
+<p>Oui, le téléphone lit le score dans les 26 langues de l'appli. Tu choisis la langue de la voix en préparant le match et tu peux la changer pendant le match. Si le téléphone n'a pas de voix pour cette langue, l'appli te le dit. Les points ne se saisissent pas à la voix, seulement au toucher et depuis la montre.</p>
+
+<h2>Comment diffuser un match en direct sur YouTube ?</h2>
+<p>Active une fois la diffusion en direct sur YouTube. La première activation peut prendre jusqu'à 24 heures.</p>
+<p>Dans YouTube Studio, trouve ta clé de stream. Dans le match, ouvre « Déroulement du match », appuie sur « En direct sur YouTube » et colle la clé.</p>
+<p>Mets le téléphone sur un trépied, branche une batterie externe et compte environ 2 GB de données pour 90 minutes. Skoretap doit rester à l'écran. Pendant la diffusion, saisis les points depuis la montre.</p>
+<p>La vidéo n'a pas de son. Le score est dans l'image. Si le match est sur le web, tu peux copier le lien vers les statistiques dans la description de la vidéo.</p>
+
+<h2>Un autre téléphone que celui qui filme peut-il compter les points ?</h2>
+<p>Oui. Un téléphone compte (le tien avec la montre, ou celui de l'arbitre), l'autre est sur un trépied comme caméra.</p>
+<p>Sur le téléphone qui compte, touche « Caméra sur un autre téléphone » pendant le match, puis « Créer un code ». Tu dois être connecté à un compte Skoretap.</p>
+<p>Sur le téléphone caméra, touche « Caméra pour un match » sur l'écran d'accueil, saisis le code et lance la diffusion. Pas besoin de compte ici.</p>
+<p>Le score passe par Internet et apparaît à l'image environ une seconde après le point. Un seul téléphone saisit les points, pour que rien ne compte deux fois.</p>
+
+<h2>Comment supprimer mon compte et mes données ?</h2>
+<p>Quand tu es connecté, l'écran de préparation du match a un bouton « Supprimer le compte ». Sans l'appli, tu peux demander la suppression sur skoretap.com/smazani-uctu.html. Ce que nous gardons et pourquoi se trouve dans la politique de confidentialité sur skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="it" lang="it" hidden>
+<h1>Domande frequenti</h1>
+
+<h2>Su quali orologi e telefoni funziona Skoretap?</h2>
+<p>Su telefoni Android e smartwatch Wear OS, come il Samsung Galaxy Watch. Per ora non funziona su iPhone, Apple Watch o Garmin.</p>
+
+<h2>Come metto Skoretap sull'orologio?</h2>
+<p>L'orologio deve essere abbinato al telefono. Installa Skoretap da Google Play sul telefono e poi anche sull'orologio. Da solo sull'orologio non funziona, serve il telefono.</p>
+
+<h2>Come inizio una partita con l'orologio?</h2>
+<p>Crea la partita sul telefono e apri Skoretap sull'orologio. L'orologio scopre da solo com'è il punteggio. Se c'è scritto “Cerco il telefono…”, non si è ancora collegato al telefono.</p>
+
+<h2>Come aggiungo i punti sull'orologio?</h2>
+<p>Tasto in basso una volta: punto alla squadra in alto.</p>
+<p>Tasto in basso due volte veloce: punto alla squadra in basso.</p>
+<p>L'orologio vibra e mostra chi ha preso il punto.</p>
+<p>Hai sbagliato? Tocca “ANNULLA”.</p>
+<p>La ghiera girevole non aggiunge punti, di proposito. Potresti sfiorarla mentre giochi e si aggiungerebbe un punto che nessuno conosce.</p>
+
+<h2>E se l'orologio perde il telefono?</h2>
+<p>Il telefono tiene il punteggio e l'orologio è il suo telecomando. Quando la connessione cade, l'orologio mostra “niente telefono” e ricorda le tue pressioni. “in coda 3” significa che tre pressioni aspettano di essere inviate. Partono da sole appena l'orologio si ricollega.</p>
+
+<h2>Cosa significa “Il telefono non risponde”?</h2>
+<p>Il telefono non ha confermato il tuo punto. Apri Skoretap sul telefono. L'orologio continua a provare e le tue pressioni non si perdono.</p>
+
+<h2>Sono uscito dall'app sull'orologio. Ho perso la partita?</h2>
+<p>No. La partita è sul telefono e va avanti. Apri Skoretap dall'elenco delle app dell'orologio e continua. Durante la partita il tasto in basso non ti fa uscire dall'app, aggiunge solo punti.</p>
+
+<h2>Perché l'orologio chiede i permessi?</h2>
+<p>Notifiche: servono all'orologio per sapere che una partita è in corso. Consentile quando te lo chiede.</p>
+<p>Frequenza cardiaca e attività: solo se vuoi misurare battito, passi e calorie. I punti funzionano anche senza.</p>
+<p>Puoi cambiare i permessi nelle impostazioni dell'orologio, sotto Skoretap.</p>
+
+<h2>Perché disattivare il rilevamento dell'allenamento in Samsung Health?</h2>
+<p>Sugli orologi Samsung, Samsung Health può avviare da solo il monitoraggio dell'allenamento durante una partita e prendersi la misurazione di battito e calorie. Allora Skoretap non ha più niente da misurare. Apri Samsung Health sull'orologio, vai nelle sue impostazioni e disattiva il rilevamento automatico dell'allenamento. L'orologio mostra questo consiglio una sola volta, per questo è anche qui.</p>
+
+<h2>Perché battito o calorie non sono stati misurati?</h2>
+<p>La misurazione si attiva con il tuo consenso nell'app del telefono. Controlla che sia attiva.</p>
+<p>L'orologio deve avere il permesso per frequenza cardiaca e attività.</p>
+<p>Potrebbe averla presa un'altra app. Il telefono te lo dice dopo la partita. Il consiglio su Samsung Health qui sopra aiuta.</p>
+
+<h2>Serve internet?</h2>
+<p>No. La partita si conta sul telefono e finisce uguale anche senza segnale. Internet serve solo per pubblicare una partita, fare il backup e accedere.</p>
+
+<h2>La mia partita viene pubblicata da sola?</h2>
+<p>No. L'impostazione predefinita è “Non condividere”. Una partita viene pubblicata solo se lo attivi, e può essere pubblicata anche senza nomi.</p>
+
+<h2>Posso finire una partita in un altro momento?</h2>
+<p>Sì. Scegli “Finirla un'altra volta”. La partita resta sul telefono tra quelle da finire e riprendi da dove avevi smesso.</p>
+
+<h2>Skoretap può leggere il punteggio ad alta voce?</h2>
+<p>Sì, il telefono legge il punteggio in tutte le 26 lingue dell'app. La lingua della voce si sceglie nella preparazione e si può cambiare anche durante la partita. Se il telefono non ha la voce per quella lingua, l'app te lo dice. I punti non si inseriscono a voce, solo al tocco e dall'orologio.</p>
+
+<h2>Come faccio la diretta di una partita su YouTube?</h2>
+<p>Attiva una volta le dirette su YouTube. La prima attivazione può richiedere fino a 24 ore.</p>
+<p>Trova la chiave stream in YouTube Studio. Nella partita apri “Andamento della partita”, tocca “In diretta su YouTube” e incolla la chiave.</p>
+<p>Metti il telefono su un treppiede, collega un power bank e calcola circa 2 GB di dati per 90 minuti. Skoretap deve restare sullo schermo. Durante la diretta inserisci i punti dall'orologio.</p>
+<p>Il video è senza audio. Il punteggio è nell'immagine. Se la partita è sul web, puoi copiare il link alle statistiche nella descrizione del video.</p>
+
+<h2>Può tenere il punteggio un telefono diverso da quello che riprende?</h2>
+<p>Sì. Un telefono tiene il punteggio (il tuo con l'orologio o quello dell'arbitro), l'altro sta sul treppiede come fotocamera.</p>
+<p>Sul telefono che conta, tocca nella partita «Fotocamera su un altro telefono» e «Crea codice». Devi aver effettuato l'accesso a un account Skoretap.</p>
+<p>Sul telefono con la fotocamera, tocca «Fotocamera per una partita» nella schermata iniziale, inserisci il codice e avvia la diretta. Lì l'account non serve.</p>
+<p>Il punteggio passa da internet e compare nell'immagine circa un secondo dopo il punto. I punti li inserisce sempre un solo telefono, così niente conta due volte.</p>
+
+<h2>Come elimino il mio account e i miei dati?</h2>
+<p>Quando hai effettuato l'accesso, nella preparazione della partita c'è il pulsante “Elimina account”. Senza l'app puoi chiedere l'eliminazione su skoretap.com/smazani-uctu.html. Cosa conserviamo e perché lo trovi nell'informativa sulla privacy su skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="pt" lang="pt" hidden>
+<h1>Perguntas frequentes</h1>
+
+<h2>Em que relógios e telemóveis funciona o Skoretap?</h2>
+<p>Em telemóveis Android e relógios Wear OS, como o Samsung Galaxy Watch. Para já, não funciona em iPhone, Apple Watch nem Garmin.</p>
+
+<h2>Como ponho o Skoretap no relógio?</h2>
+<p>O relógio tem de estar emparelhado com o telemóvel. Instala o Skoretap a partir do Google Play no telemóvel e depois também no relógio. Sozinho no relógio não funciona, precisa do telemóvel.</p>
+
+<h2>Como começo um jogo com o relógio?</h2>
+<p>Cria o jogo no telemóvel e abre o Skoretap no relógio. O relógio descobre sozinho como está o resultado. Se aparecer “A procurar o telemóvel…”, ainda não se ligou ao telemóvel.</p>
+
+<h2>Como adiciono pontos no relógio?</h2>
+<p>Botão de baixo uma vez: ponto para a equipa de cima.</p>
+<p>Botão de baixo duas vezes seguidas: ponto para a equipa de baixo.</p>
+<p>O relógio vibra e mostra quem ganhou o ponto.</p>
+<p>Enganaste-te? Toca em “DESFAZER”.</p>
+<p>O bisel rotativo não adiciona pontos, de propósito. Podias roçar nele durante o jogo e seria adicionado um ponto que ninguém sabe.</p>
+
+<h2>E se o relógio perder o telemóvel?</h2>
+<p>O telemóvel guarda o resultado e o relógio é o seu comando. Quando a ligação cai, o relógio mostra “sem telemóvel” e lembra-se dos teus toques. “em fila 3” quer dizer que três toques esperam para ser enviados. Seguem sozinhos assim que o relógio voltar a ligar-se.</p>
+
+<h2>O que significa “O telemóvel não responde”?</h2>
+<p>O telemóvel não confirmou o teu ponto. Abre o Skoretap no telemóvel. O relógio continua a tentar e os teus toques não se perdem.</p>
+
+<h2>Saí da app no relógio. Perdi o jogo?</h2>
+<p>Não. O jogo está no telemóvel e continua. Abre o Skoretap a partir da lista de apps do relógio e segue em frente. Durante um jogo, o botão de baixo não te tira da app, só adiciona pontos.</p>
+
+<h2>Porque é que o relógio pede permissões?</h2>
+<p>Notificações: servem para o relógio saber que está a decorrer um jogo. Permite-as quando ele perguntar.</p>
+<p>Frequência cardíaca e atividade: só se quiseres medir a frequência cardíaca, os passos e as calorias. Os pontos funcionam sem isso.</p>
+<p>Podes mudar as permissões nas definições do relógio, em Skoretap.</p>
+
+<h2>Porque devo desligar a deteção de treino no Samsung Health?</h2>
+<p>Nos relógios Samsung, o Samsung Health pode iniciar sozinho o registo de um treino durante um jogo e ficar com a medição da frequência cardíaca e das calorias. Aí o Skoretap já não tem nada para medir. Abre o Samsung Health no relógio, vai às definições e desliga a deteção automática de treino. O relógio mostra esta dica só uma vez, por isso está também aqui.</p>
+
+<h2>Porque não mediu a minha frequência cardíaca ou as calorias?</h2>
+<p>A medição ativa-se com o teu consentimento na app do telemóvel. Verifica se está ligada.</p>
+<p>O relógio tem de ter permissão para a frequência cardíaca e a atividade.</p>
+<p>Outra app pode ter ficado com a medição. O telemóvel diz-to depois do jogo. A dica do Samsung Health acima ajuda.</p>
+
+<h2>Preciso de internet?</h2>
+<p>Não. O jogo conta-se no telemóvel e acaba da mesma forma sem rede. Só precisas de internet para publicar um jogo, fazer cópia de segurança e iniciar sessão.</p>
+
+<h2>O meu jogo é publicado automaticamente?</h2>
+<p>Não. A predefinição é “Não partilhar”. Um jogo só é publicado se o ativares, e pode ser publicado sem nomes.</p>
+
+<h2>Posso acabar um jogo mais tarde?</h2>
+<p>Sim. Escolhe “Acabar mais tarde”. O jogo fica no telemóvel entre os jogos por acabar e continuas onde ficaste.</p>
+
+<h2>O Skoretap lê o resultado em voz alta?</h2>
+<p>Sim, o telemóvel lê o resultado nas 26 línguas da app. Escolhes a língua da voz ao preparar o jogo e podes mudá-la durante o jogo. Se o telemóvel não tiver voz para essa língua, a app avisa. Os pontos não se introduzem por voz, só ao toque e a partir do relógio.</p>
+
+<h2>Como transmito um jogo no YouTube?</h2>
+<p>Ativa uma vez as transmissões em direto no YouTube. A primeira ativação pode demorar até 24 horas.</p>
+<p>Encontra a chave de stream no YouTube Studio. No jogo abre “Evolução da partida”, toca em “Em direto no YouTube” e cola a chave.</p>
+<p>Põe o telemóvel num tripé, liga um powerbank e conta com cerca de 2 GB de dados por 90 minutos. O Skoretap tem de ficar no ecrã. Durante a transmissão, regista os pontos no relógio.</p>
+<p>O vídeo não tem som. O resultado está na imagem. Se o jogo estiver na web, podes copiar a ligação para as estatísticas para a descrição do vídeo.</p>
+
+<h2>Pode outro telemóvel contar o resultado, que não o que filma?</h2>
+<p>Sim. Um telemóvel conta o resultado (o teu com o relógio, ou o do árbitro) e o outro fica num tripé como câmara.</p>
+<p>No telemóvel que conta, toca no jogo em «Câmara noutro telemóvel» e «Criar código». Tens de ter sessão iniciada numa conta Skoretap.</p>
+<p>No telemóvel com a câmara, toca em «Câmara para um jogo» no ecrã inicial, escreve o código e inicia a transmissão. Aí não é preciso conta.</p>
+<p>O resultado vai pela internet e aparece na imagem cerca de um segundo depois do ponto. Só um telemóvel introduz os pontos, para nada contar duas vezes.</p>
+
+<h2>Como apago a conta e os dados?</h2>
+<p>Quando tens sessão iniciada, a preparação do jogo tem o botão “Apagar conta”. Sem a app, podes pedir a eliminação em skoretap.com/smazani-uctu.html. O que guardamos e porquê está na política de privacidade em skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="nl" lang="nl" hidden>
+<h1>Veelgestelde vragen</h1>
+
+<h2>Op welke horloges en telefoons werkt Skoretap?</h2>
+<p>Op Android-telefoons en Wear OS-horloges, zoals de Samsung Galaxy Watch. Op iPhone, Apple Watch of Garmin werkt het nog niet.</p>
+
+<h2>Hoe krijg ik Skoretap op mijn horloge?</h2>
+<p>Het horloge moet met je telefoon gekoppeld zijn. Installeer Skoretap uit Google Play op de telefoon en daarna ook op het horloge. Op het horloge alleen werkt het niet, het heeft de telefoon nodig.</p>
+
+<h2>Hoe start ik een wedstrijd met het horloge?</h2>
+<p>Maak de wedstrijd aan op de telefoon en open Skoretap op het horloge. Het horloge ziet zelf hoe de stand is. Staat er “Telefoon zoeken…”, dan is het nog niet verbonden met de telefoon.</p>
+
+<h2>Hoe tel ik punten op het horloge?</h2>
+<p>Onderste knop één keer: punt voor het bovenste team.</p>
+<p>Onderste knop twee keer snel achter elkaar: punt voor het onderste team.</p>
+<p>Het horloge trilt en laat zien wie het punt kreeg.</p>
+<p>Verkeerd gedrukt? Tik op “TERUG”.</p>
+<p>De draaibare bezel geeft bewust geen punten. Je zou er tijdens het spelen tegenaan kunnen komen, en dan wordt er een punt geteld waar niemand van weet.</p>
+
+<h2>Wat als het horloge de telefoon kwijtraakt?</h2>
+<p>De telefoon houdt de stand bij, het horloge is de afstandsbediening. Als de verbinding wegvalt, toont het horloge “geen telefoon” en onthoudt het je knopdrukken. “wacht 3” betekent dat drie knopdrukken nog verstuurd moeten worden. Ze gaan vanzelf weg zodra het horloge weer verbinding heeft met de telefoon.</p>
+
+<h2>Wat betekent “Telefoon reageert niet”?</h2>
+<p>De telefoon heeft je punt niet bevestigd. Open Skoretap op de telefoon. Het horloge blijft het proberen, er gaat niets verloren.</p>
+
+<h2>Ik ben uit de app op mijn horloge gegaan. Ben ik de wedstrijd kwijt?</h2>
+<p>Nee. De wedstrijd staat op de telefoon en loopt door. Open Skoretap op het horloge via de lijst met apps en ga verder. Tijdens een wedstrijd verlaat de onderste knop de app niet, hij telt alleen punten.</p>
+
+<h2>Waarom vraagt het horloge om toestemmingen?</h2>
+<p>Meldingen: daardoor weet het horloge dat er een wedstrijd loopt. Sta ze toe als erom gevraagd wordt.</p>
+<p>Hartslag en beweging: alleen als je hartslag, stappen en calorieën wilt meten. Punten tellen ook zonder.</p>
+<p>Toestemmingen wijzig je in de horloge-instellingen bij Skoretap.</p>
+
+<h2>Waarom moet ik trainingsherkenning in Samsung Health uitzetten?</h2>
+<p>Op Samsung-horloges kan Samsung Health tijdens een wedstrijd zelf een training starten en de meting van hartslag en calorieën overnemen. Skoretap heeft dan niets meer te meten. Open Samsung Health op het horloge, ga naar de instellingen en zet de automatische trainingsherkenning uit. Het horloge toont deze tip maar één keer, daarom staat hij ook hier.</p>
+
+<h2>Waarom zijn mijn hartslag of calorieën niet gemeten?</h2>
+<p>Meten zet je aan met je toestemming in de telefoon-app. Controleer of het aanstaat.</p>
+<p>Het horloge moet toestemming hebben voor hartslag en beweging.</p>
+<p>Misschien heeft een andere app het meten overgenomen. De telefoon meldt dat na de wedstrijd. De Samsung Health-tip hierboven helpt.</p>
+
+<h2>Heb ik internet nodig?</h2>
+<p>Nee. De wedstrijd wordt op de telefoon geteld en gaat zonder bereik gewoon door tot het einde. Internet heb je alleen nodig om een wedstrijd te publiceren, voor de back-up en om in te loggen.</p>
+
+<h2>Wordt mijn wedstrijd vanzelf gepubliceerd?</h2>
+<p>Nee. Standaard staat het op “Niet delen”. Een wedstrijd wordt alleen gepubliceerd als je dat aanzet, en dat kan ook zonder namen.</p>
+
+<h2>Kan ik een wedstrijd later afmaken?</h2>
+<p>Ja. Kies “Later uitspelen”. De wedstrijd blijft op de telefoon staan bij je onafgemaakte wedstrijden en je gaat verder waar je gebleven was.</p>
+
+<h2>Kan Skoretap de stand voorlezen?</h2>
+<p>Ja, de telefoon leest de score voor in alle 26 talen van de app. De taal van de stem kies je bij het voorbereiden en je kunt hem ook tijdens de wedstrijd wijzigen. Heeft de telefoon geen stem voor die taal, dan meldt de app dat. Punten invoeren met je stem kan niet, alleen met aanraken en vanaf het horloge.</p>
+
+<h2>Hoe stream ik een wedstrijd op YouTube?</h2>
+<p>Zet livestreamen op YouTube één keer aan. De eerste activering kan tot 24 uur duren.</p>
+<p>Zoek je streamsleutel in YouTube Studio. Open in de wedstrijd “Verloop van de wedstrijd”, tik op “Live op YouTube” en plak de sleutel.</p>
+<p>Zet de telefoon op een statief, sluit een powerbank aan en reken op ongeveer 2 GB data per 90 minuten. Skoretap moet op het scherm blijven. Voer tijdens de livestream de punten in op je horloge.</p>
+<p>De video heeft geen geluid. De stand staat in beeld. Staat de wedstrijd op het web, dan kun je de link naar de statistieken in de videobeschrijving kopiëren.</p>
+
+<h2>Kan een andere telefoon de score bijhouden dan die filmt?</h2>
+<p>Ja. Eén telefoon houdt de score bij (die van jou met het horloge, of die van de scheidsrechter), de andere staat als camera op een statief.</p>
+<p>Tik op de telefoon die telt in de wedstrijd op „Camera op andere telefoon” en „Code maken”. Je moet ingelogd zijn op een Skoretap-account.</p>
+<p>Tik op de cameratelefoon op het startscherm op „Camera voor een wedstrijd”, voer de code in en start de stream. Daar is geen account nodig.</p>
+<p>De score gaat via internet en staat ongeveer een seconde na het punt in beeld. Punten worden altijd door één telefoon ingevoerd, zodat niets dubbel telt.</p>
+
+<h2>Hoe verwijder ik mijn account en gegevens?</h2>
+<p>Als je bent ingelogd, staat er bij het voorbereiden van de wedstrijd een knop “Account verwijderen”. Zonder de app kun je verwijdering aanvragen op skoretap.com/smazani-uctu.html. Wat we opslaan en waarom staat in het privacybeleid op skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="sv" lang="sv" hidden>
+<h1>Vanliga frågor</h1>
+
+<h2>Vilka klockor och telefoner fungerar Skoretap på?</h2>
+<p>På Android-telefoner och Wear OS-klockor, till exempel Samsung Galaxy Watch. På iPhone, Apple Watch eller Garmin fungerar det inte ännu.</p>
+
+<h2>Hur får jag Skoretap på klockan?</h2>
+<p>Klockan måste vara ihopkopplad med telefonen. Installera Skoretap från Google Play på telefonen och sedan på klockan också. Det fungerar inte på klockan ensam, det behöver telefonen.</p>
+
+<h2>Hur startar jag en match med klockan?</h2>
+<p>Skapa matchen på telefonen och öppna Skoretap på klockan. Klockan tar själv reda på ställningen. Står det ”Söker telefonen…” har den inte kopplat upp sig mot telefonen än.</p>
+
+<h2>Hur lägger jag till poäng på klockan?</h2>
+<p>Nedre knappen en gång: poäng till laget överst.</p>
+<p>Nedre knappen två gånger snabbt efter varandra: poäng till laget nederst.</p>
+<p>Klockan vibrerar och visar vem som fick poängen.</p>
+<p>Gjorde du fel? Tryck på ”ÅNGRA”.</p>
+<p>Den vridbara bezeln ger medvetet inga poäng. Du kan råka röra vid den under spelet, och då skulle en poäng räknas som ingen vet om.</p>
+
+<h2>Vad händer om klockan tappar telefonen?</h2>
+<p>Telefonen håller i ställningen och klockan är dess fjärrkontroll. Om anslutningen bryts visar klockan ”ingen telefon” och minns dina tryck. ”i kö 3” betyder att tre tryck väntar på att skickas. De skickas av sig själva så fort klockan kopplar upp sig mot telefonen igen.</p>
+
+<h2>Vad betyder ”Telefonen svarar inte”?</h2>
+<p>Telefonen har inte bekräftat din poäng. Öppna Skoretap på telefonen. Klockan fortsätter försöka och inga tryck går förlorade.</p>
+
+<h2>Jag lämnade appen på klockan. Har jag förlorat matchen?</h2>
+<p>Nej. Matchen ligger på telefonen och fortsätter. Öppna Skoretap från applistan på klockan och fortsätt. Under en match lämnar den nedre knappen inte appen, den lägger bara till poäng.</p>
+
+<h2>Varför ber klockan om behörigheter?</h2>
+<p>Aviseringar: med dem vet klockan att en match pågår. Tillåt dem när du får frågan.</p>
+<p>Puls och aktivitet: bara om du vill mäta puls, steg och kalorier. Poängräkningen fungerar även utan.</p>
+<p>Behörigheter ändrar du i klockans inställningar under Skoretap.</p>
+
+<h2>Varför ska jag stänga av träningsavkänning i Samsung Health?</h2>
+<p>På Samsung-klockor kan Samsung Health starta ett träningspass av sig själv under en match och ta över mätningen av puls och kalorier. Då har Skoretap inget att mäta. Öppna Samsung Health på klockan, gå till inställningarna och stäng av automatisk träningsavkänning. Klockan visar det här tipset bara en gång, därför står det också här.</p>
+
+<h2>Varför mättes inte min puls eller mina kalorier?</h2>
+<p>Mätningen slås på med ditt samtycke i telefonappen. Kontrollera att den är på.</p>
+<p>Klockan måste ha behörighet för puls och aktivitet.</p>
+<p>En annan app kan ha tagit över mätningen. Telefonen berättar det efter matchen. Tipset om Samsung Health ovan hjälper.</p>
+
+<h2>Behöver jag internet?</h2>
+<p>Nej. Matchen räknas på telefonen och spelas klart på samma sätt utan täckning. Du behöver bara internet för att publicera en match, för säkerhetskopia och för att logga in.</p>
+
+<h2>Publiceras min match av sig själv?</h2>
+<p>Nej. Standard är ”Dela inte”. En match publiceras bara om du slår på det, och den kan publiceras utan namn.</p>
+
+<h2>Kan jag spela klart en match senare?</h2>
+<p>Ja. Välj ”Spela klart senare”. Matchen ligger kvar på telefonen bland dina pågående matcher och du fortsätter där du slutade.</p>
+
+<h2>Kan Skoretap läsa upp ställningen?</h2>
+<p>Ja, telefonen läser upp ställningen på alla appens 26 språk. Röstens språk väljer du när du förbereder matchen, och det går att ändra under matchen. Om telefonen saknar röst för språket säger appen till. Poäng kan inte matas in med rösten, bara med tryck och från klockan.</p>
+
+<h2>Hur sänder jag en match på YouTube?</h2>
+<p>Slå på livesändning på YouTube en gång. Första aktiveringen kan ta upp till 24 timmar.</p>
+<p>Hitta din streamnyckel i YouTube Studio. Öppna ”Matchens förlopp” i matchen, tryck på ”Live på YouTube” och klistra in nyckeln.</p>
+<p>Sätt telefonen på ett stativ, koppla in en powerbank och räkna med ungefär 2 GB data på 90 minuter. Skoretap måste vara kvar på skärmen. Ange poäng från klockan under sändningen.</p>
+<p>Videon har inget ljud. Ställningen syns i bilden. Om matchen finns på webben kan du kopiera länken till statistiken till videons beskrivning.</p>
+
+<h2>Kan en annan telefon räkna poängen än den som filmar?</h2>
+<p>Ja. En telefon räknar (din med klockan, eller domarens), den andra står på ett stativ som kamera.</p>
+<p>Tryck på den räknande telefonen i matchen på ”Kamera på annan telefon” och ”Skapa kod”. Du måste vara inloggad på ett Skoretap-konto.</p>
+<p>Tryck på kameratelefonen på startskärmen på ”Kamera för en match”, skriv in koden och starta sändningen. Där behövs inget konto.</p>
+<p>Ställningen går via internet och syns i bilden ungefär en sekund efter poängen. Poäng matas alltid in från en enda telefon, så att inget räknas dubbelt.</p>
+
+<h2>Hur raderar jag mitt konto och mina data?</h2>
+<p>När du är inloggad finns knappen ”Radera konto” i matchförberedelsen. Utan appen kan du be om radering på skoretap.com/smazani-uctu.html. Vad vi sparar och varför står i integritetspolicyn på skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="da" lang="da" hidden>
+<h1>Ofte stillede spørgsmål</h1>
+
+<h2>Hvilke ure og telefoner virker Skoretap på?</h2>
+<p>Android-telefoner og Wear OS-ure, for eksempel Samsung Galaxy Watch. På iPhone, Apple Watch eller Garmin virker det ikke endnu.</p>
+
+<h2>Hvordan får jeg Skoretap på mit ur?</h2>
+<p>Uret skal være parret med din telefon. Installer Skoretap fra Google Play på telefonen og derefter på uret også. Det virker ikke på uret alene, det har brug for telefonen.</p>
+
+<h2>Hvordan starter jeg en kamp med uret?</h2>
+<p>Opret kampen på telefonen og åbn Skoretap på uret. Uret finder selv ud af, hvordan stillingen er. Står der »Leder efter telefonen…«, er det ikke forbundet til telefonen endnu.</p>
+
+<h2>Hvordan tæller jeg point på uret?</h2>
+<p>Nederste knap én gang: point til holdet øverst.</p>
+<p>Nederste knap to gange hurtigt efter hinanden: point til holdet nederst.</p>
+<p>Uret vibrerer og viser, hvem der fik pointet.</p>
+<p>Trykket forkert? Tryk på »FORTRYD«.</p>
+<p>Den drejelige bezel giver med vilje ingen point. Du kan komme til at røre ved den under spillet, og så ville der blive talt et point, som ingen ved noget om.</p>
+
+<h2>Hvad hvis uret mister telefonen?</h2>
+<p>Telefonen holder styr på stillingen, og uret er dens fjernbetjening. Hvis forbindelsen afbrydes, viser uret »ingen telefon« og husker dine tryk. »i kø 3« betyder, at tre tryk venter på at blive sendt. De sendes af sig selv, så snart uret får forbindelse til telefonen igen.</p>
+
+<h2>Hvad betyder »Telefonen svarer ikke«?</h2>
+<p>Telefonen har ikke bekræftet dit point. Åbn Skoretap på telefonen. Uret bliver ved med at prøve, og ingen tryk går tabt.</p>
+
+<h2>Jeg forlod appen på uret. Har jeg mistet kampen?</h2>
+<p>Nej. Kampen ligger på telefonen og kører videre. Åbn Skoretap fra applisten på uret og fortsæt. Under en kamp forlader den nederste knap ikke appen, den tæller kun point.</p>
+
+<h2>Hvorfor beder uret om tilladelser?</h2>
+<p>Notifikationer: med dem ved uret, at en kamp kører. Tillad dem, når du bliver spurgt.</p>
+<p>Puls og aktivitet: kun hvis du vil måle puls, skridt og kalorier. Pointene tælles også uden.</p>
+<p>Tilladelser kan du ændre i urets indstillinger under Skoretap.</p>
+
+<h2>Hvorfor skal jeg slå træningsgenkendelse fra i Samsung Health?</h2>
+<p>På Samsung-ure kan Samsung Health selv starte en træning under en kamp og overtage målingen af puls og kalorier. Så har Skoretap intet at måle. Åbn Samsung Health på uret, gå til indstillingerne og slå automatisk træningsgenkendelse fra. Uret viser dette tip kun én gang, derfor står det også her.</p>
+
+<h2>Hvorfor blev min puls eller mine kalorier ikke målt?</h2>
+<p>Måling slås til med dit samtykke i telefonappen. Tjek, at den er slået til.</p>
+<p>Uret skal have tilladelse til puls og aktivitet.</p>
+<p>En anden app kan have overtaget målingen. Telefonen fortæller det efter kampen. Samsung Health-tippet ovenfor hjælper.</p>
+
+<h2>Skal jeg have internet?</h2>
+<p>Nej. Kampen tælles på telefonen og spilles færdig på samme måde uden dækning. Du skal kun bruge internet til at offentliggøre en kamp, til sikkerhedskopi og til at logge ind.</p>
+
+<h2>Bliver min kamp offentliggjort af sig selv?</h2>
+<p>Nej. Standarden er »Del ikke«. En kamp bliver kun offentliggjort, hvis du slår det til, og den kan offentliggøres uden navne.</p>
+
+<h2>Kan jeg spille en kamp færdig senere?</h2>
+<p>Ja. Vælg »Spil færdig senere«. Kampen bliver på telefonen blandt dine igangværende kampe, og du fortsætter, hvor du slap.</p>
+
+<h2>Kan Skoretap læse stillingen højt?</h2>
+<p>Ja, telefonen læser stillingen op på alle appens 26 sprog. Stemmens sprog vælger du, når du forbereder kampen, og det kan ændres under kampen. Hvis telefonen ikke har en stemme til sproget, siger appen det. Point kan ikke indtastes med stemmen, kun med tryk og fra uret.</p>
+
+<h2>Hvordan sender jeg en kamp på YouTube?</h2>
+<p>Slå livestreaming til på YouTube én gang. Den første aktivering kan tage op til 24 timer.</p>
+<p>Find din streamnøgle i YouTube Studio. Åbn »Kampens forløb« i kampen, tryk på »Live på YouTube«, og indsæt nøglen.</p>
+<p>Sæt telefonen på et stativ, tilslut en powerbank, og regn med omkring 2 GB data på 90 minutter. Skoretap skal blive på skærmen. Indtast point fra uret under livestreamen.</p>
+<p>Videoen har ingen lyd. Stillingen er i billedet. Hvis kampen er på nettet, kan du kopiere linket til statistikken ind i videobeskrivelsen.</p>
+
+<h2>Kan en anden telefon tælle point end den, der filmer?</h2>
+<p>Ja. Én telefon tæller (din med uret eller dommerens), den anden står på et stativ som kamera.</p>
+<p>Tryk på den tællende telefon i kampen på »Kamera på en anden telefon« og »Opret kode«. Du skal være logget ind på en Skoretap-konto.</p>
+<p>Tryk på kameratelefonen på startskærmen på »Kamera til en kamp«, skriv koden og start udsendelsen. Der kræves ingen konto.</p>
+<p>Stillingen går via internettet og ses i billedet cirka et sekund efter pointet. Kun én telefon indtaster point, så intet tælles to gange.</p>
+
+<h2>Hvordan sletter jeg min konto og mine data?</h2>
+<p>Når du er logget ind, er der knappen »Slet konto« i kampopsætningen. Uden appen kan du bede om sletning på skoretap.com/smazani-uctu.html. Hvad vi gemmer og hvorfor, står i privatlivspolitikken på skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="nb" lang="nb" hidden>
+<h1>Ofte stilte spørsmål</h1>
+
+<h2>Hvilke klokker og telefoner fungerer Skoretap på?</h2>
+<p>Android-telefoner og Wear OS-klokker, for eksempel Samsung Galaxy Watch. På iPhone, Apple Watch eller Garmin fungerer det ikke ennå.</p>
+
+<h2>Hvordan får jeg Skoretap på klokken?</h2>
+<p>Klokken må være paret med telefonen. Installer Skoretap fra Google Play på telefonen, og deretter på klokken også. Det fungerer ikke på klokken alene, den trenger telefonen.</p>
+
+<h2>Hvordan starter jeg en kamp med klokken?</h2>
+<p>Opprett kampen på telefonen og åpne Skoretap på klokken. Klokken finner selv ut hvordan stillingen er. Står det «Leter etter telefonen…», har den ikke koblet seg til telefonen ennå.</p>
+
+<h2>Hvordan legger jeg til poeng på klokken?</h2>
+<p>Nederste knapp én gang: poeng til laget øverst.</p>
+<p>Nederste knapp to ganger raskt etter hverandre: poeng til laget nederst.</p>
+<p>Klokken vibrerer og viser hvem som fikk poenget.</p>
+<p>Trykket feil? Trykk på «ANGRE».</p>
+<p>Den dreibare bezelen gir med vilje ingen poeng. Du kan komme borti den under spillet, og da ville det telles et poeng som ingen vet om.</p>
+
+<h2>Hva hvis klokken mister telefonen?</h2>
+<p>Telefonen holder stillingen, og klokken er fjernkontrollen. Hvis forbindelsen brytes, viser klokken «ingen telefon» og husker trykkene dine. «i kø 3» betyr at tre trykk venter på å bli sendt. De sendes av seg selv så snart klokken kobler seg til telefonen igjen.</p>
+
+<h2>Hva betyr «Telefonen svarer ikke»?</h2>
+<p>Telefonen har ikke bekreftet poenget ditt. Åpne Skoretap på telefonen. Klokken fortsetter å prøve, og ingen trykk går tapt.</p>
+
+<h2>Jeg forlot appen på klokken. Har jeg mistet kampen?</h2>
+<p>Nei. Kampen ligger på telefonen og går videre. Åpne Skoretap fra applisten på klokken og fortsett. Under en kamp forlater ikke den nederste knappen appen, den legger bare til poeng.</p>
+
+<h2>Hvorfor ber klokken om tillatelser?</h2>
+<p>Varsler: med dem vet klokken at en kamp pågår. Tillat dem når du blir spurt.</p>
+<p>Puls og aktivitet: bare hvis du vil måle puls, skritt og kalorier. Poengene telles også uten.</p>
+<p>Tillatelser endrer du i klokkens innstillinger under Skoretap.</p>
+
+<h2>Hvorfor bør jeg slå av treningsgjenkjenning i Samsung Health?</h2>
+<p>På Samsung-klokker kan Samsung Health starte en treningsøkt av seg selv under en kamp og overta målingen av puls og kalorier. Da har Skoretap ingenting å måle. Åpne Samsung Health på klokken, gå til innstillingene og slå av automatisk treningsgjenkjenning. Klokken viser dette tipset bare én gang, derfor står det også her.</p>
+
+<h2>Hvorfor ble ikke pulsen eller kaloriene mine målt?</h2>
+<p>Målingen slås på med samtykket ditt i telefonappen. Sjekk at den er på.</p>
+<p>Klokken må ha tillatelse til puls og aktivitet.</p>
+<p>En annen app kan ha overtatt målingen. Telefonen sier fra etter kampen. Samsung Health-tipset ovenfor hjelper.</p>
+
+<h2>Trenger jeg internett?</h2>
+<p>Nei. Kampen telles på telefonen og spilles ferdig på samme måte uten dekning. Du trenger bare internett for å publisere en kamp, for sikkerhetskopi og for å logge inn.</p>
+
+<h2>Blir kampen min publisert av seg selv?</h2>
+<p>Nei. Standard er «Ikke del». En kamp blir bare publisert hvis du slår det på, og den kan publiseres uten navn.</p>
+
+<h2>Kan jeg spille ferdig en kamp senere?</h2>
+<p>Ja. Velg «Spill ferdig senere». Kampen blir på telefonen blant de påbegynte kampene dine, og du fortsetter der du slapp.</p>
+
+<h2>Kan Skoretap lese opp stillingen?</h2>
+<p>Ja, telefonen leser opp stillingen på alle appens 26 språk. Stemmens språk velger du når du forbereder kampen, og det kan endres underveis. Hvis telefonen mangler stemme for språket, sier appen fra. Poeng kan ikke legges inn med stemmen, bare med trykk og fra klokken.</p>
+
+<h2>Hvordan sender jeg en kamp på YouTube?</h2>
+<p>Slå på direktesending på YouTube én gang. Den første aktiveringen kan ta opptil 24 timer.</p>
+<p>Finn strømmenøkkelen din i YouTube Studio. Åpne «Kampforløp» i kampen, trykk på «Live på YouTube» og lim inn nøkkelen.</p>
+<p>Sett telefonen på et stativ, koble til en powerbank og regn med omtrent 2 GB data på 90 minutter. Skoretap må bli på skjermen. Registrer poeng fra klokka under sendingen.</p>
+<p>Videoen har ingen lyd. Stillingen vises i bildet. Hvis kampen er på nettet, kan du kopiere lenken til statistikken inn i videobeskrivelsen.</p>
+
+<h2>Kan en annen telefon telle poeng enn den som filmer?</h2>
+<p>Ja. Én telefon teller (din med klokken, eller dommerens), den andre står på et stativ som kamera.</p>
+<p>Trykk på telefonen som teller i kampen på «Kamera på en annen telefon» og «Lag kode». Du må være logget inn på en Skoretap-konto.</p>
+<p>Trykk på kameratelefonen på startskjermen på «Kamera til en kamp», skriv inn koden og start sendingen. Der trengs ingen konto.</p>
+<p>Stillingen går via internett og vises i bildet omtrent et sekund etter poenget. Bare én telefon legger inn poeng, så ingenting telles to ganger.</p>
+
+<h2>Hvordan sletter jeg kontoen og dataene mine?</h2>
+<p>Når du er logget inn, finnes knappen «Slett konto» i kampoppsettet. Uten appen kan du be om sletting på skoretap.com/smazani-uctu.html. Hva vi lagrer og hvorfor, står i personvernerklæringen på skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="fi" lang="fi" hidden>
+<h1>Usein kysyttyä</h1>
+
+<h2>Millä kelloilla ja puhelimilla Skoretap toimii?</h2>
+<p>Android-puhelimilla ja Wear OS -kelloilla, esimerkiksi Samsung Galaxy Watch -kelloilla. iPhone-puhelimilla, Apple Watch -kelloilla tai Garmin-kelloilla se ei vielä toimi.</p>
+
+<h2>Miten saan Skoretap-sovelluksen kelloon?</h2>
+<p>Kellon täytyy olla pariliitetty puhelimeen. Asenna Skoretap puhelimeen Google Play -kaupasta ja sitten myös kelloon. Pelkässä kellossa se ei toimi, se tarvitsee puhelimen.</p>
+
+<h2>Miten aloitan ottelun kellolla?</h2>
+<p>Luo ottelu puhelimessa ja avaa Skoretap kellossa. Kello saa itse selville, mikä tilanne on. Jos siinä lukee ”Etsitään puhelinta…”, se ei ole vielä yhteydessä puhelimeen.</p>
+
+<h2>Miten lisään pisteitä kellolla?</h2>
+<p>Alanappi kerran: piste ylhäällä olevalle joukkueelle.</p>
+<p>Alanappi kahdesti nopeasti peräkkäin: piste alhaalla olevalle joukkueelle.</p>
+<p>Kello värähtää ja näyttää, kenelle piste meni.</p>
+<p>Virhepainallus? Napauta ”KUMOA”.</p>
+<p>Pyörivä kehä (bezel) ei tahallaan lisää pisteitä. Voisit osua siihen pelin aikana, ja kirjautuisi piste, josta kukaan ei tiedä.</p>
+
+<h2>Entä jos kello menettää yhteyden puhelimeen?</h2>
+<p>Puhelin pitää tilannetta, ja kello on sen kaukosäädin. Jos yhteys katkeaa, kello näyttää ”ei puhelinta” ja muistaa painalluksesi. ”jonossa 3” tarkoittaa, että kolme painallusta odottaa lähetystä. Ne lähtevät itsestään heti, kun kello saa taas yhteyden puhelimeen.</p>
+
+<h2>Mitä tarkoittaa ”Puhelin ei vastaa”?</h2>
+<p>Puhelin ei ole vahvistanut pistettäsi. Avaa Skoretap puhelimessa. Kello yrittää edelleen, eikä painalluksia katoa.</p>
+
+<h2>Poistuin kellon sovelluksesta. Menetinkö ottelun?</h2>
+<p>Et. Ottelu on puhelimessa ja jatkuu. Avaa Skoretap kellon sovelluslistasta ja jatka. Ottelun aikana alanappi ei poistu sovelluksesta, se vain lisää pisteitä.</p>
+
+<h2>Miksi kello pyytää lupia?</h2>
+<p>Ilmoitukset: niiden avulla kello tietää, että ottelu on käynnissä. Salli ne, kun kysytään.</p>
+<p>Syke ja liikunta: vain jos haluat mitata sykettä, askelia ja kaloreita. Pisteet lasketaan ilman niitäkin.</p>
+<p>Luvat voit muuttaa kellon asetuksista Skoretap-sovelluksen kohdalta.</p>
+
+<h2>Miksi Samsung Health -sovelluksessa kannattaa kytkeä harjoittelun tunnistus pois?</h2>
+<p>Samsung-kelloissa Samsung Health voi ottelun aikana käynnistää harjoituksen itse ja ottaa syke- ja kalorimittauksen haltuunsa. Silloin Skoretap-sovelluksella ei ole mitään mitattavaa. Avaa Samsung Health -sovellus kellossa, mene sen asetuksiin ja kytke automaattinen harjoittelun tunnistus pois. Kello näyttää tämän vinkin vain kerran, siksi se on myös täällä.</p>
+
+<h2>Miksi sykettä tai kaloreita ei mitattu?</h2>
+<p>Mittaus otetaan käyttöön suostumuksella puhelinsovelluksessa. Tarkista, että se on päällä.</p>
+<p>Kellolla täytyy olla lupa sykkeeseen ja liikuntaan.</p>
+<p>Joku toinen sovellus on voinut ottaa mittauksen haltuunsa. Puhelin kertoo siitä ottelun jälkeen. Samsung Health -vinkki yllä auttaa.</p>
+
+<h2>Tarvitsenko internetin?</h2>
+<p>Et. Ottelu lasketaan puhelimessa ja pelataan loppuun samalla tavalla ilman verkkoyhteyttä. Internet tarvitaan vain ottelun julkaisemiseen, varmuuskopiointiin ja kirjautumiseen.</p>
+
+<h2>Julkaistaanko ottelu automaattisesti?</h2>
+<p>Ei. Oletuksena on ”Älä jaa”. Ottelu julkaistaan vain, jos kytket sen päälle, ja se voidaan julkaista myös ilman nimiä.</p>
+
+<h2>Voinko pelata ottelun loppuun myöhemmin?</h2>
+<p>Kyllä. Valitse ”Pelaa loppuun myöhemmin”. Ottelu pysyy puhelimessa keskeneräisten otteluiden joukossa, ja jatkat siitä, mihin jäit.</p>
+
+<h2>Osaako Skoretap lukea tilanteen ääneen?</h2>
+<p>Kyllä, puhelin lukee tilanteen ääneen kaikilla sovelluksen 26 kielellä. Äänen kielen valitset ottelua valmistellessa, ja sitä voi vaihtaa myös ottelun aikana. Jos puhelimessa ei ole ääntä sille kielelle, sovellus kertoo sen. Pisteitä ei voi syöttää äänellä, vain koskettamalla ja kellosta.</p>
+
+<h2>Miten lähetän ottelun YouTubeen?</h2>
+<p>Ota suorat lähetykset käyttöön YouTubessa kerran. Ensimmäinen käyttöönotto voi kestää jopa 24 tuntia.</p>
+<p>Löydä striimiavaimesi YouTube Studiosta. Avaa ottelussa ”Ottelun kulku”, napauta ”Livenä YouTubessa” ja liitä avain.</p>
+<p>Laita puhelin jalustalle, kytke virtapankki ja varaudu noin 2 GB:n datamäärään 90 minuutin aikana. Skoretapin täytyy pysyä näytöllä. Merkitse pisteet lähetyksen aikana kellosta.</p>
+<p>Videossa ei ole ääntä. Tulos näkyy kuvassa. Jos ottelu on verkossa, voit kopioida tilastolinkin videon kuvaukseen.</p>
+
+<h2>Voiko pisteitä laskea eri puhelin kuin se, joka kuvaa?</h2>
+<p>Kyllä. Yksi puhelin laskee pisteet (sinun kellon kanssa tai tuomarin), toinen on jalustalla kamerana.</p>
+<p>Napauta laskevassa puhelimessa ottelun aikana ”Kamera toisessa puhelimessa” ja ”Luo koodi”. Sinun täytyy olla kirjautunut Skoretap-tilille.</p>
+<p>Napauta kamerapuhelimen aloitusnäytössä ”Kamera otteluun”, kirjoita koodi ja aloita lähetys. Siellä tiliä ei tarvita.</p>
+<p>Tilanne kulkee internetin kautta ja näkyy kuvassa noin sekunti pisteen jälkeen. Pisteitä syöttää aina vain yksi puhelin, joten mitään ei lasketa kahdesti.</p>
+
+<h2>Miten poistan tilini ja tietoni?</h2>
+<p>Kun olet kirjautunut sisään, ottelun valmisteluvaiheessa on painike ”Poista tili”. Ilman sovellusta voit pyytää poistoa osoitteessa skoretap.com/smazani-uctu.html. Mitä tallennamme ja miksi, kerrotaan tietosuojaselosteessa osoitteessa skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="pl" lang="pl" hidden>
+<h1>Często zadawane pytania</h1>
+
+<h2>Na jakich zegarkach i telefonach działa Skoretap?</h2>
+<p>Na telefonach z Androidem i zegarkach z Wear OS, na przykład Samsung Galaxy Watch. Na iPhonie, Apple Watch ani zegarkach Garmin na razie nie działa.</p>
+
+<h2>Jak zainstalować Skoretap na zegarku?</h2>
+<p>Zegarek musi być sparowany z telefonem. Zainstaluj Skoretap z Google Play na telefonie, a potem także na zegarku. Na samym zegarku nie działa, potrzebuje telefonu.</p>
+
+<h2>Jak zacząć mecz z zegarkiem?</h2>
+<p>Załóż mecz w telefonie i otwórz Skoretap na zegarku. Zegarek sam sprawdzi, jaki jest wynik. Jeśli widzisz „Szukam telefonu…”, zegarek nie połączył się jeszcze z telefonem.</p>
+
+<h2>Jak dodawać punkty na zegarku?</h2>
+<p>Dolny przycisk raz: punkt dla drużyny na górze.</p>
+<p>Dolny przycisk dwa razy szybko: punkt dla drużyny na dole.</p>
+<p>Zegarek zawibruje i pokaże, kto dostał punkt.</p>
+<p>Pomyłka? Stuknij „COFNIJ”.</p>
+<p>Obrotowy bezel celowo nie dodaje punktów. Podczas gry można go przypadkiem zahaczyć i doliczyłby się punkt, o którym nikt nie wie.</p>
+
+<h2>Co, jeśli zegarek straci połączenie z telefonem?</h2>
+<p>Wynik trzyma telefon, a zegarek jest jego pilotem. Gdy połączenie się zerwie, zegarek pokaże „brak telefonu” i zapamięta twoje stuknięcia. Napis „w kolejce 3” oznacza, że trzy stuknięcia czekają na wysłanie. Wyślą się same, gdy tylko zegarek połączy się z telefonem.</p>
+
+<h2>Co oznacza „Telefon nie odpowiada”?</h2>
+<p>Telefon nie potwierdził twojego punktu. Otwórz Skoretap w telefonie. Zegarek będzie próbował dalej, stuknięcia nie przepadną.</p>
+
+<h2>Wyszedłem z aplikacji na zegarku. Czy straciłem mecz?</h2>
+<p>Nie. Mecz jest w telefonie i trwa dalej. Otwórz Skoretap z listy aplikacji na zegarku i graj dalej. W trakcie meczu dolny przycisk nie wychodzi z aplikacji, tylko dodaje punkty.</p>
+
+<h2>Dlaczego zegarek prosi o uprawnienia?</h2>
+<p>Powiadomienia: dzięki nim zegarek wie, że trwa mecz. Gdy zapyta, zezwól.</p>
+<p>Tętno i aktywność: tylko jeśli chcesz mierzyć tętno, kroki i kalorie. Punkty liczą się też bez tego.</p>
+<p>Uprawnienia zmienisz w ustawieniach zegarka, w sekcji Skoretap.</p>
+
+<h2>Dlaczego mam wyłączyć wykrywanie ćwiczeń w Samsung Health?</h2>
+<p>Na zegarkach Samsung aplikacja Samsung Health może sama włączyć śledzenie treningu podczas meczu i przejąć pomiar tętna oraz kalorii. Wtedy Skoretap nie ma czego mierzyć. Otwórz Samsung Health na zegarku, wejdź w ustawienia i wyłącz automatyczne wykrywanie ćwiczeń. Zegarek pokazuje tę wskazówkę tylko raz, dlatego jest też tutaj.</p>
+
+<h2>Dlaczego nie zmierzono mojego tętna lub kalorii?</h2>
+<p>Pomiar włącza się zgodą w telefonie. Sprawdź, czy jest włączony.</p>
+<p>Zegarek musi mieć uprawnienie do tętna i aktywności.</p>
+<p>Pomiar mogła przejąć inna aplikacja. Telefon napisze o tym po meczu. Pomoże wskazówka o Samsung Health powyżej.</p>
+
+<h2>Czy potrzebuję internetu?</h2>
+<p>Nie. Mecz liczy się w telefonie i bez zasięgu dokończysz go tak samo. Internet jest potrzebny tylko do opublikowania meczu, kopii zapasowej i logowania.</p>
+
+<h2>Czy mój mecz opublikuje się sam?</h2>
+<p>Nie. Domyślnie jest ustawione „Nie udostępniaj”. Mecz zostanie opublikowany tylko wtedy, gdy to włączysz, i może być bez imion.</p>
+
+<h2>Czy mogę dokończyć mecz innym razem?</h2>
+<p>Tak. Wybierz „Dokończ później”. Mecz zostanie w telefonie wśród niedokończonych i wrócisz do gry od ostatniego punktu.</p>
+
+<h2>Czy Skoretap potrafi czytać wynik na głos?</h2>
+<p>Tak, telefon czyta wynik we wszystkich 26 językach aplikacji. Język głosu wybierasz przy przygotowaniu meczu i możesz go zmienić w trakcie. Jeśli telefon nie ma głosu w tym języku, aplikacja o tym powie. Punktów nie da się wprowadzać głosem, tylko dotykiem i z zegarka.</p>
+
+<h2>Jak transmitować mecz na YouTube?</h2>
+<p>Na YouTube raz włącz transmisje na żywo. Pierwsza aktywacja może potrwać do 24 godzin.</p>
+<p>W YouTube Studio znajdź klucz transmisji. W meczu otwórz „Przebieg meczu”, stuknij „Na żywo na YouTube” i wklej klucz.</p>
+<p>Postaw telefon na statywie, podłącz powerbank i licz się z około 2 GB danych na 90 minut. Skoretap musi zostać na ekranie. Podczas transmisji wpisuj punkty z zegarka.</p>
+<p>Wideo jest bez dźwięku. Wynik jest w obrazie. Jeśli mecz jest w sieci, możesz skopiować link do statystyk do opisu wideo.</p>
+
+<h2>Czy wynik może liczyć inny telefon niż ten, który nagrywa?</h2>
+<p>Tak. Jeden telefon liczy wynik (twój z zegarkiem albo sędziego), drugi stoi na statywie jako kamera.</p>
+<p>Na telefonie, który liczy, dotknij w meczu „Kamera na innym telefonie” i „Utwórz kod”. Musisz być zalogowany na konto Skoretap.</p>
+<p>Na telefonie z kamerą dotknij na ekranie startowym „Kamera do meczu”, wpisz kod i uruchom transmisję. Tam konto nie jest potrzebne.</p>
+<p>Wynik idzie przez internet i pojawia się w obrazie około sekundy po punkcie. Punkty wpisuje zawsze tylko jeden telefon, żeby nic nie liczyło się dwa razy.</p>
+
+<h2>Jak usunąć konto i dane?</h2>
+<p>Gdy jesteś zalogowany, na ekranie przygotowania meczu jest przycisk „Usuń konto”. Bez aplikacji możesz poprosić o usunięcie na skoretap.com/smazani-uctu.html. Co zapisujemy i po co, znajdziesz w polityce prywatności na skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="sk" lang="sk" hidden>
+<h1>Časté otázky</h1>
+
+<h2>Na ktorých hodinkách a telefónoch Skoretap funguje?</h2>
+<p>Na telefónoch s Androidom a hodinkách s Wear OS, napríklad Samsung Galaxy Watch. Na iPhone, Apple Watch ani hodinkách Garmin zatiaľ nefunguje.</p>
+
+<h2>Ako dostanem Skoretap do hodiniek?</h2>
+<p>Hodinky musia byť spárované s telefónom. Nainštaluj Skoretap z Google Play do telefónu a potom aj do hodiniek. Na samotných hodinkách nefunguje, potrebuje telefón.</p>
+
+<h2>Ako začnem zápas s hodinkami?</h2>
+<p>Zápas založ v telefóne a na hodinkách otvor Skoretap. Hodinky si samy zistia, aké je skóre. Keď píšu „Hľadám telefón…“, ešte sa s telefónom nespojili.</p>
+
+<h2>Ako sa na hodinkách pripisujú body?</h2>
+<p>Spodné tlačidlo raz: bod pre tím hore.</p>
+<p>Spodné tlačidlo dvakrát rýchlo za sebou: bod pre tím dole.</p>
+<p>Hodinky zavibrujú a ukážu, komu bod išiel.</p>
+<p>Chyba? Ťukni na „SPÄŤ“.</p>
+<p>Otočný prstenec (bezel) body schválne nepridáva. Počas hry by sa ho dalo ľahko zachytiť a pripísal by sa bod, o ktorom nikto nevie.</p>
+
+<h2>Čo ak sa hodinky odpoja od telefónu?</h2>
+<p>Skóre drží telefón, hodinky sú jeho ovládač. Keď sa spojenie preruší, hodinky ukážu „bez telefónu“ a ťuknutia si pamätajú. Nápis „čaká 3“ znamená, že tri ťuknutia čakajú na odoslanie. Odošlú sa samy, hneď ako sa hodinky s telefónom spoja.</p>
+
+<h2>Čo znamená „Telefón neodpovedá“?</h2>
+<p>Telefón nepotvrdil tvoj bod. Otvor Skoretap v telefóne. Hodinky to budú skúšať ďalej, ťuknutia sa nestratia.</p>
+
+<h2>Odišiel som z aplikácie na hodinkách. Stratil som zápas?</h2>
+<p>Nie. Zápas je v telefóne a beží ďalej. Na hodinkách otvor Skoretap zo zoznamu aplikácií a pokračuj. Počas zápasu spodné tlačidlo z aplikácie neodíde, len pripisuje body.</p>
+
+<h2>Prečo hodinky chcú povolenia?</h2>
+<p>Oznámenia: vďaka nim hodinky vedia, že beží zápas. Keď sa opýtajú, povoľ ich.</p>
+<p>Tep a pohyb: len ak chceš merať tep, kroky a kalórie. Body sa počítajú aj bez toho.</p>
+<p>Povolenia zmeníš v nastaveniach hodiniek pri aplikácii Skoretap.</p>
+
+<h2>Prečo mám v Samsung Health vypnúť rozpoznávanie cvičenia?</h2>
+<p>Na hodinkách Samsung si môže Samsung Health počas zápasu samo spustiť sledovanie cvičenia a prevziať meranie tepu a kalórií. Skoretap potom nemá čo merať. V aplikácii Samsung Health na hodinkách otvor nastavenia a vypni automatické rozpoznávanie cvičenia. Hodinky túto radu ukážu len raz, preto je aj tu.</p>
+
+<h2>Prečo sa mi nezmeral tep alebo kalórie?</h2>
+<p>Meranie sa zapína súhlasom v telefóne. Skontroluj, či je zapnuté.</p>
+<p>Hodinky musia mať povolený tep a pohyb.</p>
+<p>Meranie mohla prevziať iná aplikácia. Telefón to po zápase napíše. Pomôže rada o Samsung Health vyššie.</p>
+
+<h2>Musím mať internet?</h2>
+<p>Nie. Zápas sa počíta v telefóne a bez signálu sa dohrá rovnako. Internet treba len na zverejnenie zápasu, zálohu a prihlásenie.</p>
+
+<h2>Zverejní sa môj zápas sám?</h2>
+<p>Nie. Predvolené nastavenie je „Nezdieľať“. Zápas sa zverejní, len keď si to zapneš, a môže byť aj bez mien.</p>
+
+<h2>Môžem rozohraný zápas dohrať inokedy?</h2>
+<p>Áno. Vyber „Dohrať nabudúce“. Zápas zostane v telefóne medzi rozohranými zápasmi a pokračuješ od posledného bodu.</p>
+
+<h2>Vie Skoretap čítať skóre nahlas?</h2>
+<p>Áno, telefón číta skóre vo všetkých 26 jazykoch aplikácie. Jazyk hlasu zvolíš v príprave a dá sa zmeniť aj počas zápasu. Keď telefón hlas pre ten jazyk nemá, aplikácia to povie. Body sa hlasom zadávať nedajú, len dotykom a z hodiniek.</p>
+
+<h2>Ako vysielam zápas na YouTube?</h2>
+<p>Na YouTube si raz zapni vysielanie naživo. Prvá aktivácia môže trvať až 24 hodín.</p>
+<p>V YouTube Studio nájdi kľúč streamu. V zápase otvor „Priebeh zápasu“, ťukni na „Naživo na YouTube“ a kľúč vlož.</p>
+<p>Telefón daj na statív, pripoj powerbanku a rátaj približne s 2 GB dát za 90 minút. Skoretap musí zostať na obrazovke. Počas vysielania zadávaj body z hodiniek.</p>
+<p>Video ide bez zvuku. Skóre je v obraze. Keď je zápas na webe, odkaz na štatistiky si skopíruješ do popisu videa.</p>
+
+<h2>Môže skóre zadávať iný telefón, než ktorý natáča?</h2>
+<p>Áno. Skóre počíta jeden telefón (tvoj s hodinkami alebo rozhodcov), druhý stojí na statíve ako kamera.</p>
+<p>Na telefóne, ktorý počíta, ťukni v zápase na „Kamera na inom telefóne“ a „Vytvoriť kód“. Musíš byť prihlásený do účtu Skoretap.</p>
+<p>Na telefóne s kamerou ťukni na úvodnej obrazovke na „Kamera k zápasu“, opíš kód a spusti prenos. Účet tu nie je potrebný.</p>
+<p>Skóre ide cez internet, v obraze je asi sekundu po bode. Body zadáva vždy len jeden telefón, aby sa žiadny nezapísal dvakrát.</p>
+
+<h2>Ako zmažem účet a údaje?</h2>
+<p>Keď si prihlásený, je v príprave zápasu tlačidlo „Zmazať účet“. Bez aplikácie môžeš o zmazanie požiadať na skoretap.com/smazani-uctu.html. Čo ukladáme a prečo, je v zásadách ochrany osobných údajov na skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="hu" lang="hu" hidden>
+<h1>Gyakori kérdések</h1>
+
+<h2>Milyen órákon és telefonokon működik a Skoretap?</h2>
+<p>Androidos telefonokon és Wear OS-es órákon, például a Samsung Galaxy Watch-on. iPhone-on, Apple Watch-on és Garmin órákon egyelőre nem működik.</p>
+
+<h2>Hogyan teszem fel a Skoretapet az órámra?</h2>
+<p>Az órának párosítva kell lennie a telefonnal. Telepítsd a Skoretapet a Google Playről a telefonra, majd az órára is. Az órán egyedül nem működik, szüksége van a telefonra.</p>
+
+<h2>Hogyan kezdek meccset az órával?</h2>
+<p>Hozd létre a meccset a telefonon, az órán pedig nyisd meg a Skoretapet. Az óra magától megtudja, hogy áll a meccs. Ha ezt írja: „Telefon keresése…”, még nem kapcsolódott a telefonhoz.</p>
+
+<h2>Hogyan adok pontot az órán?</h2>
+<p>Alsó gomb egyszer: pont a felső csapatnak.</p>
+<p>Alsó gomb kétszer gyorsan egymás után: pont az alsó csapatnak.</p>
+<p>Az óra rezeg, és megmutatja, ki kapta a pontot.</p>
+<p>Elrontottad? Koppints a „VISSZA” gombra.</p>
+<p>A forgatható gyűrű (bezel) szándékosan nem ad pontot. Játék közben könnyen hozzáérhetnél, és olyan pont íródna be, amiről senki nem tud.</p>
+
+<h2>Mi van, ha az óra elveszti a telefont?</h2>
+<p>A pontállást a telefon őrzi, az óra a távirányítója. Ha megszakad a kapcsolat, az óra ezt mutatja: „nincs telefon”, és megjegyzi a koppintásaidat. A „vár 3” felirat azt jelenti, hogy három koppintás vár elküldésre. Maguktól elmennek, amint az óra újra kapcsolódik a telefonhoz.</p>
+
+<h2>Mit jelent: „A telefon nem válaszol”?</h2>
+<p>A telefon nem erősítette meg a pontodat. Nyisd meg a Skoretapet a telefonon. Az óra tovább próbálkozik, a koppintások nem vesznek el.</p>
+
+<h2>Kiléptem az alkalmazásból az órán. Elveszett a meccs?</h2>
+<p>Nem. A meccs a telefonon van, és megy tovább. Az órán nyisd meg a Skoretapet az alkalmazások listájából, és folytasd. Meccs közben az alsó gomb nem lép ki az alkalmazásból, csak pontot ad.</p>
+
+<h2>Miért kér engedélyt az óra?</h2>
+<p>Értesítések: ezek tudatják az órával, hogy meccs fut. Ha rákérdez, engedélyezd.</p>
+<p>Pulzus és mozgás: csak ha pulzust, lépéseket és kalóriát akarsz mérni. A pontok enélkül is számolódnak.</p>
+<p>Az engedélyeket az óra beállításaiban módosíthatod, a Skoretap résznél.</p>
+
+<h2>Miért kapcsoljam ki az edzésfelismerést a Samsung Healthben?</h2>
+<p>Samsung órákon a Samsung Health meccs közben magától elindíthatja az edzéskövetést, és átveheti a pulzus és a kalória mérését. A Skoretapnek így nincs mit mérnie. Nyisd meg az órán a Samsung Health beállításait, és kapcsold ki az automatikus edzésfelismerést. Az óra ezt a tippet csak egyszer mutatja, ezért itt is ott van.</p>
+
+<h2>Miért nem mérte a pulzusomat vagy a kalóriát?</h2>
+<p>A mérést a telefonon adott hozzájárulással kapcsolod be. Nézd meg, be van-e kapcsolva.</p>
+<p>Az órának engedélye kell legyen a pulzusra és a mozgásra.</p>
+<p>A mérést átvehette egy másik alkalmazás. A telefon a meccs után jelzi. Segít a fenti Samsung Health tipp.</p>
+
+<h2>Kell hozzá internet?</h2>
+<p>Nem. A meccset a telefon számolja, és térerő nélkül is ugyanúgy befejezhető. Internet csak a meccs közzétételéhez, a mentéshez és a bejelentkezéshez kell.</p>
+
+<h2>Magától közzétevődik a meccsem?</h2>
+<p>Nem. Az alapbeállítás: „Nincs megosztás”. A meccs csak akkor kerül ki, ha bekapcsolod, és név nélkül is lehet.</p>
+
+<h2>Befejezhetem később a félbehagyott meccset?</h2>
+<p>Igen. Válaszd a „Befejezés később” lehetőséget. A meccs a telefonon marad a félbehagyottak között, és az utolsó ponttól folytatod.</p>
+
+<h2>Fel tudja olvasni a Skoretap a pontállást?</h2>
+<p>Igen, a telefon az alkalmazás mind a 26 nyelvén felolvassa az állást. A hang nyelvét a meccs előkészítésekor választod, és meccs közben is módosíthatod. Ha a telefonon nincs hang az adott nyelvhez, az alkalmazás szól. Pontot hanggal nem lehet bevinni, csak érintéssel és az óráról.</p>
+
+<h2>Hogyan közvetítem a meccset a YouTube-on?</h2>
+<p>A YouTube-on egyszer kapcsold be az élő közvetítést. Az első aktiválás akár 24 órát is igénybe vehet.</p>
+<p>A YouTube Studio felületén keresd meg a streamkulcsot. A meccsben nyisd meg ezt: „A meccs menete”, koppints erre: „Élő a YouTube-on”, és illeszd be a kulcsot.</p>
+<p>Rakd a telefont állványra, csatlakoztass powerbankot, és számolj kb. 2 GB adattal 90 percre. A Skoretapnak a képernyőn kell maradnia. Közvetítés közben a pontokat az óráról add meg.</p>
+<p>A videó hang nélkül megy. A pontállás a képen van. Ha a meccs a weben van, a statisztikák linkjét bemásolhatod a videó leírásába.</p>
+
+<h2>Számolhatja az állást más telefon, mint ami filmez?</h2>
+<p>Igen. Az egyik telefon számol (a tiéd az órával, vagy a játékvezetőé), a másik állványon áll kameraként.</p>
+<p>A számoló telefonon a meccs közben koppints a „Kamera másik telefonon”, majd a „Kód létrehozása” gombra. Be kell lenned jelentkezve egy Skoretap-fiókba.</p>
+<p>A kamerás telefonon a kezdőképernyőn koppints a „Kamera meccshez” gombra, írd be a kódot, és indítsd az adást. Ott nem kell fiók.</p>
+<p>Az állás az interneten megy, és nagyjából egy másodperccel a pont után látszik a képen. Pontot mindig csak egy telefon visz be, így semmi sem számít kétszer.</p>
+
+<h2>Hogyan törlöm a fiókomat és az adataimat?</h2>
+<p>Ha be vagy jelentkezve, a meccs előkészítésénél van egy „Fiók törlése” gomb. Az alkalmazás nélkül a törlést a skoretap.com/smazani-uctu.html címen kérheted. Hogy mit tárolunk és miért, az adatvédelmi tájékoztatóban olvasod: skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="ro" lang="ro" hidden>
+<h1>Întrebări frecvente</h1>
+
+<h2>Pe ce ceasuri și telefoane merge Skoretap?</h2>
+<p>Pe telefoane Android și ceasuri Wear OS, de exemplu Samsung Galaxy Watch. Deocamdată nu merge pe iPhone, Apple Watch sau Garmin.</p>
+
+<h2>Cum pun Skoretap pe ceas?</h2>
+<p>Ceasul trebuie să fie asociat cu telefonul. Instalează Skoretap din Google Play pe telefon, apoi și pe ceas. Pe ceas singur nu merge, are nevoie de telefon.</p>
+
+<h2>Cum încep un meci cu ceasul?</h2>
+<p>Creează meciul pe telefon și deschide Skoretap pe ceas. Ceasul află singur cum stă scorul. Dacă scrie „Caut telefonul…”, încă nu s-a conectat la telefon.</p>
+
+<h2>Cum adaug puncte pe ceas?</h2>
+<p>Butonul de jos o dată: punct pentru echipa de sus.</p>
+<p>Butonul de jos de două ori repede: punct pentru echipa de jos.</p>
+<p>Ceasul vibrează și arată cine a luat punctul.</p>
+<p>Ai greșit? Atinge „ÎNAPOI”.</p>
+<p>Inelul rotativ nu adaugă puncte, intenționat. L-ai putea atinge în timpul jocului și s-ar adăuga un punct despre care nu știe nimeni.</p>
+
+<h2>Ce se întâmplă dacă ceasul pierde telefonul?</h2>
+<p>Telefonul ține scorul, iar ceasul e telecomanda lui. Când conexiunea se pierde, ceasul arată „fără telefon” și își amintește apăsările tale. „așteaptă 3” înseamnă că trei apăsări așteaptă să fie trimise. Pleacă singure de îndată ce ceasul se reconectează.</p>
+
+<h2>Ce înseamnă „Telefonul nu răspunde”?</h2>
+<p>Telefonul nu ți-a confirmat punctul. Deschide Skoretap pe telefon. Ceasul continuă să încerce, iar apăsările nu se pierd.</p>
+
+<h2>Am ieșit din aplicația de pe ceas. Am pierdut meciul?</h2>
+<p>Nu. Meciul e pe telefon și merge mai departe. Deschide Skoretap din lista de aplicații a ceasului și continuă. În timpul meciului, butonul de jos nu te scoate din aplicație, doar adaugă puncte.</p>
+
+<h2>De ce cere ceasul permisiuni?</h2>
+<p>Notificări: prin ele ceasul știe că rulează un meci. Permite-le când te întreabă.</p>
+<p>Puls și activitate: doar dacă vrei să măsori pulsul, pașii și caloriile. Punctele merg și fără ele.</p>
+<p>Poți schimba permisiunile în setările ceasului, la Skoretap.</p>
+
+<h2>De ce să opresc detectarea antrenamentului în Samsung Health?</h2>
+<p>Pe ceasurile Samsung, Samsung Health poate porni singur urmărirea unui antrenament în timpul meciului și poate prelua măsurarea pulsului și a caloriilor. Atunci Skoretap nu mai are ce măsura. Deschide Samsung Health pe ceas, intră în setări și oprește detectarea automată a antrenamentului. Ceasul arată acest sfat o singură dată, de aceea e și aici.</p>
+
+<h2>De ce nu mi s-au măsurat pulsul sau caloriile?</h2>
+<p>Măsurarea se pornește cu acordul tău în aplicația de pe telefon. Verifică dacă e pornită.</p>
+<p>Ceasul trebuie să aibă permisiune pentru puls și activitate.</p>
+<p>Poate că măsurarea a preluat-o altă aplicație. Telefonul îți spune după meci. Sfatul despre Samsung Health de mai sus ajută.</p>
+
+<h2>Am nevoie de internet?</h2>
+<p>Nu. Meciul se numără pe telefon și se termină la fel și fără semnal. Ai nevoie de internet doar ca să publici un meci, să faci copie de rezervă și să te conectezi.</p>
+
+<h2>Meciul meu se publică automat?</h2>
+<p>Nu. Implicit este „Nu partaja”. Un meci se publică doar dacă pornești asta și poate fi publicat și fără nume.</p>
+
+<h2>Pot termina un meci mai târziu?</h2>
+<p>Da. Alege „Termină-l mai târziu”. Meciul rămâne în telefon printre meciurile neterminate și continui de unde ai rămas.</p>
+
+<h2>Poate Skoretap să citească scorul cu voce tare?</h2>
+<p>Da, telefonul citește scorul în toate cele 26 de limbi ale aplicației. Limba vocii o alegi la pregătirea meciului și o poți schimba și în timpul meciului. Dacă telefonul nu are voce pentru acea limbă, aplicația îți spune. Punctele nu se introduc prin voce, doar prin atingere și de pe ceas.</p>
+
+<h2>Cum transmit un meci live pe YouTube?</h2>
+<p>Activează o dată transmisiile live pe YouTube. Prima activare poate dura până la 24 de ore.</p>
+<p>Găsește cheia de flux în YouTube Studio. În meci deschide „Desfășurarea meciului”, atinge „Live pe YouTube” și lipește cheia.</p>
+<p>Pune telefonul pe un trepied, conectează un powerbank și socotește cam 2 GB de date pentru 90 de minute. Skoretap trebuie să rămână pe ecran. În timpul transmisiei introdu punctele de pe ceas.</p>
+<p>Videoclipul nu are sunet. Scorul e în imagine. Dacă meciul e pe web, poți copia linkul spre statistici în descrierea videoclipului.</p>
+
+<h2>Poate ține scorul alt telefon decât cel care filmează?</h2>
+<p>Da. Un telefon ține scorul (al tău cu ceasul sau al arbitrului), celălalt stă pe un trepied ca cameră.</p>
+<p>Pe telefonul care ține scorul, atinge în meci „Cameră pe alt telefon” și „Creează cod”. Trebuie să fii conectat la un cont Skoretap.</p>
+<p>Pe telefonul cu camera, atinge pe ecranul principal „Cameră pentru meci”, scrie codul și pornește transmisiunea. Acolo nu e nevoie de cont.</p>
+<p>Scorul merge prin internet și apare în imagine la circa o secundă după punct. Punctele le introduce mereu un singur telefon, ca nimic să nu se numere de două ori.</p>
+
+<h2>Cum îmi șterg contul și datele?</h2>
+<p>Când ești conectat, pregătirea meciului are butonul „Șterge contul”. Fără aplicație, poți cere ștergerea la skoretap.com/smazani-uctu.html. Ce stocăm și de ce găsești în politica de confidențialitate la skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="hr" lang="hr" hidden>
+<h1>Česta pitanja</h1>
+
+<h2>Na kojim satovima i mobitelima radi Skoretap?</h2>
+<p>Na mobitelima s Androidom i satovima s Wear OS, na primjer Samsung Galaxy Watch. Na iPhoneu, Apple Watchu i Garmin satovima za sada ne radi.</p>
+
+<h2>Kako instalirati Skoretap na sat?</h2>
+<p>Sat mora biti uparen s mobitelom. Instaliraj Skoretap iz trgovine Google Play na mobitel, a zatim i na sat. Na samom satu ne radi, treba mu mobitel.</p>
+
+<h2>Kako započeti meč sa satom?</h2>
+<p>Meč napravi na mobitelu, a na satu otvori Skoretap. Sat sam provjeri kako stoji rezultat. Ako piše „Tražim mobitel…”, još se nije povezao s mobitelom.</p>
+
+<h2>Kako se na satu dodaju bodovi?</h2>
+<p>Donja tipka jednom: bod za ekipu gore.</p>
+<p>Donja tipka dvaput brzo za redom: bod za ekipu dolje.</p>
+<p>Sat zavibrira i pokaže tko je dobio bod.</p>
+<p>Pogreška? Dodirni „NATRAG”.</p>
+<p>Rotirajući prsten (bezel) namjerno ne dodaje bodove. Tijekom igre lako bi ga se moglo dodirnuti i upisao bi se bod za koji nitko ne zna.</p>
+
+<h2>Što ako se sat odspoji od mobitela?</h2>
+<p>Rezultat drži mobitel, a sat je njegov daljinski. Kad se veza prekine, sat prikaže „nema mobitela” i pamti tvoje dodire. Natpis „čeka 3” znači da tri dodira čekaju slanje. Poslat će se sama čim se sat ponovno poveže s mobitelom.</p>
+
+<h2>Što znači „Telefon ne odgovara”?</h2>
+<p>Mobitel nije potvrdio tvoj bod. Otvori Skoretap na mobitelu. Sat će nastaviti pokušavati, dodiri se ne gube.</p>
+
+<h2>Izašao sam iz aplikacije na satu. Jesam li izgubio meč?</h2>
+<p>Nisi. Meč je na mobitelu i nastavlja se. Na satu otvori Skoretap s popisa aplikacija i nastavi. Tijekom meča donja tipka ne izlazi iz aplikacije, samo dodaje bodove.</p>
+
+<h2>Zašto sat traži dopuštenja?</h2>
+<p>Obavijesti: zahvaljujući njima sat zna da meč traje. Kad pita, dopusti.</p>
+<p>Puls i kretanje: samo ako želiš mjeriti puls, korake i kalorije. Bodovi se broje i bez toga.</p>
+<p>Dopuštenja možeš promijeniti u postavkama sata, kod aplikacije Skoretap.</p>
+
+<h2>Zašto da isključim prepoznavanje vježbanja u Samsung Healthu?</h2>
+<p>Na Samsung satovima Samsung Health može tijekom meča sam pokrenuti praćenje vježbanja i preuzeti mjerenje pulsa i kalorija. Skoretap tada nema što mjeriti. U aplikaciji Samsung Health na satu otvori postavke i isključi automatsko prepoznavanje vježbanja. Sat ovaj savjet prikaže samo jednom, zato je i ovdje.</p>
+
+<h2>Zašto mi nije izmjeren puls ili kalorije?</h2>
+<p>Mjerenje se uključuje pristankom na mobitelu. Provjeri je li uključeno.</p>
+<p>Sat mora imati dopuštenje za puls i kretanje.</p>
+<p>Mjerenje je možda preuzela druga aplikacija. Mobitel to javi nakon meča. Pomaže savjet o Samsung Healthu gore.</p>
+
+<h2>Trebam li internet?</h2>
+<p>Ne. Meč se broji na mobitelu i bez signala se dovrši jednako. Internet treba samo za objavu meča, sigurnosnu kopiju i prijavu.</p>
+
+<h2>Objavljuje li se moj meč sam?</h2>
+<p>Ne. Zadana postavka je „Ne dijeli”. Meč se objavi samo ako to uključiš, a može biti i bez imena.</p>
+
+<h2>Mogu li nedovršeni meč dovršiti kasnije?</h2>
+<p>Da. Odaberi „Dovrši kasnije”. Meč ostaje na mobitelu među nedovršenima i nastavljaš od zadnjeg boda.</p>
+
+<h2>Zna li Skoretap čitati rezultat naglas?</h2>
+<p>Da, mobitel čita rezultat na svih 26 jezika aplikacije. Jezik glasa biraš pri pripremi meča, a možeš ga promijeniti i tijekom meča. Ako mobitel nema glas za taj jezik, aplikacija će ti reći. Bodovi se ne unose glasom, samo dodirom i sa sata.</p>
+
+<h2>Kako prenositi meč uživo na YouTubeu?</h2>
+<p>Na YouTubeu jednom uključi prijenose uživo. Prva aktivacija može trajati do 24 sata.</p>
+<p>U alatu YouTube Studio pronađi ključ prijenosa. U meču otvori „Tijek meča”, dodirni „Uživo na YouTubeu” i zalijepi ključ.</p>
+<p>Mobitel stavi na stativ, spoji powerbank i računaj na oko 2 GB podataka za 90 minuta. Skoretap mora ostati na zaslonu. Tijekom prijenosa bodove unosi sa sata.</p>
+<p>Video je bez zvuka. Rezultat je na slici. Ako je meč na webu, poveznicu na statistiku možeš kopirati u opis videa.</p>
+
+<h2>Može li rezultat bilježiti drugi mobitel, a ne onaj koji snima?</h2>
+<p>Da. Jedan mobitel bilježi rezultat (tvoj sa satom ili sudačev), drugi stoji na stativu kao kamera.</p>
+<p>Na mobitelu koji broji u meču dodirni „Kamera na drugom telefonu” i „Izradi kod”. Moraš biti prijavljen u Skoretap račun.</p>
+<p>Na mobitelu s kamerom na početnom zaslonu dodirni „Kamera za meč”, upiši kod i pokreni prijenos. Tu račun nije potreban.</p>
+<p>Rezultat ide preko interneta i u slici je oko sekundu nakon poena. Bodove uvijek unosi samo jedan mobitel, da se ništa ne zbroji dvaput.</p>
+
+<h2>Kako izbrisati račun i podatke?</h2>
+<p>Kad si prijavljen, u pripremi meča postoji gumb „Izbriši račun”. Bez aplikacije brisanje možeš zatražiti na skoretap.com/smazani-uctu.html. Što spremamo i zašto, piše u pravilima privatnosti na skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="sl" lang="sl" hidden>
+<h1>Pogosta vprašanja</h1>
+
+<h2>Na katerih urah in telefonih deluje Skoretap?</h2>
+<p>Na telefonih z Androidom in urah z Wear OS, na primer Samsung Galaxy Watch. Na iPhonu, Apple Watch in urah Garmin za zdaj ne deluje.</p>
+
+<h2>Kako dobim Skoretap na uro?</h2>
+<p>Ura mora biti seznanjena s telefonom. Namesti Skoretap iz trgovine Google Play na telefon, nato še na uro. Na sami uri ne deluje, potrebuje telefon.</p>
+
+<h2>Kako začnem tekmo z uro?</h2>
+<p>Tekmo ustvari v telefonu, na uri pa odpri Skoretap. Ura sama ugotovi, kakšen je rezultat. Če piše „Iščem telefon…“, se še ni povezala s telefonom.</p>
+
+<h2>Kako se na uri dodajajo točke?</h2>
+<p>Spodnji gumb enkrat: točka za ekipo zgoraj.</p>
+<p>Spodnji gumb dvakrat hitro zapored: točka za ekipo spodaj.</p>
+<p>Ura zavibrira in pokaže, kdo je dobil točko.</p>
+<p>Napaka? Dotakni se „NAZAJ“.</p>
+<p>Vrtljivi obroč (bezel) točk namenoma ne dodaja. Med igro bi se ga lahko slučajno dotaknili in vpisala bi se točka, za katero nihče ne ve.</p>
+
+<h2>Kaj, če se ura odklopi od telefona?</h2>
+<p>Rezultat hrani telefon, ura je njegov daljinec. Ko se povezava prekine, ura pokaže „ni telefona“ in si zapomni tvoje dotike. Napis „čaka 3“ pomeni, da trije dotiki čakajo na pošiljanje. Poslani bodo sami, takoj ko se ura spet poveže s telefonom.</p>
+
+<h2>Kaj pomeni „Telefon se ne odziva“?</h2>
+<p>Telefon ni potrdil tvoje točke. Odpri Skoretap v telefonu. Ura bo poskušala naprej, dotiki se ne izgubijo.</p>
+
+<h2>Zapustil sem aplikacijo na uri. Sem izgubil tekmo?</h2>
+<p>Ne. Tekma je v telefonu in teče naprej. Na uri odpri Skoretap s seznama aplikacij in nadaljuj. Med tekmo spodnji gumb ne zapusti aplikacije, samo dodaja točke.</p>
+
+<h2>Zakaj ura prosi za dovoljenja?</h2>
+<p>Obvestila: zaradi njih ura ve, da teče tekma. Ko vpraša, dovoli.</p>
+<p>Puls in gibanje: samo če želiš meriti puls, korake in kalorije. Točke se štejejo tudi brez tega.</p>
+<p>Dovoljenja spremeniš v nastavitvah ure pri aplikaciji Skoretap.</p>
+
+<h2>Zakaj naj v Samsung Health izklopim prepoznavanje vadbe?</h2>
+<p>Na urah Samsung lahko Samsung Health med tekmo sam zažene spremljanje vadbe in prevzame merjenje pulza in kalorij. Skoretap potem nima kaj meriti. V aplikaciji Samsung Health na uri odpri nastavitve in izklopi samodejno prepoznavanje vadbe. Ura ta nasvet pokaže samo enkrat, zato je tudi tukaj.</p>
+
+<h2>Zakaj se mi puls ali kalorije niso izmerili?</h2>
+<p>Merjenje se vklopi s soglasjem v telefonu. Preveri, ali je vklopljeno.</p>
+<p>Ura mora imeti dovoljenje za puls in gibanje.</p>
+<p>Merjenje je morda prevzela druga aplikacija. Telefon to sporoči po tekmi. Pomaga zgornji nasvet o Samsung Health.</p>
+
+<h2>Ali potrebujem internet?</h2>
+<p>Ne. Tekma se šteje v telefonu in se brez signala odigra enako. Internet je potreben samo za objavo tekme, varnostno kopijo in prijavo.</p>
+
+<h2>Ali se moja tekma objavi sama?</h2>
+<p>Ne. Privzeta nastavitev je „Ne deli“. Tekma se objavi samo, če to vklopiš, in je lahko tudi brez imen.</p>
+
+<h2>Ali lahko začeto tekmo dokončam kdaj drugič?</h2>
+<p>Da. Izberi „Dokončaj pozneje“. Tekma ostane v telefonu med nedokončanimi in nadaljuješ od zadnje točke.</p>
+
+<h2>Ali zna Skoretap brati rezultat na glas?</h2>
+<p>Da, telefon prebere rezultat v vseh 26 jezikih aplikacije. Jezik glasu izbereš pri pripravi tekme, spremeniš ga lahko tudi med tekmo. Če telefon za ta jezik nima glasu, ti aplikacija to pove. Točk ni mogoče vnašati z glasom, samo z dotikom in z ure.</p>
+
+<h2>Kako prenašam tekmo v živo na YouTubu?</h2>
+<p>Na YouTubu enkrat vklopi prenose v živo. Prva aktivacija lahko traja do 24 ur.</p>
+<p>V orodju YouTube Studio poišči ključ pretoka. V tekmi odpri „Potek tekme“, dotakni se „V živo na YouTubu“ in prilepi ključ.</p>
+<p>Telefon postavi na stojalo, priključi zunanjo baterijo in računaj na približno 2 GB podatkov za 90 minut. Skoretap mora ostati na zaslonu. Med prenosom vnašaj točke z ure.</p>
+<p>Video je brez zvoka. Rezultat je na sliki. Če je tekma na spletu, lahko povezavo do statistike kopiraš v opis videa.</p>
+
+<h2>Lahko rezultat beleži drug telefon kot tisti, ki snema?</h2>
+<p>Da. En telefon beleži rezultat (tvoj z uro ali sodnikov), drugi stoji na stojalu kot kamera.</p>
+<p>Na telefonu, ki šteje, med tekmo tapni »Kamera na drugem telefonu« in »Ustvari kodo«. Biti moraš prijavljen v račun Skoretap.</p>
+<p>Na telefonu s kamero na začetnem zaslonu tapni »Kamera za tekmo«, vpiši kodo in zaženi prenos. Tam račun ni potreben.</p>
+<p>Rezultat gre prek interneta in je v sliki približno sekundo po točki. Točke vedno vnaša samo en telefon, da se nič ne šteje dvakrat.</p>
+
+<h2>Kako izbrišem račun in podatke?</h2>
+<p>Ko si prijavljen, je v pripravi tekme gumb „Izbriši račun“. Brez aplikacije lahko izbris zahtevaš na skoretap.com/smazani-uctu.html. Kaj shranjujemo in zakaj, piše v pravilih zasebnosti na skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="el" lang="el" hidden>
+<h1>Συχνές ερωτήσεις</h1>
+
+<h2>Σε ποια ρολόγια και κινητά λειτουργεί το Skoretap;</h2>
+<p>Σε κινητά Android και ρολόγια Wear OS, όπως το Samsung Galaxy Watch. Προς το παρόν δεν λειτουργεί σε iPhone, Apple Watch ή Garmin.</p>
+
+<h2>Πώς βάζω το Skoretap στο ρολόι μου;</h2>
+<p>Το ρολόι πρέπει να είναι συζευγμένο με το κινητό. Εγκατάστησε το Skoretap από το Google Play στο κινητό και μετά και στο ρολόι. Μόνο του στο ρολόι δεν λειτουργεί, χρειάζεται το κινητό.</p>
+
+<h2>Πώς ξεκινάω έναν αγώνα με το ρολόι;</h2>
+<p>Δημιούργησε τον αγώνα στο κινητό και άνοιξε το Skoretap στο ρολόι. Το ρολόι μαθαίνει μόνο του το σκορ. Αν γράφει «Αναζήτηση τηλεφώνου…», δεν έχει συνδεθεί ακόμα με το κινητό.</p>
+
+<h2>Πώς προσθέτω πόντους στο ρολόι;</h2>
+<p>Κάτω κουμπί μία φορά: πόντος για την ομάδα από πάνω.</p>
+<p>Κάτω κουμπί δύο φορές γρήγορα: πόντος για την ομάδα από κάτω.</p>
+<p>Το ρολόι δονείται και δείχνει ποιος πήρε τον πόντο.</p>
+<p>Έκανες λάθος; Πάτησε «ΑΝΑΙΡΕΣΗ».</p>
+<p>Το περιστρεφόμενο στεφάνι δεν προσθέτει πόντους επίτηδες. Θα μπορούσες να το ακουμπήσεις την ώρα του παιχνιδιού και να μπει ένας πόντος που κανείς δεν ξέρει.</p>
+
+<h2>Τι γίνεται αν το ρολόι χάσει το κινητό;</h2>
+<p>Το κινητό κρατάει το σκορ και το ρολόι είναι το τηλεχειριστήριό του. Όταν κοπεί η σύνδεση, το ρολόι δείχνει «χωρίς τηλέφωνο» και θυμάται τα πατήματά σου. Το «σε αναμονή 3» σημαίνει ότι τρία πατήματα περιμένουν να σταλούν. Φεύγουν μόνα τους μόλις το ρολόι ξανασυνδεθεί.</p>
+
+<h2>Τι σημαίνει «Το τηλέφωνο δεν απαντά»;</h2>
+<p>Το κινητό δεν επιβεβαίωσε τον πόντο σου. Άνοιξε το Skoretap στο κινητό. Το ρολόι συνεχίζει να προσπαθεί και τα πατήματα δεν χάνονται.</p>
+
+<h2>Βγήκα από την εφαρμογή στο ρολόι. Έχασα τον αγώνα;</h2>
+<p>Όχι. Ο αγώνας είναι στο κινητό και συνεχίζεται. Άνοιξε το Skoretap από τη λίστα εφαρμογών του ρολογιού και συνέχισε. Κατά τη διάρκεια του αγώνα το κάτω κουμπί δεν σε βγάζει από την εφαρμογή, απλώς προσθέτει πόντους.</p>
+
+<h2>Γιατί το ρολόι ζητάει άδειες;</h2>
+<p>Ειδοποιήσεις: έτσι το ρολόι ξέρει ότι τρέχει αγώνας. Επίτρεψέ τες όταν ρωτήσει.</p>
+<p>Καρδιακοί παλμοί και δραστηριότητα: μόνο αν θέλεις να μετράς παλμούς, βήματα και θερμίδες. Οι πόντοι μετριούνται και χωρίς αυτά.</p>
+<p>Μπορείς να αλλάξεις τις άδειες στις ρυθμίσεις του ρολογιού, στο Skoretap.</p>
+
+<h2>Γιατί να απενεργοποιήσω την ανίχνευση άσκησης στο Samsung Health;</h2>
+<p>Στα ρολόγια Samsung, το Samsung Health μπορεί να ξεκινήσει μόνο του την παρακολούθηση άσκησης στη διάρκεια ενός αγώνα και να αναλάβει τη μέτρηση παλμών και θερμίδων. Τότε το Skoretap δεν έχει τίποτα να μετρήσει. Άνοιξε το Samsung Health στο ρολόι, μπες στις ρυθμίσεις του και απενεργοποίησε την αυτόματη ανίχνευση άσκησης. Το ρολόι δείχνει αυτή τη συμβουλή μόνο μία φορά, γι' αυτό είναι και εδώ.</p>
+
+<h2>Γιατί δεν μετρήθηκαν οι παλμοί ή οι θερμίδες μου;</h2>
+<p>Η μέτρηση ενεργοποιείται με τη συγκατάθεσή σου στην εφαρμογή του κινητού. Έλεγξε ότι είναι ενεργή.</p>
+<p>Το ρολόι πρέπει να έχει άδεια για καρδιακούς παλμούς και δραστηριότητα.</p>
+<p>Ίσως τη μέτρηση την ανέλαβε άλλη εφαρμογή. Το κινητό σού το λέει μετά τον αγώνα. Βοηθάει η συμβουλή για το Samsung Health παραπάνω.</p>
+
+<h2>Χρειάζομαι ίντερνετ;</h2>
+<p>Όχι. Ο αγώνας μετριέται στο κινητό και τελειώνει το ίδιο χωρίς σήμα. Ίντερνετ χρειάζεσαι μόνο για να δημοσιεύσεις έναν αγώνα, να κάνεις αντίγραφο ασφαλείας και να συνδεθείς.</p>
+
+<h2>Δημοσιεύεται αυτόματα ο αγώνας μου;</h2>
+<p>Όχι. Η προεπιλογή είναι «Χωρίς κοινοποίηση». Ένας αγώνας δημοσιεύεται μόνο αν το ενεργοποιήσεις, και μπορεί να δημοσιευτεί και χωρίς ονόματα.</p>
+
+<h2>Μπορώ να τελειώσω έναν αγώνα αργότερα;</h2>
+<p>Ναι. Διάλεξε «Ολοκλήρωση αργότερα». Ο αγώνας μένει στο κινητό ανάμεσα στους ημιτελείς αγώνες και συνεχίζεις από εκεί που σταμάτησες.</p>
+
+<h2>Μπορεί το Skoretap να διαβάζει το σκορ φωναχτά;</h2>
+<p>Ναι, το κινητό διαβάζει το σκορ και στις 26 γλώσσες της εφαρμογής. Τη γλώσσα της φωνής τη διαλέγεις στην προετοιμασία και μπορείς να την αλλάξεις και στη διάρκεια του αγώνα. Αν το κινητό δεν έχει φωνή για αυτή τη γλώσσα, η εφαρμογή σού το λέει. Οι πόντοι δεν καταχωρούνται με τη φωνή, μόνο με άγγιγμα και από το ρολόι.</p>
+
+<h2>Πώς κάνω ζωντανή μετάδοση ενός αγώνα στο YouTube;</h2>
+<p>Ενεργοποίησε μία φορά τις ζωντανές μεταδόσεις στο YouTube. Η πρώτη ενεργοποίηση μπορεί να πάρει έως και 24 ώρες.</p>
+<p>Βρες το κλειδί ροής στο YouTube Studio. Στον αγώνα άνοιξε «Εξέλιξη αγώνα», πάτησε «Ζωντανά στο YouTube» και επικόλλησε το κλειδί.</p>
+<p>Βάλε το κινητό σε τρίποδο, σύνδεσε ένα powerbank και υπολόγισε περίπου 2 GB δεδομένων για 90 λεπτά. Το Skoretap πρέπει να μένει στην οθόνη. Κατά τη μετάδοση βάζε τους πόντους από το ρολόι.</p>
+<p>Το βίντεο δεν έχει ήχο. Το σκορ είναι στην εικόνα. Αν ο αγώνας είναι στο διαδίκτυο, μπορείς να αντιγράψεις τον σύνδεσμο για τα στατιστικά στην περιγραφή του βίντεο.</p>
+
+<h2>Μπορεί άλλο κινητό να κρατά το σκορ από αυτό που τραβά βίντεο;</h2>
+<p>Ναι. Το ένα κινητό κρατά το σκορ (το δικό σου με το ρολόι ή του διαιτητή), το άλλο στέκεται σε τρίποδο ως κάμερα.</p>
+<p>Στο κινητό που μετρά, πάτησε στον αγώνα «Κάμερα σε άλλο κινητό» και «Δημιουργία κωδικού». Πρέπει να έχεις συνδεθεί σε λογαριασμό Skoretap.</p>
+<p>Στο κινητό με την κάμερα, πάτησε στην αρχική οθόνη «Κάμερα για αγώνα», γράψε τον κωδικό και ξεκίνα τη μετάδοση. Εκεί δεν χρειάζεται λογαριασμός.</p>
+<p>Το σκορ πάει μέσω ίντερνετ και φαίνεται στην εικόνα περίπου ένα δευτερόλεπτο μετά τον πόντο. Πόντους περνά πάντα μόνο ένα κινητό, ώστε τίποτα να μη μετρηθεί δύο φορές.</p>
+
+<h2>Πώς διαγράφω τον λογαριασμό και τα δεδομένα μου;</h2>
+<p>Όταν είσαι συνδεδεμένος, στην προετοιμασία του αγώνα υπάρχει το κουμπί «Διαγραφή λογαριασμού». Χωρίς την εφαρμογή, μπορείς να ζητήσεις διαγραφή στο skoretap.com/smazani-uctu.html. Τι αποθηκεύουμε και γιατί, θα βρεις στην πολιτική απορρήτου στο skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="tr" lang="tr" hidden>
+<h1>Sık sorulan sorular</h1>
+
+<h2>Skoretap hangi saatlerde ve telefonlarda çalışır?</h2>
+<p>Android telefonlarda ve Wear OS saatlerde, örneğin Samsung Galaxy Watch'ta çalışır. iPhone, Apple Watch ve Garmin saatlerde henüz çalışmaz.</p>
+
+<h2>Skoretap'i saatime nasıl kurarım?</h2>
+<p>Saat telefonla eşleşmiş olmalı. Skoretap'i önce telefona Google Play'den kur, sonra saate de kur. Saatte tek başına çalışmaz, telefona ihtiyacı var.</p>
+
+<h2>Saatle maça nasıl başlarım?</h2>
+<p>Maçı telefonda oluştur, saatte Skoretap'i aç. Saat skoru kendisi öğrenir. “Telefon aranıyor…” yazıyorsa saat telefona henüz bağlanmamış demektir.</p>
+
+<h2>Saatte puanı nasıl eklerim?</h2>
+<p>Alt tuşa bir kez bas: üstteki takıma puan.</p>
+<p>Alt tuşa hızlıca iki kez bas: alttaki takıma puan.</p>
+<p>Saat titreşir ve puanın kime gittiğini gösterir.</p>
+<p>Yanlış mı bastın? “GERİ AL”a dokun.</p>
+<p>Dönen çerçeve bilerek puan eklemez. Oyun sırasında ona sürtebilirsin ve kimsenin bilmediği bir puan yazılırdı.</p>
+
+<h2>Saat telefonla bağlantıyı kaybederse ne olur?</h2>
+<p>Skoru telefon tutar, saat onun uzaktan kumandasıdır. Bağlantı kopunca saat “telefon yok” gösterir ve bastıklarını hatırlar. “sırada 3” yazısı, üç basışın gönderilmeyi beklediği anlamına gelir. Saat telefona yeniden bağlanır bağlanmaz bunlar kendiliğinden gider.</p>
+
+<h2>“Telefon yanıt vermiyor” ne demek?</h2>
+<p>Telefon puanını onaylamadı. Telefonda Skoretap'i aç. Saat denemeye devam eder, basışların kaybolmaz.</p>
+
+<h2>Saatte uygulamadan çıktım. Maçı kaybettim mi?</h2>
+<p>Hayır. Maç telefonda ve devam ediyor. Saatte uygulama listesinden Skoretap'i aç ve devam et. Maç sırasında alt tuş uygulamadan çıkarmaz, sadece puan ekler.</p>
+
+<h2>Saat neden izin istiyor?</h2>
+<p>Bildirimler: saat sayesinde bir maçın sürdüğünü bilir. Sorulunca izin ver.</p>
+<p>Nabız ve hareket: sadece nabzı, adımları ve kaloriyi ölçmek istersen. Puanlar bunlar olmadan da sayılır.</p>
+<p>İzinleri saatin ayarlarında Skoretap bölümünden değiştirebilirsin.</p>
+
+<h2>Samsung Health'te egzersiz algılamayı neden kapatmalıyım?</h2>
+<p>Samsung saatlerde Samsung Health, maç sırasında egzersiz takibini kendiliğinden başlatıp nabız ve kalori ölçümünü devralabilir. O zaman Skoretap'in ölçecek bir şeyi kalmaz. Saatte Samsung Health'in ayarlarını aç ve otomatik egzersiz algılamayı kapat. Saat bu ipucunu yalnızca bir kez gösterir, o yüzden burada da var.</p>
+
+<h2>Nabzım veya kalorim neden ölçülmedi?</h2>
+<p>Ölçüm, telefondaki uygulamada verdiğin onayla açılır. Açık olduğunu kontrol et.</p>
+<p>Saatte nabız ve hareket izni verilmiş olmalı.</p>
+<p>Ölçümü başka bir uygulama devralmış olabilir. Telefon bunu maçtan sonra söyler. Yukarıdaki Samsung Health ipucu yardımcı olur.</p>
+
+<h2>İnternet gerekli mi?</h2>
+<p>Hayır. Maç telefonda sayılır ve sinyal olmadan da aynı şekilde biter. İnternete yalnızca maçı yayınlamak, yedeklemek ve giriş yapmak için ihtiyaç var.</p>
+
+<h2>Maçım kendiliğinden yayınlanır mı?</h2>
+<p>Hayır. Varsayılan ayar “Paylaşma”dır. Maç ancak sen açarsan yayınlanır ve isimsiz de olabilir.</p>
+
+<h2>Yarım kalan maçı sonra bitirebilir miyim?</h2>
+<p>Evet. “Sonra bitir”i seç. Maç telefonda yarım kalan maçların arasında durur ve kaldığın yerden devam edersin.</p>
+
+<h2>Skoretap skoru sesli okuyabilir mi?</h2>
+<p>Evet, telefon skoru uygulamanın 26 dilinin hepsinde sesli okur. Sesin dilini maçı hazırlarken seçersin, maç sırasında da değiştirebilirsin. Telefonda o dil için ses yoksa uygulama bunu söyler. Puanlar sesle girilemez, yalnızca dokunarak ve saatten.</p>
+
+<h2>Bir maçı YouTube'da nasıl yayınlarım?</h2>
+<p>YouTube'da canlı yayını bir kez aç. İlk etkinleştirme 24 saate kadar sürebilir.</p>
+<p>Yayın anahtarını YouTube Studio'da bul. Maçta “Maçın akışı”nı aç, “YouTube'da canlı”ya dokun ve anahtarı yapıştır.</p>
+<p>Telefonu tripoda koy, powerbank bağla ve 90 dakika için yaklaşık 2 GB veri hesapla. Skoretap ekranda kalmalı. Yayın sırasında puanları saatten gir.</p>
+<p>Videoda ses yok. Skor görüntünün içinde. Maç web'deyse istatistik bağlantısını video açıklamasına kopyalayabilirsin.</p>
+
+<h2>Skoru, çekim yapan telefondan başka bir telefon tutabilir mi?</h2>
+<p>Evet. Bir telefon skoru tutar (saatli seninki ya da hakeminki), diğeri tripod üzerinde kamera olarak durur.</p>
+<p>Skoru tutan telefonda maç sırasında “Başka telefonda kamera” ve “Kod oluştur”a dokun. Bir Skoretap hesabında oturum açmış olmalısın.</p>
+<p>Kameralı telefonda ana ekranda “Maç için kamera”ya dokun, kodu yaz ve yayını başlat. Orada hesap gerekmez.</p>
+<p>Skor internet üzerinden gider ve sayıdan yaklaşık bir saniye sonra görüntüde olur. Puanları her zaman tek bir telefon girer, böylece hiçbir şey iki kez sayılmaz.</p>
+
+<h2>Hesabımı ve verilerimi nasıl silerim?</h2>
+<p>Giriş yapmışsan maç hazırlama ekranında “Hesabı sil” düğmesi vardır. Uygulama olmadan silme talebini skoretap.com/smazani-uctu.html adresinden yapabilirsin. Neyi neden sakladığımız skoretap.com/soukromi.html adresindeki gizlilik politikasında yazıyor.</p>
+</section>
+
+<section data-jazyk="uk" lang="uk" hidden>
+<h1>Часті запитання</h1>
+
+<h2>На яких годинниках і телефонах працює Skoretap?</h2>
+<p>На телефонах з Android і годинниках з Wear OS, наприклад Samsung Galaxy Watch. На iPhone, Apple Watch і годинниках Garmin поки що не працює.</p>
+
+<h2>Як встановити Skoretap на годинник?</h2>
+<p>Годинник має бути спарений із телефоном. Встанови Skoretap із Google Play на телефон, а потім і на годинник. Сам по собі на годиннику він не працює, йому потрібен телефон.</p>
+
+<h2>Як почати матч з годинником?</h2>
+<p>Створи матч у телефоні та відкрий Skoretap на годиннику. Годинник сам дізнається, який рахунок. Якщо він пише «Шукаю телефон…», то ще не з’єднався з телефоном.</p>
+
+<h2>Як на годиннику додавати очки?</h2>
+<p>Нижня кнопка один раз: очко для команди зверху.</p>
+<p>Нижня кнопка двічі швидко поспіль: очко для команди знизу.</p>
+<p>Годинник завібрує й покаже, кому пішло очко.</p>
+<p>Помилка? Торкнись «НАЗАД».</p>
+<p>Обертове кільце (безель) очок навмисно не додає. Його можна випадково зачепити під час гри, і зарахувалось би очко, про яке ніхто не знає.</p>
+
+<h2>Що, як годинник втратить зв’язок з телефоном?</h2>
+<p>Рахунок тримає телефон, а годинник — це його пульт. Коли зв’язок обривається, годинник показує «без телефона» і запам’ятовує твої натискання. Напис «у черзі 3» означає, що три натискання чекають на відправлення. Вони підуть самі, щойно годинник знову з’єднається з телефоном.</p>
+
+<h2>Що означає «Телефон не відповідає»?</h2>
+<p>Телефон не підтвердив твоє очко. Відкрий Skoretap у телефоні. Годинник пробуватиме далі, натискання не пропадуть.</p>
+
+<h2>Я вийшов із застосунку на годиннику. Я втратив матч?</h2>
+<p>Ні. Матч у телефоні й іде далі. На годиннику відкрий Skoretap зі списку застосунків і продовжуй. Під час матчу нижня кнопка із застосунку не виходить, вона лише додає очки.</p>
+
+<h2>Чому годинник просить дозволи?</h2>
+<p>Сповіщення: завдяки ним годинник знає, що триває матч. Коли він запитає, дозволь.</p>
+<p>Пульс і рух: лише якщо хочеш вимірювати пульс, кроки та калорії. Очки рахуються й без цього.</p>
+<p>Дозволи можна змінити в налаштуваннях годинника, у розділі Skoretap.</p>
+
+<h2>Чому треба вимкнути розпізнавання тренувань у Samsung Health?</h2>
+<p>На годинниках Samsung застосунок Samsung Health може сам запустити відстеження тренування під час матчу й перебрати на себе вимірювання пульсу та калорій. Тоді Skoretap нема чого вимірювати. Відкрий Samsung Health на годиннику, зайди в налаштування й вимкни автоматичне розпізнавання тренувань. Годинник показує цю пораду лише раз, тому вона є й тут.</p>
+
+<h2>Чому не виміряно мій пульс або калорії?</h2>
+<p>Вимірювання вмикається згодою в телефоні. Перевір, чи воно ввімкнене.</p>
+<p>У годинника має бути дозвіл на пульс і рух.</p>
+<p>Вимірювання могла перебрати інша програма. Телефон повідомить про це після матчу. Допоможе порада про Samsung Health вище.</p>
+
+<h2>Чи потрібен інтернет?</h2>
+<p>Ні. Матч рахується в телефоні й без сигналу доігрується так само. Інтернет потрібен лише для публікації матчу, резервної копії та входу.</p>
+
+<h2>Чи публікується мій матч сам?</h2>
+<p>Ні. За замовчуванням стоїть «Не ділитися». Матч публікується, лише якщо ти це ввімкнеш, і може бути без імен.</p>
+
+<h2>Чи можу я доіграти розпочатий матч іншим разом?</h2>
+<p>Так. Вибери «Дограти пізніше». Матч залишиться в телефоні серед незавершених, і ти продовжиш з останнього очка.</p>
+
+<h2>Чи вміє Skoretap читати рахунок уголос?</h2>
+<p>Так, телефон читає рахунок усіма 26 мовами застосунку. Мову голосу обираєш під час підготовки матчу, змінити її можна й під час гри. Якщо в телефоні немає голосу для цієї мови, застосунок про це скаже. Очки голосом не вводяться, лише дотиком і з годинника.</p>
+
+<h2>Як транслювати матч на YouTube?</h2>
+<p>На YouTube один раз увімкни трансляції наживо. Перша активація може тривати до 24 годин.</p>
+<p>У YouTube Studio знайди ключ трансляції. У матчі відкрий «Перебіг матчу», торкнись «Наживо на YouTube» і встав ключ.</p>
+<p>Постав телефон на штатив, під’єднай павербанк і розраховуй приблизно на 2 GB даних за 90 хвилин. Skoretap має залишатися на екрані. Під час трансляції вводь очки з годинника.</p>
+<p>Відео йде без звуку. Рахунок видно на зображенні. Якщо матч на вебсайті, посилання на статистику можна скопіювати в опис відео.</p>
+
+<h2>Чи може рахунок вести інший телефон, ніж той, що знімає?</h2>
+<p>Так. Один телефон веде рахунок (твій із годинником або суддівський), інший стоїть на штативі як камера.</p>
+<p>На телефоні, що рахує, під час матчу торкнися «Камера на іншому телефоні» і «Створити код». Потрібно увійти в обліковий запис Skoretap.</p>
+<p>На телефоні з камерою на головному екрані торкнися «Камера для матчу», введи код і запусти трансляцію. Обліковий запис там не потрібен.</p>
+<p>Рахунок іде через інтернет і з’являється в кадрі приблизно за секунду після очка. Очки завжди вводить лише один телефон, щоб нічого не зарахувалося двічі.</p>
+
+<h2>Як видалити акаунт і дані?</h2>
+<p>Коли ти ввійшов в акаунт, у підготовці матчу є кнопка «Видалити акаунт». Без застосунку видалення можна попросити на skoretap.com/smazani-uctu.html. Що ми зберігаємо й навіщо, написано в політиці конфіденційності на skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="ar" lang="ar" dir="rtl" hidden>
+<h1>الأسئلة الشائعة</h1>
+
+<h2>على أي ساعات وهواتف يعمل Skoretap؟</h2>
+<p>يعمل على هواتف Android وساعات Wear OS، مثل Samsung Galaxy Watch. لا يعمل بعد على iPhone ولا Apple Watch ولا ساعات Garmin.</p>
+
+<h2>كيف أضع Skoretap على ساعتي؟</h2>
+<p>يجب أن تكون الساعة مقترنة بهاتفك. ثبّت Skoretap من Google Play على الهاتف أولًا، ثم على الساعة أيضًا. لا يعمل على الساعة وحدها، فهو يحتاج إلى الهاتف.</p>
+
+<h2>كيف أبدأ مباراة بالساعة؟</h2>
+<p>أنشئ المباراة على الهاتف وافتح Skoretap على الساعة. تعرف الساعة النتيجة بنفسها. إذا ظهرت عبارة “جارٍ البحث عن الهاتف…” فهذا يعني أنها لم تتصل بالهاتف بعد.</p>
+
+<h2>كيف أسجّل النقاط على الساعة؟</h2>
+<p>اضغط الزر السفلي مرة واحدة: نقطة للفريق العلوي.</p>
+<p>اضغط الزر السفلي مرتين بسرعة: نقطة للفريق السفلي.</p>
+<p>تهتز الساعة وتُظهر من أخذ النقطة.</p>
+<p>أخطأت؟ المس “تراجع”.</p>
+<p>الإطار الدوّار لا يسجّل النقاط عمدًا. قد تلمسه أثناء اللعب فتُسجَّل نقطة لا يعرف بها أحد.</p>
+
+<h2>ماذا لو انقطع اتصال الساعة بالهاتف؟</h2>
+<p>الهاتف هو الذي يحتفظ بالنتيجة، والساعة مجرد جهاز تحكم عن بُعد. عند انقطاع الاتصال تعرض الساعة “لا هاتف” وتتذكر ضغطاتك. عبارة “في الانتظار 3” تعني أن ثلاث ضغطات تنتظر الإرسال. وتُرسل وحدها فور عودة الاتصال بالهاتف.</p>
+
+<h2>ماذا يعني “الهاتف لا يستجيب”؟</h2>
+<p>لم يؤكد الهاتف نقطتك. افتح Skoretap على الهاتف. ستواصل الساعة المحاولة ولن تضيع ضغطاتك.</p>
+
+<h2>خرجت من التطبيق على الساعة. هل خسرت المباراة؟</h2>
+<p>لا. المباراة على الهاتف وتستمر. افتح Skoretap من قائمة التطبيقات على الساعة وتابع. أثناء المباراة لا يُخرجك الزر السفلي من التطبيق، بل يسجّل النقاط فقط.</p>
+
+<h2>لماذا تطلب الساعة أذونات؟</h2>
+<p>الإشعارات: بفضلها تعرف الساعة أن مباراة جارية. اسمح بها عند السؤال.</p>
+<p>نبض القلب والحركة: فقط إذا أردت قياس النبض والخطوات والسعرات. تُحتسب النقاط بدونها أيضًا.</p>
+<p>يمكنك تغيير الأذونات من إعدادات الساعة ضمن Skoretap.</p>
+
+<h2>لماذا أُوقف اكتشاف التمارين في Samsung Health؟</h2>
+<p>في ساعات Samsung قد يبدأ Samsung Health بتتبّع التمرين من تلقاء نفسه أثناء المباراة ويستولي على قياس النبض والسعرات. عندها لا يبقى لدى Skoretap ما يقيسه. افتح Samsung Health على الساعة، ثم الإعدادات، وأوقف الاكتشاف التلقائي للتمارين. تعرض الساعة هذه النصيحة مرة واحدة فقط، ولذلك ذكرناها هنا أيضًا.</p>
+
+<h2>لماذا لم يُقَس نبضي أو سعراتي؟</h2>
+<p>يُفعَّل القياس بموافقتك في تطبيق الهاتف. تأكد أنه مفعّل.</p>
+<p>يجب أن تملك الساعة إذن النبض والحركة.</p>
+<p>ربما استولى تطبيق آخر على القياس. يخبرك الهاتف بذلك بعد المباراة. تساعد نصيحة Samsung Health المذكورة أعلاه.</p>
+
+<h2>هل أحتاج إلى الإنترنت؟</h2>
+<p>لا. تُحتسب المباراة على الهاتف وتنتهي بالشكل نفسه بدون إشارة. تحتاج إلى الإنترنت فقط لنشر المباراة والنسخ الاحتياطي وتسجيل الدخول.</p>
+
+<h2>هل تُنشر مباراتي تلقائيًا؟</h2>
+<p>لا. الإعداد الافتراضي هو “بدون مشاركة”. لا تُنشر المباراة إلا إذا فعّلت ذلك، ويمكن نشرها بدون أسماء.</p>
+
+<h2>هل أستطيع إكمال مباراة غير منتهية لاحقًا؟</h2>
+<p>نعم. اختر “أكملها لاحقًا”. تبقى المباراة على الهاتف بين المباريات غير المنتهية، وتكمل من حيث توقفت.</p>
+
+<h2>هل يستطيع Skoretap قراءة النتيجة بصوت عالٍ؟</h2>
+<p>نعم، يقرأ الهاتف النتيجة بجميع لغات التطبيق الـ26. تختار لغة الصوت عند تجهيز المباراة ويمكنك تغييرها أثناء المباراة. إذا لم يكن في الهاتف صوت لتلك اللغة، يخبرك التطبيق بذلك. لا يمكن إدخال النقاط بالصوت، فقط باللمس ومن الساعة.</p>
+
+<h2>كيف أبثّ مباراة على YouTube؟</h2>
+<p>فعّل البث المباشر على YouTube مرة واحدة. قد يستغرق التفعيل الأول حتى 24 ساعة.</p>
+<p>ابحث عن مفتاح البث في YouTube Studio. في المباراة افتح “سير المباراة”، واضغط “مباشر على YouTube” والصق المفتاح.</p>
+<p>ضع الهاتف على حامل ثلاثي، وصِل شاحنًا متنقلًا، وتوقّع نحو 2 GB من البيانات لكل 90 دقيقة. يجب أن يبقى Skoretap على الشاشة. أثناء البث أدخل النقاط من الساعة.</p>
+<p>الفيديو بلا صوت. النتيجة تظهر في الصورة. إذا كانت المباراة على الويب، يمكنك نسخ رابط الإحصاءات إلى وصف الفيديو.</p>
+
+<h2>هل يمكن لهاتف غير الذي يصوّر أن يسجّل النتيجة؟</h2>
+<p>نعم. يسجّل هاتف واحد النتيجة (هاتفك مع الساعة أو هاتف الحكم)، والآخر يقف على حامل ثلاثي ككاميرا.</p>
+<p>على الهاتف الذي يسجّل، المس أثناء المباراة «كاميرا على هاتف آخر» ثم «إنشاء رمز». يجب أن تكون مسجّل الدخول إلى حساب Skoretap.</p>
+<p>على هاتف الكاميرا، المس «كاميرا للمباراة» في الشاشة الرئيسية، واكتب الرمز وابدأ البث. لا حاجة إلى حساب هناك.</p>
+<p>تنتقل النتيجة عبر الإنترنت وتظهر في الصورة بعد النقطة بثانية تقريبًا. يُدخل النقاط هاتف واحد فقط دائمًا، حتى لا تُحسب أي نقطة مرتين.</p>
+
+<h2>كيف أحذف حسابي وبياناتي؟</h2>
+<p>عندما تكون مسجّلًا للدخول، يوجد زر “حذف الحساب” في شاشة إعداد المباراة. وبدون التطبيق يمكنك طلب الحذف عبر skoretap.com/smazani-uctu.html. ما نخزّنه ولماذا مكتوب في سياسة الخصوصية على skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="ja" lang="ja" hidden>
+<h1>よくある質問</h1>
+
+<h2>Skoretapはどのウォッチとスマホで使えますか？</h2>
+<p>AndroidスマホとWear OSのウォッチ（Samsung Galaxy Watchなど）で使えます。iPhone、Apple Watch、Garminのウォッチではまだ使えません。</p>
+
+<h2>Skoretapをウォッチに入れるには？</h2>
+<p>ウォッチはスマホとペアリングしておく必要があります。まずスマホにGoogle PlayからSkoretapをインストールし、そのあとウォッチにもインストールしてください。ウォッチ単体では動かず、スマホが必要です。</p>
+
+<h2>ウォッチで試合を始めるには？</h2>
+<p>スマホで試合を作成し、ウォッチでSkoretapを開きます。スコアはウォッチが自動で取得します。「スマホを探しています…」と出ているときは、まだスマホにつながっていません。</p>
+
+<h2>ウォッチでポイントを入れるには？</h2>
+<p>下のボタンを1回押す：上のチームにポイント。</p>
+<p>下のボタンをすばやく2回押す：下のチームにポイント。</p>
+<p>ウォッチが振動して、どちらにポイントが入ったか表示します。</p>
+<p>間違えた？「戻す」をタップしてください。</p>
+<p>回転ベゼルではポイントは入りません。プレー中にうっかり触れて、誰も知らないポイントが入ってしまうのを防ぐためです。</p>
+
+<h2>ウォッチがスマホとつながらなくなったら？</h2>
+<p>スコアを持っているのはスマホで、ウォッチはそのリモコンです。接続が切れると、ウォッチは「スマホなし」と表示し、押した内容を覚えておきます。「待機 3」は、3回分の操作が送信待ちという意味です。ウォッチがスマホにつながると、自動で送られます。</p>
+
+<h2>「スマホが応答しません」とは？</h2>
+<p>スマホがあなたのポイントを確認できていません。スマホでSkoretapを開いてください。ウォッチは送信を試し続けるので、操作は失われません。</p>
+
+<h2>ウォッチでアプリを閉じました。試合は消えましたか？</h2>
+<p>いいえ。試合はスマホにあり、続いています。ウォッチのアプリ一覧からSkoretapを開いて続けてください。試合中、下のボタンでアプリを閉じることはなく、ポイントを入れるだけです。</p>
+
+<h2>ウォッチはなぜ許可を求めるの？</h2>
+<p>通知：試合が進行中であることをウォッチが知るために使います。聞かれたら許可してください。</p>
+<p>心拍と動き：心拍数、歩数、カロリーを測りたい場合のみ。ポイントは許可なしでも数えられます。</p>
+<p>許可はウォッチの設定にあるSkoretapの項目で変更できます。</p>
+
+<h2>Samsung Healthでワークアウト自動検出をオフにするのはなぜ？</h2>
+<p>Samsungのウォッチでは、試合中にSamsung Healthが自動でワークアウトの記録を始め、心拍数とカロリーの測定を引き継ぐことがあります。そうなると、Skoretapが測るものがなくなります。ウォッチでSamsung Healthの設定を開き、ワークアウトの自動検出をオフにしてください。ウォッチはこのヒントを一度しか表示しないので、ここにも載せています。</p>
+
+<h2>心拍数やカロリーが測れなかったのはなぜ？</h2>
+<p>測定は、スマホのアプリで同意すると有効になります。オンになっているか確認してください。</p>
+<p>ウォッチで心拍と動きの許可が必要です。</p>
+<p>別のアプリが測定を引き継いだ可能性があります。その場合は試合後にスマホが知らせます。上のSamsung Healthのヒントが役立ちます。</p>
+
+<h2>インターネットは必要ですか？</h2>
+<p>いいえ。試合はスマホで数えるので、電波がなくても最後まで続けられます。インターネットが必要なのは、試合の公開、バックアップ、ログインのときだけです。</p>
+
+<h2>試合は自動で公開されますか？</h2>
+<p>いいえ。初期設定は「共有しない」です。公開されるのは、あなたがオンにしたときだけで、名前なしでも公開できます。</p>
+
+<h2>途中の試合を後で続けられますか？</h2>
+<p>はい。「後で続ける」を選んでください。試合はスマホの途中の試合の中に残り、やめたところから再開できます。</p>
+
+<h2>Skoretapはスコアを読み上げられますか？</h2>
+<p>はい。アプリの26言語すべてでスコアを読み上げます。読み上げの言語は試合の準備で選び、試合中も変更できます。スマホにその言語の音声がない場合はアプリがお知らせします。ポイントは音声では入力できず、タッチとウォッチからのみ入力できます。</p>
+
+<h2>試合をYouTubeで配信するには？</h2>
+<p>YouTubeでライブ配信を一度オンにしてください。初回の有効化には最大24時間かかることがあります。</p>
+<p>YouTube Studioでストリームキーを探します。試合で「試合の経過」を開き、「YouTubeでライブ配信」をタップして、キーを貼り付けます。</p>
+<p>スマホを三脚に置き、モバイルバッテリーをつないでください。90分でおよそ2 GBのデータを使います。Skoretapは画面に表示したままにします。配信中はウォッチからポイントを入力してください。</p>
+<p>映像に音声はありません。スコアは映像に入ります。試合がウェブにある場合は、統計へのリンクを動画の説明にコピーできます。</p>
+
+<h2>撮影しているスマホとは別のスマホでスコアを付けられますか？</h2>
+<p>はい。1台がスコアを付け（ウォッチを使うあなたのスマホ、または審判のスマホ）、もう1台は三脚に立ててカメラにします。</p>
+<p>スコアを付けるスマホで、試合中に「別のスマホでカメラ」をタップし、「コードを作成」をタップします。Skoretapアカウントへのログインが必要です。</p>
+<p>カメラ用のスマホでは、ホーム画面の「試合のカメラ」をタップし、コードを入力して配信を始めます。こちらはアカウント不要です。</p>
+<p>スコアはインターネット経由で届き、ポイントの約1秒後に映像に表示されます。ポイントを入力するのは常に1台だけなので、二重に数えられることはありません。</p>
+
+<h2>アカウントとデータを削除するには？</h2>
+<p>ログイン中は、試合の準備画面に「アカウントを削除」ボタンがあります。アプリがない場合は、skoretap.com/smazani-uctu.html から削除を依頼できます。保存する情報とその理由は、skoretap.com/soukromi.html のプライバシーポリシーに書いてあります。</p>
+</section>
+
+<section data-jazyk="zh" lang="zh" hidden>
+<h1>常见问题</h1>
+
+<h2>Skoretap 支持哪些手表和手机？</h2>
+<p>支持 Android 手机和 Wear OS 手表，例如 Samsung Galaxy Watch。目前还不支持 iPhone、Apple Watch 和 Garmin 手表。</p>
+
+<h2>怎么把 Skoretap 装到手表上？</h2>
+<p>手表要先和手机配对。先在手机上从 Google Play 安装 Skoretap，再在手表上也安装。它不能单独在手表上使用，需要手机。</p>
+
+<h2>怎么用手表开始一场比赛？</h2>
+<p>在手机上创建比赛，然后在手表上打开 Skoretap。手表会自己获取比分。如果显示“正在查找手机…”，说明手表还没连上手机。</p>
+
+<h2>怎么在手表上记分？</h2>
+<p>按一下下方按钮：上方球队得分。</p>
+<p>快速连按两下下方按钮：下方球队得分。</p>
+<p>手表会振动，并显示哪一队得了分。</p>
+<p>按错了？点“撤销”。</p>
+<p>旋转表圈故意不能记分。打球时可能不小心碰到，结果记下一个谁都不知道的分。</p>
+
+<h2>手表和手机断开了怎么办？</h2>
+<p>比分保存在手机里，手表只是它的遥控器。连接断开时，手表会显示“未连手机”，并记住你按过的操作。“待发 3”表示有三次操作在等待发送。手表一连上手机，它们就会自动发出。</p>
+
+<h2>“手机没有响应”是什么意思？</h2>
+<p>手机没有确认你的得分。请在手机上打开 Skoretap。手表会继续尝试，你的操作不会丢。</p>
+
+<h2>我在手表上退出了应用，比赛丢了吗？</h2>
+<p>没有。比赛在手机上，仍在继续。在手表的应用列表里打开 Skoretap，接着用就行。比赛期间，下方按钮不会退出应用，只会记分。</p>
+
+<h2>手表为什么要权限？</h2>
+<p>通知：有了它，手表才知道有比赛在进行。被询问时请允许。</p>
+<p>心率和运动：只有你想测心率、步数和卡路里时才需要。不开也能正常记分。</p>
+<p>权限可以在手表设置里的 Skoretap 中修改。</p>
+
+<h2>为什么要在 Samsung Health 里关闭运动自动识别？</h2>
+<p>在 Samsung 手表上，比赛时 Samsung Health 可能会自己开始记录运动，并接管心率和卡路里的测量。这样 Skoretap 就没有可测的了。请在手表上打开 Samsung Health 的设置，关闭运动自动识别。手表只会显示一次这个提示，所以这里也写出来。</p>
+
+<h2>为什么没有测到我的心率或卡路里？</h2>
+<p>测量要在手机应用里同意后才会开启。请检查是否已开启。</p>
+<p>手表必须有心率和运动的权限。</p>
+<p>也可能是别的应用接管了测量。比赛结束后手机会告诉你。上面关于 Samsung Health 的提示会有帮助。</p>
+
+<h2>需要联网吗？</h2>
+<p>不需要。比赛在手机上计分，没有信号也一样能打完。只有公开比赛、备份和登录时才需要联网。</p>
+
+<h2>我的比赛会自动公开吗？</h2>
+<p>不会。默认设置是“不分享”。只有你自己打开，比赛才会公开，而且可以不显示姓名。</p>
+
+<h2>没打完的比赛可以以后再打吗？</h2>
+<p>可以。选“下次继续”。比赛会留在手机的未完成比赛里，你可以从停下的地方接着打。</p>
+
+<h2>Skoretap 能把比分读出来吗？</h2>
+<p>可以，手机能用应用的全部26种语言朗读比分。朗读语言在准备比赛时选择，比赛中也可以更改。如果手机没有该语言的语音，应用会提示你。得分不能用语音输入，只能触摸屏幕或在手表上输入。</p>
+
+<h2>怎么在 YouTube 上直播比赛？</h2>
+<p>先在 YouTube 上开通一次直播。首次开通最长可能要 24 小时。</p>
+<p>在 YouTube Studio 里找到直播码。在比赛中打开“比赛过程”，点“YouTube 直播”，然后粘贴直播码。</p>
+<p>把手机放在三脚架上，接上充电宝，90 分钟大约需要 2 GB 流量。Skoretap 必须一直留在屏幕上。直播时请在手表上记分。</p>
+<p>视频没有声音。比分显示在画面里。如果比赛已公开到网站，可以把统计链接复制到视频简介里。</p>
+
+<h2>计分的手机可以和拍摄的手机不是同一部吗？</h2>
+<p>可以。一部手机计分（你戴手表用的那部，或裁判的），另一部放在三脚架上当摄像头。</p>
+<p>在计分的手机上，比赛中点按“用另一部手机当摄像头”，再点“生成代码”。需要登录 Skoretap 账户。</p>
+<p>在当摄像头的手机上，在主屏幕点按“比赛摄像头”，输入代码并开始直播。这部手机不需要账户。</p>
+<p>比分通过互联网传送，得分后大约一秒出现在画面中。始终只有一部手机录入得分，因此不会重复计分。</p>
+
+<h2>怎么删除我的账号和数据？</h2>
+<p>登录后，比赛准备界面里有“删除账号”按钮。没有应用时，可以在 skoretap.com/smazani-uctu.html 申请删除。我们保存什么、为什么保存，写在 skoretap.com/soukromi.html 的隐私政策里。</p>
+</section>
+
+<section data-jazyk="id" lang="id" hidden>
+<h1>Pertanyaan yang sering diajukan</h1>
+
+<h2>Skoretap bisa dipakai di jam dan ponsel apa saja?</h2>
+<p>Di ponsel Android dan jam Wear OS, misalnya Samsung Galaxy Watch. Belum bisa dipakai di iPhone, Apple Watch, atau jam Garmin.</p>
+
+<h2>Bagaimana cara memasang Skoretap di jam?</h2>
+<p>Jam harus sudah terhubung (dipasangkan) dengan ponsel. Pasang Skoretap dari Google Play di ponsel dulu, lalu di jam juga. Aplikasi ini tidak bisa jalan di jam saja, ponsel tetap dibutuhkan.</p>
+
+<h2>Bagaimana cara memulai pertandingan dengan jam?</h2>
+<p>Buat pertandingan di ponsel, lalu buka Skoretap di jam. Jam akan mengetahui skor sendiri. Kalau tertulis “Mencari ponsel…”, berarti jam belum terhubung ke ponsel.</p>
+
+<h2>Bagaimana cara menambah poin di jam?</h2>
+<p>Tombol bawah satu kali: poin untuk tim atas.</p>
+<p>Tombol bawah dua kali dengan cepat: poin untuk tim bawah.</p>
+<p>Jam bergetar dan menunjukkan siapa yang dapat poin.</p>
+<p>Salah tekan? Ketuk “URUNGKAN”.</p>
+<p>Bezel putar sengaja tidak menambah poin. Saat bermain bezel bisa tersenggol, dan poin yang tidak diketahui siapa pun akan tercatat.</p>
+
+<h2>Bagaimana kalau jam terputus dari ponsel?</h2>
+<p>Skor disimpan di ponsel, jam hanya remote-nya. Saat koneksi putus, jam menampilkan “tanpa ponsel” dan mengingat tekanan tombolmu. Tulisan “antre 3” berarti tiga tekanan sedang menunggu untuk dikirim. Semuanya terkirim sendiri begitu jam terhubung lagi ke ponsel.</p>
+
+<h2>Apa arti “Ponsel tidak merespons”?</h2>
+<p>Ponsel belum mengonfirmasi poinmu. Buka Skoretap di ponsel. Jam akan terus mencoba, dan tekananmu tidak hilang.</p>
+
+<h2>Saya keluar dari aplikasi di jam. Apakah pertandingannya hilang?</h2>
+<p>Tidak. Pertandingan ada di ponsel dan terus berjalan. Buka Skoretap dari daftar aplikasi di jam, lalu lanjutkan. Selama pertandingan, tombol bawah tidak membuatmu keluar dari aplikasi, hanya menambah poin.</p>
+
+<h2>Kenapa jam meminta izin?</h2>
+<p>Notifikasi: lewat notifikasi, jam tahu ada pertandingan yang sedang berjalan. Izinkan saat ditanya.</p>
+<p>Detak jantung dan aktivitas: hanya kalau kamu ingin mengukur detak jantung, langkah, dan kalori. Poin tetap terhitung tanpa itu.</p>
+<p>Izin bisa diubah di pengaturan jam, di bagian Skoretap.</p>
+
+<h2>Kenapa saya perlu mematikan deteksi olahraga di Samsung Health?</h2>
+<p>Di jam Samsung, Samsung Health bisa memulai pelacakan olahraga sendiri saat pertandingan dan mengambil alih pengukuran detak jantung dan kalori. Akibatnya Skoretap tidak punya apa pun untuk diukur. Buka pengaturan Samsung Health di jam, lalu matikan deteksi olahraga otomatis. Jam hanya menampilkan tips ini satu kali, makanya ditulis juga di sini.</p>
+
+<h2>Kenapa detak jantung atau kalori saya tidak terukur?</h2>
+<p>Pengukuran aktif setelah kamu menyetujuinya di aplikasi ponsel. Pastikan sudah aktif.</p>
+<p>Jam harus punya izin detak jantung dan aktivitas.</p>
+<p>Bisa jadi aplikasi lain mengambil alih pengukuran. Ponsel akan memberi tahu setelah pertandingan. Tips Samsung Health di atas bisa membantu.</p>
+
+<h2>Apakah saya perlu internet?</h2>
+<p>Tidak. Pertandingan dihitung di ponsel dan tetap selesai seperti biasa tanpa sinyal. Internet hanya dibutuhkan untuk mempublikasikan pertandingan, mencadangkan, dan masuk akun.</p>
+
+<h2>Apakah pertandingan saya dipublikasikan otomatis?</h2>
+<p>Tidak. Pengaturan bawaannya “Jangan bagikan”. Pertandingan hanya dipublikasikan kalau kamu mengaktifkannya, dan bisa tanpa nama.</p>
+
+<h2>Bisakah saya melanjutkan pertandingan yang belum selesai nanti?</h2>
+<p>Bisa. Pilih “Lanjutkan nanti”. Pertandingan tetap ada di ponsel di antara pertandingan yang belum selesai, dan kamu melanjutkan dari tempat terakhir.</p>
+
+<h2>Bisakah Skoretap membacakan skor dengan suara?</h2>
+<p>Ya, ponsel membacakan skor dalam ke-26 bahasa aplikasi. Bahasa suara dipilih saat menyiapkan pertandingan dan bisa diubah selama pertandingan. Jika ponsel tidak punya suara untuk bahasa itu, aplikasi akan memberi tahu. Poin tidak bisa dimasukkan dengan suara, hanya dengan sentuhan dan dari jam tangan.</p>
+
+<h2>Bagaimana cara menyiarkan pertandingan di YouTube?</h2>
+<p>Aktifkan siaran langsung di YouTube satu kali. Aktivasi pertama bisa memakan waktu hingga 24 jam.</p>
+<p>Cari kunci streaming di YouTube Studio. Di pertandingan, buka “Jalannya pertandingan”, ketuk “Siaran langsung di YouTube”, lalu tempel kuncinya.</p>
+<p>Pasang ponsel di tripod, sambungkan power bank, dan siapkan sekitar 2 GB data untuk 90 menit. Skoretap harus tetap di layar. Selama siaran, masukkan poin dari jam tangan.</p>
+<p>Video tanpa suara. Skor ada di gambar. Kalau pertandingan ada di web, kamu bisa menyalin tautan statistik ke deskripsi video.</p>
+
+<h2>Bisakah skor dicatat ponsel lain, bukan yang merekam?</h2>
+<p>Bisa. Satu ponsel mencatat skor (ponselmu dengan jam tangan, atau milik wasit), yang lain berdiri di tripod sebagai kamera.</p>
+<p>Di ponsel yang mencatat, ketuk “Kamera di ponsel lain” saat pertandingan, lalu “Buat kode”. Kamu harus masuk ke akun Skoretap.</p>
+<p>Di ponsel kamera, ketuk “Kamera untuk pertandingan” di layar awal, ketik kodenya, lalu mulai siaran. Di sana tidak perlu akun.</p>
+<p>Skor dikirim lewat internet dan muncul di gambar sekitar sedetik setelah poin. Poin selalu dimasukkan dari satu ponsel saja, jadi tidak ada yang terhitung dua kali.</p>
+
+<h2>Bagaimana cara menghapus akun dan data saya?</h2>
+<p>Kalau kamu sudah masuk, ada tombol “Hapus akun” di layar persiapan pertandingan. Tanpa aplikasi, kamu bisa meminta penghapusan di skoretap.com/smazani-uctu.html. Data apa yang kami simpan dan alasannya ada di kebijakan privasi di skoretap.com/soukromi.html.</p>
+</section>
+
+<section data-jazyk="ru" lang="ru" hidden>
+<h1>Частые вопросы</h1>
+
+<h2>На каких часах и телефонах работает Skoretap?</h2>
+<p>На телефонах с Android и часах с Wear OS, например Samsung Galaxy Watch. На iPhone, Apple Watch и часах Garmin пока не работает.</p>
+
+<h2>Как установить Skoretap на часы?</h2>
+<p>Часы должны быть сопряжены с телефоном. Установи Skoretap из Google Play на телефон, а потом и на часы. Сами по себе на часах он не работает, ему нужен телефон.</p>
+
+<h2>Как начать матч с часами?</h2>
+<p>Создай матч в телефоне и открой Skoretap на часах. Часы сами узнают, какой счёт. Если они пишут «Ищу телефон…», значит, ещё не соединились с телефоном.</p>
+
+<h2>Как добавлять очки на часах?</h2>
+<p>Нижняя кнопка один раз: очко команде сверху.</p>
+<p>Нижняя кнопка два раза быстро подряд: очко команде снизу.</p>
+<p>Часы завибрируют и покажут, кому пошло очко.</p>
+<p>Ошибка? Нажми «НАЗАД».</p>
+<p>Вращающийся безель очки намеренно не добавляет. Его легко задеть во время игры, и засчиталось бы очко, о котором никто не знает.</p>
+
+<h2>Что, если часы потеряют связь с телефоном?</h2>
+<p>Счёт хранит телефон, а часы — это его пульт. Когда связь обрывается, часы показывают «нет телефона» и запоминают твои нажатия. Надпись «в очереди 3» означает, что три нажатия ждут отправки. Они уйдут сами, как только часы снова соединятся с телефоном.</p>
+
+<h2>Что значит «Телефон не отвечает»?</h2>
+<p>Телефон не подтвердил твоё очко. Открой Skoretap в телефоне. Часы будут пробовать дальше, нажатия не пропадут.</p>
+
+<h2>Я вышел из приложения на часах. Я потерял матч?</h2>
+<p>Нет. Матч в телефоне и идёт дальше. На часах открой Skoretap из списка приложений и продолжай. Во время матча нижняя кнопка из приложения не выходит, она только добавляет очки.</p>
+
+<h2>Зачем часам нужны разрешения?</h2>
+<p>Уведомления: благодаря им часы знают, что идёт матч. Когда спросят, разреши.</p>
+<p>Пульс и движение: только если хочешь измерять пульс, шаги и калории. Очки считаются и без этого.</p>
+<p>Разрешения можно изменить в настройках часов, в разделе Skoretap.</p>
+
+<h2>Почему в Samsung Health нужно отключить распознавание тренировок?</h2>
+<p>На часах Samsung приложение Samsung Health может само запустить отслеживание тренировки во время матча и взять на себя измерение пульса и калорий. Тогда Skoretap нечего измерять. Открой Samsung Health на часах, зайди в настройки и отключи автоматическое распознавание тренировок. Часы показывают этот совет только один раз, поэтому он есть и здесь.</p>
+
+<h2>Почему не измерились мой пульс или калории?</h2>
+<p>Измерение включается согласием в телефоне. Проверь, что оно включено.</p>
+<p>У часов должно быть разрешение на пульс и движение.</p>
+<p>Измерение могло взять на себя другое приложение. Телефон сообщит об этом после матча. Поможет совет про Samsung Health выше.</p>
+
+<h2>Нужен ли интернет?</h2>
+<p>Нет. Матч считается в телефоне и без сигнала доигрывается так же. Интернет нужен только для публикации матча, резервной копии и входа.</p>
+
+<h2>Публикуется ли мой матч сам?</h2>
+<p>Нет. По умолчанию стоит «Не публиковать». Матч публикуется, только если ты это включишь, и может быть без имён.</p>
+
+<h2>Можно ли доиграть начатый матч в другой раз?</h2>
+<p>Да. Выбери «Доиграть потом». Матч останется в телефоне среди незаконченных, и ты продолжишь с последнего очка.</p>
+
+<h2>Умеет ли Skoretap читать счёт вслух?</h2>
+<p>Да, телефон читает счёт на всех 26 языках приложения. Язык голоса выбираешь при подготовке матча, сменить его можно и во время игры. Если в телефоне нет голоса для этого языка, приложение об этом скажет. Очки голосом не вводятся, только касанием и с часов.</p>
+
+<h2>Как транслировать матч на YouTube?</h2>
+<p>На YouTube один раз включи прямые трансляции. Первая активация может занять до 24 часов.</p>
+<p>В YouTube Studio найди ключ трансляции. В матче открой «Ход матча», нажми «Прямой эфир на YouTube» и вставь ключ.</p>
+<p>Поставь телефон на штатив, подключи павербанк и рассчитывай примерно на 2 GB данных за 90 минут. Skoretap должен оставаться на экране. Во время трансляции вводи очки с часов.</p>
+<p>Видео идёт без звука. Счёт виден в кадре. Если матч на сайте, ссылку на статистику можно скопировать в описание видео.</p>
+
+<h2>Может ли счёт вести другой телефон, а не тот, что снимает?</h2>
+<p>Да. Один телефон ведёт счёт (твой с часами или судейский), другой стоит на штативе как камера.</p>
+<p>На телефоне, который считает, во время матча нажми «Камера на другом телефоне» и «Создать код». Нужно войти в аккаунт Skoretap.</p>
+<p>На телефоне с камерой на главном экране нажми «Камера для матча», введи код и запусти трансляцию. Аккаунт там не нужен.</p>
+<p>Счёт идёт через интернет и появляется в кадре примерно через секунду после очка. Очки всегда вводит только один телефон, чтобы ничего не засчиталось дважды.</p>
+
+<h2>Как удалить аккаунт и данные?</h2>
+<p>Когда ты вошёл в аккаунт, в подготовке матча есть кнопка «Удалить аккаунт». Без приложения удаление можно запросить на skoretap.com/smazani-uctu.html. Что мы храним и зачем, написано в политике конфиденциальности на skoretap.com/soukromi.html.</p>
+</section>
+
+</main>
+<script type="module">
+  // Ukáže se jen jeden jazyk — volba z webu, z odkazu (?lang=), nebo
+  // z prohlížeče (app/jazyky.js). Bez skriptu zůstane čeština a pod ní
+  // angličtina, jako dřív.
+  import { zvolenyJazyk, vyberJazyka } from './app/jazyky.js';
+  var k = zvolenyJazyk();
+  var vybrana = document.querySelector('[data-jazyk="' + k + '"]') || document.querySelector('[data-jazyk="en"]');
+  document.querySelectorAll('[data-jazyk]').forEach(function (s) { s.hidden = s !== vybrana; });
+  document.getElementById('oddelovac').hidden = true;
+  document.getElementById('anglickyNiz').hidden = true;
+  document.documentElement.lang = vybrana.getAttribute('data-jazyk');
+  vyberJazyka(document.getElementById('jazyk'), k);
+</script>
+</body>
+</html>

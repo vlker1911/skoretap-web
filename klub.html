@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skoretap — pozvánka od klubu</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  Sem vede QR kód klubu: skoretap.com/klub.html?id=<id partnera>.
+  (rozhodnuti/043) Tlačítko otevře aplikaci na pozvánce
+  (skoretap://klub/<id>); sama pozvánka nic nezapne, hráč potvrdí v aplikaci.
+  Stránka nic neposílá a nic si nepamatuje — id jen přečte z adresy.
+  QR kód pro klub vyrábí partneri/qr-klubu.html.
+-->
+<style>
+  :root { --pozadi: #14141A; --text: #FFFFFF; --tlumeny: rgba(255,255,255,.72); --micek: #C8F000; --karta: rgba(255,255,255,.06); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 32px 16px 64px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .06em; font-size: 14px; }
+  h1 { font-size: 28px; margin: 8px 0 16px; }
+  p { color: var(--tlumeny); }
+  strong { color: var(--text); }
+  .tlacitko { display: block; text-align: center; background: var(--micek); color: #14141A; font-weight: 800; text-decoration: none; padding: 16px; border-radius: 999px; margin: 24px 0 12px; font-size: 18px; }
+  .karta { background: var(--karta); border-radius: 16px; padding: 4px 20px 12px; margin: 16px 0; }
+  .chyba { color: #FF6B6B; }
+  hr { border: 0; border-top: 1px solid rgba(255,255,255,.12); margin: 40px 0; }
+  a { color: var(--micek); }
+  code { color: var(--text); }
+</style>
+</head>
+<body>
+<main>
+
+<div class="znacka">SKORETAP</div>
+<h1>Pozvánka od klubu</h1>
+
+<p id="cs-text">Klub <strong id="cs-klub">…</strong> chce dostávat tvoje dohrané
+zápasy ze Skoretapu. V aplikaci uvidíš, co přesně se posílá, a <strong>rozhodneš
+sám</strong> — bez potvrzení se nic nepošle.</p>
+<p id="cs-chyba" class="chyba" hidden>Odkaz není celý. Naskenuj QR kód znovu.</p>
+
+<a id="cs-otevrit" class="tlacitko" href="#">Otevřít ve Skoretapu</a>
+
+<div class="karta">
+<p>Skoretap ještě nemáš? Je to aplikace na počítání skóre v padelu,
+pro Android a hodinky Wear OS. Nainstaluj si ji a pak naskenuj QR kód znovu.</p>
+</div>
+
+<hr>
+
+<div class="znacka">SKORETAP</div>
+<h1>Invitation from a club</h1>
+
+<p>The club <strong id="en-klub">…</strong> would like to receive your finished
+matches from Skoretap. The app shows exactly what is sent, and <strong>you
+decide</strong> — nothing is sent without your confirmation.</p>
+<p id="en-chyba" class="chyba" hidden>The link is incomplete. Scan the QR code again.</p>
+
+<a id="en-otevrit" class="tlacitko" href="#">Open in Skoretap</a>
+
+<div class="karta">
+<p>No Skoretap yet? It is a padel scoring app for Android and Wear OS
+watches. Install it and scan the QR code again.</p>
+</div>
+
+</main>
+<script>
+  // Id partnera z adresy. Stejné pravidlo jako v aplikaci
+  // (Souhlasy.platneId): malá písmena, číslice, podtržítko, 2–40 znaků.
+  var parametry = new URLSearchParams(location.search);
+  var id = parametry.get('id') || '';
+  var platne = /^[a-z0-9_]{2,40}$/.test(id);
+  // Název jen na ukázání (z QR kódu). Rozhoduje aplikace — ta si skutečný
+  // název klubu vezme ze serveru, ne z adresy.
+  var nazev = (parametry.get('n') || id).slice(0, 60);
+  ['cs', 'en'].forEach(function (j) {
+    document.getElementById(j + '-klub').textContent = platne ? nazev : '?';
+    if (platne) {
+      document.getElementById(j + '-otevrit').href = 'skoretap://klub/' + id;
+    } else {
+      document.getElementById(j + '-chyba').hidden = false;
+      document.getElementById(j + '-otevrit').hidden = true;
+    }
+  });
+</script>
+</body>
+</html>
