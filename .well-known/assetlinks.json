@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.skoretap.app",
+      "sha256_cert_fingerprints": [
+        "1D:2F:72:61:E7:F6:90:26:D5:F4:89:07:FF:8F:5A:C2:4A:A6:F5:FE:C8:CD:4B:BB:93:86:D2:7A:6E:0E:E6:8B"
+      ]
+    }
+  }
+]

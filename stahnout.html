@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skoretap — stáhnout pro Android a iPhone</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  Aplikace ke stažení bez Google Play (rozhodnuti/052, Roman 17. 11. 2026).
+  Soubor stahnout/skoretap.apk a stahnout/verze.json vyrábí Gradle úloha
+  apkNaWeb; číslo verze se tu ručně nepíše (ponauceni.md 9).
+-->
+<style>
+  :root { --pozadi: #14141A; --text: #FFFFFF; --tlumeny: rgba(255,255,255,.72); --micek: #C8F000; --karta: rgba(255,255,255,.06); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 720px; margin: 0 auto; padding: 32px 16px 64px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .06em; font-size: 14px; }
+  .znacka a { color: inherit; text-decoration: none; }
+  h1 { font-size: 28px; margin: 8px 0 16px; }
+  h2 { font-size: 19px; margin: 32px 0 8px; }
+  p, li { color: var(--tlumeny); }
+  strong { color: var(--text); }
+  .karta { background: var(--karta); border-radius: 16px; padding: 4px 20px 12px; margin: 16px 0; }
+  ol, ul { padding-left: 20px; }
+  li { margin: 4px 0; }
+  hr { border: 0; border-top: 1px solid rgba(255,255,255,.12); margin: 48px 0; }
+  a { color: var(--micek); }
+  .stahnout { display: inline-block; margin: 8px 0 4px; padding: 14px 24px; border-radius: 999px; background: var(--micek); color: #14141A; font-weight: 800; font-size: 17px; text-decoration: none; }
+  .verze { font-size: 14px; }
+  code { font-size: 12px; word-break: break-all; color: var(--tlumeny); }
+</style>
+</head>
+<body>
+<main>
+
+<div class="znacka"><a href="/">SKORETAP</a></div>
+<h1>Skoretap pro Android</h1>
+<p><strong>Máš iPhone?</strong> <a href="#iphone">Návod pro iPhone</a> je níž.</p>
+
+<p>Počítání skóre v padelu ťuknutím, čtení skóre nahlas, fotostudio a přenos
+na YouTube. Stáhneš si ji přímo odsud, bez Google Play.</p>
+
+<a class="stahnout" href="stahnout/skoretap.apk" download>Stáhnout aplikaci</a>
+<p class="verze" data-verze="cs">Android 10 a novější.</p>
+
+<div class="karta">
+<h2>Jak ji nainstalovat</h2>
+<ol>
+  <li>Ťukni na <strong>Stáhnout aplikaci</strong> a počkej, až se soubor stáhne.</li>
+  <li>Otevři stažený soubor <strong>skoretap.apk</strong> (v oznámení nebo ve složce Stažené soubory).</li>
+  <li>Telefon napíše, že z tohoto zdroje nesmí instalovat. Ťukni na
+    <strong>Nastavení</strong>, zapni <strong>Povolit z tohoto zdroje</strong>
+    a vrať se zpátky.</li>
+  <li>Ťukni na <strong>Instalovat</strong>.</li>
+  <li>Kdyby se ozvala ochrana Google Play Protect, že aplikaci nezná, ťukni
+    na <strong>Další podrobnosti</strong> a <strong>Přesto nainstalovat</strong>.
+    Aplikace zatím není v Google Play, proto ji Google nezná.</li>
+</ol>
+<p>Povolení můžeš po instalaci zase vypnout: Nastavení → Aplikace → tvůj
+prohlížeč → Instalovat neznámé aplikace.</p>
+</div>
+
+<h2>Nová verze</h2>
+<p>Aplikace se sama neaktualizuje. Novou verzi stáhneš odsud stejně jako
+první. Nainstaluje se přes starou a <strong>zápasy v telefonu zůstanou</strong>.</p>
+<p><strong>Stáhl sis Skoretap před 19. 11. 2026?</strong> Ta verze se pro
+Android jmenuje jinak, takže se nová nainstaluje vedle ní a ne přes ni.
+Starou pak odinstaluj. Zápasy uložené jen v ní se nepřenesou; ty, které
+se zazálohovaly na tvůj účet, uvidíš dál.</p>
+
+<h2>Hodinky</h2>
+<p><strong>Hodinky Galaxy Watch</strong> se dají nainstalovat jen z Google
+Play, kam se Skoretap připravuje. Do té doby se počítá ťuknutím v telefonu.</p>
+
+<div class="karta" id="iphone">
+<h2>iPhone</h2>
+<p>Apple aplikace mimo App Store instalovat nedovolí. Skoretap proto na
+iPhonu běží v prohlížeči a dá se přidat na plochu jako aplikace.</p>
+<ol>
+  <li>Otevři v <strong>Safari</strong> adresu <strong>skoretap.com/app</strong>
+    (nebo ťukni na tlačítko níž).</li>
+  <li>Dole ťukni na <strong>Sdílet</strong> (čtvereček se šipkou nahoru).</li>
+  <li>Vyber <strong>Přidat na plochu</strong> a potvrď <strong>Přidat</strong>.</li>
+  <li>Na ploše máš ikonu <strong>Skoretap</strong>. Otevírá se přes celou
+    obrazovku a počítá i bez signálu.</li>
+</ol>
+<a class="stahnout" href="app/">Otevřít Skoretap</a>
+<p>Na iPhonu umí: počítání ťuknutím, čtení skóre nahlas, průběh zápasu po
+gemech, statistiky a s účtem Google i zveřejnění zápasu na skoretap.com.
+Neumí: hodinky, přenos na YouTube a počítání se zamčeným displejem.
+Zápasy zůstávají v telefonu, dokud Skoretap z plochy nesmažeš.</p>
+</div>
+
+<h2>Je to opravdu Skoretap?</h2>
+<p>Aplikace je podepsaná klíčem Skoretap. Otisk podpisu (SHA-256):</p>
+<p><code>1D:2F:72:61:E7:F6:90:26:D5:F4:89:07:FF:8F:5A:C2:4A:A6:F5:FE:C8:CD:4B:BB:93:86:D2:7A:6E:0E:E6:8B</code></p>
+<p>Stahuj ji jen ze <strong>skoretap.com</strong>. Co aplikace dělá s údaji,
+je v <a href="soukromi.html">zásadách soukromí</a>.</p>
+
+<hr>
+
+<div class="znacka" lang="en">SKORETAP</div>
+<h1 lang="en">Skoretap for Android</h1>
+
+<div lang="en">
+<p><strong>Got an iPhone?</strong> See the <a href="#iphone-en">iPhone guide</a> below.</p>
+<p>Padel scoring by tap, score read aloud, photo studio and live streaming
+to YouTube. Download it right here, without Google Play.</p>
+
+<a class="stahnout" href="stahnout/skoretap.apk" download>Download the app</a>
+<p class="verze" data-verze="en">Android 10 or newer.</p>
+
+<div class="karta">
+<h2>How to install</h2>
+<ol>
+  <li>Tap <strong>Download the app</strong> and wait for the download to finish.</li>
+  <li>Open the downloaded file <strong>skoretap.apk</strong> (from the notification or the Downloads folder).</li>
+  <li>Your phone will say it can't install apps from this source. Tap
+    <strong>Settings</strong>, turn on <strong>Allow from this source</strong>
+    and go back.</li>
+  <li>Tap <strong>Install</strong>.</li>
+  <li>If Google Play Protect says it doesn't know the app, tap
+    <strong>More details</strong> and <strong>Install anyway</strong>.
+    The app isn't on Google Play yet, so Google doesn't know it.</li>
+</ol>
+<p>You can turn the permission off again after installing: Settings → Apps →
+your browser → Install unknown apps.</p>
+</div>
+
+<h2>New versions</h2>
+<p>The app doesn't update itself. Download a new version here the same way.
+It installs over the old one and <strong>your matches on the phone stay</strong>.</p>
+<p><strong>Downloaded Skoretap before 19 November 2026?</strong> That version
+has a different name for Android, so the new one installs next to it, not
+over it. Uninstall the old one afterwards. Matches stored only in it don't
+carry over; those backed up to your account are still there.</p>
+
+<h2>Watch</h2>
+<p><strong>Galaxy Watch</strong> can only be installed from Google Play,
+where Skoretap is coming soon. Until then, score by tapping on the phone.</p>
+
+<div class="karta" id="iphone-en">
+<h2>iPhone</h2>
+<p>Apple doesn't allow installing apps outside the App Store. On iPhone,
+Skoretap runs in the browser and you can add it to your home screen like
+an app.</p>
+<ol>
+  <li>Open <strong>skoretap.com/app</strong> in <strong>Safari</strong>
+    (or tap the button below).</li>
+  <li>Tap <strong>Share</strong> at the bottom (the square with an arrow).</li>
+  <li>Choose <strong>Add to Home Screen</strong> and confirm with <strong>Add</strong>.</li>
+  <li>The <strong>Skoretap</strong> icon is now on your home screen. It
+    opens full screen and scores even without signal.</li>
+</ol>
+<a class="stahnout" href="app/">Open Skoretap</a>
+<p>On iPhone it can: score by tap, read the score aloud, show the match
+progress game by game and statistics, and with a Google account publish the
+match on skoretap.com. It can't: watch, YouTube streaming and scoring with
+the screen locked. Matches stay on the phone until you remove Skoretap from
+the home screen.</p>
+</div>
+
+<h2>Is it really Skoretap?</h2>
+<p>The app is signed with the Skoretap key. Signature fingerprint (SHA-256):</p>
+<p><code>1D:2F:72:61:E7:F6:90:26:D5:F4:89:07:FF:8F:5A:C2:4A:A6:F5:FE:C8:CD:4B:BB:93:86:D2:7A:6E:0E:E6:8B</code></p>
+<p>Only download it from <strong>skoretap.com</strong>. What the app does with
+your data is in the <a href="soukromi.html">privacy policy</a>.</p>
+</div>
+
+</main>
+<script>
+  // Verze a velikost ze souboru, který zapisuje sestavení (apkNaWeb).
+  // Když se nenačte, zůstane jen „Android 10 a novější".
+  fetch('stahnout/verze.json', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (v) {
+    var d = v.datum.split('-');
+    document.querySelector('[data-verze="cs"]').textContent =
+      'Verze ' + v.verze + ' z ' + (+d[2]) + '. ' + (+d[1]) + '. ' + d[0] + ', ' + v.mb + ' MB. Android 10 a novější.';
+    document.querySelector('[data-verze="en"]').textContent =
+      'Version ' + v.verze + ', ' + v.datum + ', ' + v.mb + ' MB. Android 10 or newer.';
+  }).catch(function () { /* bez čísla verze */ });
+</script>
+</body>
+</html>

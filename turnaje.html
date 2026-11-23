@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Turnaje — Skoretap</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  Turnaje pro kluby a pořadatele (rozhodnuti/058, krok 2).
+  Turnaj založí kdokoli s účtem Skoretap. Los, pořadí a postup počítá mozek
+  turnajů (app/turnaje/) tady v prohlížeči; server (migrace 018, 020) uloží
+  nastavení a vede zápasy s kódy jako u federace — zapisovatel na kurtu je
+  převezme v aplikaci (QR na kurtu, turnaj na celý den) a výsledky se sem
+  vrací samy. Výsledek jde zapsat i ručně. Všechno se kreslí jako text.
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root { --pozadi: #14141A; --karta: rgba(255,255,255,.07); --text: #FFFFFF; --tlumeny: rgba(255,255,255,.62); --micek: #C8F000; --cara: rgba(255,255,255,.12); --cervena: #FF3B2F; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1000px; margin: 0 auto; padding: 18px 16px 48px; }
+  a { color: var(--micek); }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 14px; text-decoration: none; }
+  h1 { font-size: 28px; margin: 18px 0 6px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--tlumeny); margin: 28px 0 10px; }
+  h3 { font-size: 16px; margin: 18px 0 8px; }
+  p, .pozn { color: var(--tlumeny); }
+  .pozn { font-size: 14px; }
+  .hlavni { display: inline-block; border: 0; border-radius: 14px; padding: 12px 18px; background: var(--micek); color: #14141A; font: inherit; font-weight: 800; cursor: pointer; text-decoration: none; }
+  .hlavni:disabled { opacity: .4; cursor: default; }
+  .tlacitko { border: 1px solid var(--cara); background: transparent; color: var(--text); border-radius: 10px; padding: 7px 11px; font: inherit; font-size: 14px; cursor: pointer; }
+  .karta { background: var(--karta); border-radius: 16px; padding: 16px; margin: 12px 0; }
+  input, select, textarea { font: inherit; background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--cara); border-radius: 10px; padding: 9px 11px; }
+  select option { background: #222; }
+  textarea { width: 100%; min-height: 160px; }
+  label { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--tlumeny); flex: 1 1 180px; }
+  .radek { display: flex; flex-wrap: wrap; gap: 12px; align-items: flex-end; margin: 10px 0; }
+  details { margin: 18px 0; } summary { cursor: pointer; font-weight: 700; padding: 8px 0; }
+  details .radek { align-items: center; margin: 6px 0; }
+  .omezeni-nazev { min-width: 170px; }
+  .chyba { color: var(--cervena); }
+  .ok { color: var(--micek); }
+  table { border-collapse: collapse; width: 100%; font-size: 14px; }
+  th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--cara); vertical-align: middle; }
+  th { color: var(--tlumeny); font-weight: 600; }
+  .tabulka { width: 100%; overflow-x: auto; }
+  .vysl input { width: 54px; padding: 6px; }
+  .vysl input.sety { width: 120px; }
+  .bezi { color: var(--micek); font-weight: 800; }
+  .kod { font-family: ui-monospace, Menlo, Consolas, monospace; letter-spacing: .06em; }
+  .qr-mrizka { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; }
+  .qr-karta { background: #fff; color: #14141A; border-radius: 14px; padding: 16px; text-align: center; }
+  .qr-karta .kurt { font-size: 26px; font-weight: 800; margin-bottom: 8px; }
+  .qr-karta .qr { display: inline-block; }
+  .qr-karta p { color: #14141A; font-size: 13px; margin: 8px 0 0; }
+  @media print {
+    body { background: #fff; }
+    main > *:not(#tisk) { display: none !important; }
+    #tisk { display: block !important; }
+    .qr-karta { break-inside: avoid; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <a class="znacka" href="/">SKORETAP</a>
+  <h1 id="nadpis">Turnaje</h1>
+  <p id="popis"></p>
+  <div id="obsah"></div>
+  <div id="tisk" hidden></div>
+</main>
+<script type="module">
+  import { relace, rpc } from './app/ucet.js';
+  import * as T from './app/turnaje/turnaj.mjs';
+  import * as P from './app/turnaje/platba.mjs';
+  import * as M from './app/turnaje/mrizka.mjs';
+  import { kresliMrizku } from './app/turnaje/mrizka-kresli.mjs';
+
+  var en = !/^cs|^sk/.test((new URLSearchParams(location.search).get('lang') || navigator.language || 'cs').toLowerCase());
+  document.documentElement.lang = en ? 'en' : 'cs';
+  var X = en ? {
+    nadpis: 'Tournaments', popis: 'Set up a tournament, draw it, print QR codes for the courts — players keep score on court with the Skoretap app and results come back here by themselves.',
+    prihlasit: 'Sign in', neprihlasen: 'Sign in with your Skoretap account. Anyone with an account can run a tournament.',
+    novy: 'New tournament', moje: 'My tournaments', zadny: 'No tournaments yet.', otevrit: 'Open', zruseny: 'cancelled',
+    nazev: 'Name', misto: 'Venue', zacatek: 'Start', delka: 'Match length (min)', prestavka: 'Break between rounds (min)',
+    kurty: 'Courts (comma separated)', format: 'Format',
+    f: { americano: 'Americano (partners rotate)', mexicano: 'Mexicano (pairs by standings)', kazdy: 'Round robin (fixed pairs)', skupiny: 'Groups + knockout (fixed pairs)' },
+    pocitani: 'Scoring', body: 'Points, total =', sety1: '1 set (FIP, star point)', sety2: 'Best of 3 sets (FIP, star point)', sety2stb: '2 sets + match tie-break (FIP, star point)',
+    hraci: 'Players — one per line', tymy: 'Pairs — one per line, players separated by /', losDvojic: 'Draw pairs from individuals',
+    kol: 'Rounds', skupin: 'Groups', postupuje: 'Advance from each group',
+    odhad: 'Estimate: {k} rounds, ends about {cas}.', vylosovat: 'Draw and publish', pracuji: 'Working…',
+    ch: { format: 'Pick a format.', kurty: 'Enter at least one court.', malo_hracu: 'Americano and Mexicano need at least 4 players.', malo_tymu: 'At least 2 pairs.', dvakrat: 'A player is listed twice.', malo_do_skupin: 'Each group needs at least 2 pairs.', dvojice: 'A pair needs exactly 2 players: {r}' },
+    chyba: 'Something went wrong. Try again.', zpet: 'Back', kodTurnaje: 'Tournament code', tisk: 'Print QR codes', zrusit: 'Cancel tournament', zrusitOtazka: 'Cancel the whole tournament? Matches not started will be cancelled.',
+    poradi: 'Standings', kolo: 'Round {k}', pauza: 'Sitting out: ', kurt: 'Court', cas: 'Time', hraje: 'Players', vysledek: 'Result', ulozit: 'Save',
+    planovany: 'scheduled', bezi: 'LIVE', dohrany: 'finished', ukonceny: 'ended', zruseny_z: 'cancelled',
+    dalsiKolo: 'Draw next round', playoff: 'Start knockout', pavouk: 'Knockout', finale: 'Final', semifinale: 'Semi-final', ctvrtfinale: 'Quarter-final', kolo_p: 'Round {k}',
+    skupina: 'Group', misto_t: '#', bodyS: 'Points', vyhry: 'Wins', zapasu: 'Played', setyS: 'Sets +/−', gemyS: 'Games +/−',
+    setyNapoveda: 'e.g. 6:4 3:6 10:8', obnoveno: 'Updates every 10 seconds.',
+    qrPopis: 'Scorer: point your phone camera here. The Skoretap app opens the match on this court.',
+    recepce: 'Tournament for the whole day', recepcePopis: 'Scan once in the morning (or type the code into the app). The app then shows the courts — tap yours.',
+    vitez: 'Winner',
+    nebo: 'Or open registration first', prihlaskyPopis: 'Players sign up themselves via a link (with a Skoretap account). You draw later from those registered. Names already in the list above are added as registered.',
+    kapacita: 'Places (empty = unlimited)', uzaverka: 'Registration closes', otevritPrihlasky: 'Open registration', zavritPrihlasky: 'Close registration',
+    prihlasky: 'Registration', odkazPopis: 'Send this link to the players (WhatsApp, e-mail, club website):', kopirovat: 'Copy',
+    prihlaskyOtevrene: 'Registration is open.', prihlaskyZavrene: 'Registration is closed — players cannot sign up.',
+    prihlaseni: 'Registered', nahradnik: 'waiting list', rucne: 'added by you', posunout: 'Move up', odebrat: 'Remove',
+    jmenoHrace: 'Player name', hrac1: 'Player 1', hrac2: 'Player 2', pridat: 'Add', vylosovatPrihlasene: 'Draw from registered players',
+    bezPlayoff: 'No playoff (groups decide)', pPavouk: 'Knockout', pFinal4: 'Final Four (best four, with 3rd place)', pPasma: 'Bands of four (everyone plays for a place)',
+    playoff: 'Playoff', o3: 'Match for 3rd place', rezim: 'Courts', rAuto: 'Automatically', rSkupina: '1 court = 1 group',
+    konec: 'Tournament ends (optional — match length is calculated)', delkaDopocitana: 'Match length calculated: {m} min.',
+    nestihne: 'The tournament will not fit: matches would be under 10 minutes. Extend the time, add courts, or use fewer rounds.',
+    losPopis: 'Add (M) or (F) after a name and the draw makes mixed pairs first.',
+    playoffSpustit: { pavouk: 'Start knockout', final4: 'Start Final Four', pasma: 'Start placement bands' },
+    pasmo: 'Places {od}–{do}', o3zapas: 'Match for 3rd place',
+    startovneNadpis: 'Entry fee', startovnePopis: 'Players pay you directly by QR code from their bank — Skoretap does not handle the money. The reference (VS) is the registration number. Empty amount = free.', castka: 'Amount', mena: 'Currency', prijemce: 'Account holder', spatnyIban: 'The IBAN is not valid — check it.', zaplaceno: 'Paid', nezaplaceno: 'Mark paid',
+    verejne: 'Public results', zverejnit: 'Publish results', skrytVerejne: 'Hide results',
+    verejnePopisNe: 'Results are visible only to you. Once published, anyone with the link sees player names and scores — the tournament page, a TV at the venue and a widget for the club website.',
+    verejnePopisAno: 'Results are public: anyone with the link sees player names and scores.',
+    odkazStranka: 'Tournament page', odkazTv: 'TV at the venue (open in the TV browser)', odkazOkenko: 'Widget for the club website (paste into the page)',
+    rozpis: 'Schedule', seznamP: 'List', mrizkaP: 'Grid',
+    mzNavod: 'Drag a match that has not started yet with the mouse to another court or time. Drag its left or right edge to make it shorter or longer — it snaps to the neighbouring match. On a phone: tap the match, then tap where it should go. The app on court finds the match in its new place straight away.',
+    mzVybrano: 'Selected: {z}. Now tap the court and time. Tap the match again to cancel.', mzZrusit: 'Cancel selection',
+    mz: { kurt: 'Court', bezCasu: 'No time yet — playoff matches go on as courts free up. Select one and tap the grid to give it a fixed time.', hrajeSe: 'playing', hotovo: 'finished', planovano: 'scheduled', chyba: 'clash', pevny: 'fixed time' },
+    chybyRozpisu: 'Clashes in the schedule', bezChyb: 'No clashes: no court and no player is booked twice at once.',
+    kKurt: 'Court {k}: two matches at once ({cas})', kHrac: '{h}: two matches at once ({cas})', kPauza: '{h}: only {m} min between matches (break is {p} min)',
+    poPresunu: 'After this move:', presto: 'Move it anyway?', nepresunuto: 'The match could not be moved — it may have started already.',
+    posunAno: 'The schedule follows real times from the courts: when a match starts late or runs over, the next matches on that court and of the same players move back; when it ends early, they return towards the plan, never earlier than planned. Matches with a fixed time never move.',
+    posunNe: 'The schedule stays as planned, whatever happens on the courts.',
+    posunVypnout: 'Keep the schedule fixed', posunZapnout: 'Follow real times from the courts',
+    rovnouPopis: 'Changes go live straight away. To prepare several changes first and publish them together, edit a draft.',
+    zacitNanecisto: 'Edit a draft', nanecistoPopis: 'Draft — changes so far: {n}. Players see nothing until you publish.',
+    zverejnitZmeny: 'Publish changes ({n})', zahoditZmeny: 'Discard draft', konecNanecisto: 'Stop drafting', zahoditOtazka: 'Discard all changes in the draft?',
+    neprovedeno: 'Changes not published: {n} — those matches have started meanwhile.', vratitZmenu: 'Undo this change', nanecistoZnacka: 'draft',
+    kZavreno: 'Court {k}: match {cas} outside the court hours', kPrani: '{h}: match {cas} outside the time they can play',
+    omezeniNadpis: 'Court hours and player time wishes', omezeniPopis: 'On the tournament day. Empty = no limit. The schedule never moves a match before a court opens or before a player can play, and the grid shows a clash for anything outside. Player wishes are visible only to you.',
+    hodinyKurtu: 'When the court is free', praniHracu: 'When the player can play', od: 'from', do_: 'to', ulozitOmezeni: 'Save',
+    emailyPoslany: 'Emailed to players whose match changed: {e}.', bezUctu: 'Players without a Skoretap account: {b} — let them know yourself.',
+    jenStranka: 'Players see the change on the tournament page.', muze: 'can play',
+    pevnyCas: 'Fix this time', uvolnitCas: 'Release fixed time', pevnyZnacka: 'fixed'
+  } : {
+    nadpis: 'Turnaje', popis: 'Založte turnaj, vylosujte ho a vytiskněte QR kódy na kurty. Hráči zapisují skóre na kurtu aplikací Skoretap a výsledky se sem vrací samy.',
+    prihlasit: 'Přihlásit se', neprihlasen: 'Přihlaste se účtem Skoretap. Turnaj může založit každý, kdo má účet.',
+    novy: 'Nový turnaj', moje: 'Moje turnaje', zadny: 'Zatím žádný turnaj.', otevrit: 'Otevřít', zruseny: 'zrušený',
+    nazev: 'Název', misto: 'Místo', zacatek: 'Začátek', delka: 'Délka zápasu (min)', prestavka: 'Přestávka mezi koly (min)',
+    kurty: 'Kurty (oddělte čárkou)', format: 'Formát',
+    f: { americano: 'Americano (střídají se spoluhráči)', mexicano: 'Mexicano (dvojice podle pořadí)', kazdy: 'Každý s každým (pevné dvojice)', skupiny: 'Skupiny + pavouk (pevné dvojice)' },
+    pocitani: 'Počítání', body: 'Na body, součet =', sety1: '1 set (FIP, star point)', sety2: '2 vítězné sety (FIP, star point)', sety2stb: '2 sety + super tie-break (FIP, star point)',
+    hraci: 'Hráči — jeden na řádek', tymy: 'Dvojice — jedna na řádek, hráči oddělení /', losDvojic: 'Rozlosovat dvojice z jednotlivců',
+    kol: 'Počet kol', skupin: 'Skupin', postupuje: 'Postupuje ze skupiny',
+    odhad: 'Odhad: {k} kol, konec asi v {cas}.', vylosovat: 'Vylosovat a zveřejnit', pracuji: 'Pracuji…',
+    ch: { format: 'Vyberte formát.', kurty: 'Zadejte aspoň jeden kurt.', malo_hracu: 'Americano a Mexicano potřebují aspoň 4 hráče.', malo_tymu: 'Aspoň 2 dvojice.', dvakrat: 'Hráč je v seznamu dvakrát.', malo_do_skupin: 'Do každé skupiny patří aspoň 2 dvojice.', dvojice: 'Dvojice musí mít právě 2 hráče: {r}' },
+    chyba: 'Něco se nepovedlo. Zkuste to znovu.', zpet: 'Zpět', kodTurnaje: 'Kód turnaje', tisk: 'Vytisknout QR kódy', zrusit: 'Zrušit turnaj', zrusitOtazka: 'Zrušit celý turnaj? Nespuštěné zápasy se zruší.',
+    poradi: 'Pořadí', kolo: '{k}. kolo', pauza: 'Stojí: ', kurt: 'Kurt', cas: 'Čas', hraje: 'Hrají', vysledek: 'Výsledek', ulozit: 'Uložit',
+    planovany: 'naplánovaný', bezi: 'HRAJE SE', dohrany: 'dohráno', ukonceny: 'ukončeno', zruseny_z: 'zrušeno',
+    dalsiKolo: 'Vylosovat další kolo', playoff: 'Spustit pavouka', pavouk: 'Pavouk', finale: 'Finále', semifinale: 'Semifinále', ctvrtfinale: 'Čtvrtfinále', kolo_p: '{k}. kolo',
+    skupina: 'Skupina', misto_t: '#', bodyS: 'Body', vyhry: 'Výhry', zapasu: 'Zápasů', setyS: 'Sety +/−', gemyS: 'Gemy +/−',
+    setyNapoveda: 'např. 6:4 3:6 10:8', obnoveno: 'Obnovuje se každých 10 vteřin.',
+    qrPopis: 'Zapisovatel: namiřte sem fotoaparát telefonu. Aplikace Skoretap otevře zápas na tomhle kurtu.',
+    recepce: 'Turnaj na celý den', recepcePopis: 'Naskenujte jednou ráno (nebo opište kód do aplikace). Aplikace pak ukáže kurty — ťuknete na svůj.',
+    vitez: 'Vítěz',
+    nebo: 'Nebo nejdřív otevřít přihlášky', prihlaskyPopis: 'Hráči se přihlásí sami odkazem (s účtem Skoretap). Vylosujete později z přihlášených. Jména, která už jsou v seznamu výš, se přidají jako přihlášená.',
+    kapacita: 'Míst (prázdné = bez omezení)', uzaverka: 'Přihlášky do', otevritPrihlasky: 'Otevřít přihlášky', zavritPrihlasky: 'Zavřít přihlášky',
+    prihlasky: 'Přihlášky', odkazPopis: 'Tenhle odkaz pošlete hráčům (WhatsApp, e-mail, web klubu):', kopirovat: 'Kopírovat',
+    prihlaskyOtevrene: 'Přihlášky jsou otevřené.', prihlaskyZavrene: 'Přihlášky jsou zavřené — hráči se přihlásit nemůžou.',
+    prihlaseni: 'Přihlášení', nahradnik: 'náhradník', rucne: 'zadáno vámi', posunout: 'Posunout nahoru', odebrat: 'Odebrat',
+    jmenoHrace: 'Jméno hráče', hrac1: 'Hráč 1', hrac2: 'Hráč 2', pridat: 'Přidat', vylosovatPrihlasene: 'Vylosovat z přihlášených',
+    bezPlayoff: 'Bez playoff (rozhodnou skupiny)', pPavouk: 'Vyřazovací pavouk', pFinal4: 'Final Four (nejlepší čtyři, i o 3. místo)', pPasma: 'Pásma po čtyřech (hrají všichni o umístění)',
+    playoff: 'Playoff', o3: 'Zápas o 3. místo', rezim: 'Kurty', rAuto: 'Automaticky', rSkupina: '1 kurt = 1 skupina',
+    konec: 'Konec turnaje (nepovinné — délka zápasu se dopočítá)', delkaDopocitana: 'Délka zápasu dopočítaná: {m} min.',
+    nestihne: 'Turnaj se nestihne: zápasy by byly kratší než 10 minut. Prodlužte čas, přidejte kurty, nebo zkraťte turnaj.',
+    losPopis: 'Za jméno napište (M) nebo (Ž) a los nejdřív složí smíšené dvojice.',
+    playoffSpustit: { pavouk: 'Spustit pavouka', final4: 'Spustit Final Four', pasma: 'Spustit pásma' },
+    pasmo: 'O {od}.–{do}. místo', o3zapas: 'O 3. místo',
+    startovneNadpis: 'Startovné', startovnePopis: 'Hráči platí přímo vám QR kódem ze své banky — Skoretap peníze nedrží. Variabilní symbol je číslo přihlášky. Prázdná částka = zdarma.', castka: 'Částka', mena: 'Měna', prijemce: 'Majitel účtu', spatnyIban: 'IBAN není platný — zkontrolujte ho.', zaplaceno: 'Zaplaceno', nezaplaceno: 'Označit zaplaceno',
+    verejne: 'Veřejné výsledky', zverejnit: 'Zveřejnit výsledky', skrytVerejne: 'Skrýt výsledky',
+    verejnePopisNe: 'Výsledky vidíte jen vy. Po zveřejnění uvidí jména hráčů a skóre každý, kdo má odkaz — stránka turnaje, televize v areálu a okénko na web klubu.',
+    verejnePopisAno: 'Výsledky jsou veřejné: kdo má odkaz, vidí jména hráčů a skóre.',
+    odkazStranka: 'Stránka turnaje', odkazTv: 'Televize v areálu (otevřít v prohlížeči televize)', odkazOkenko: 'Okénko na web klubu (vložit do stránky)',
+    rozpis: 'Rozpis', seznamP: 'Seznam', mrizkaP: 'Mřížka',
+    mzNavod: 'Zápas, který ještě nezačal, přetáhněte myší na jiný kurt nebo čas. Za levý nebo pravý okraj ho zkrátíte či prodloužíte — k sousednímu zápasu se sám přilepí. Na telefonu: ťukněte na zápas a pak na místo, kam ho dát. Aplikace na kurtu ho na novém místě najde hned.',
+    mzVybrano: 'Vybráno: {z}. Teď ťukněte na kurt a čas. Opětovným ťuknutím na zápas výběr zrušíte.', mzZrusit: 'Zrušit výběr',
+    mz: { kurt: 'Kurt', bezCasu: 'Zatím bez času — playoff se hraje, jak se kurty uvolní. Když mu chcete dát pevný čas, vyberte ho a ťukněte do mřížky.', hrajeSe: 'hraje se', hotovo: 'odehráno', planovano: 'naplánováno', chyba: 'kolize', pevny: 'pevný čas' },
+    chybyRozpisu: 'Kolize v rozpisu', bezChyb: 'Bez kolizí: žádný kurt ani hráč není obsazený dvakrát naráz.',
+    kKurt: 'Kurt {k}: dva zápasy naráz ({cas})', kHrac: '{h}: dva zápasy naráz ({cas})', kPauza: '{h}: mezi zápasy jen {m} min (přestávka je {p} min)',
+    poPresunu: 'Po přesunu:', presto: 'Přesto přesunout?', nepresunuto: 'Zápas se přesunout nepovedlo — možná už začal.',
+    posunAno: 'Rozpis se posouvá podle skutečných časů z kurtu: když zápas začne pozdě nebo se přetáhne, další zápasy na tom kurtu a týchž hráčů se posunou; když skončí dřív, vrátí se zpátky k plánu, nikdy dřív, než jsou naplánované. Zápasy s pevným časem se nehnou.',
+    posunNe: 'Rozpis zůstává, jak je naplánovaný, ať se na kurtech děje cokoli.',
+    posunVypnout: 'Nechat rozpis pevně', posunZapnout: 'Posouvat podle skutečnosti',
+    rovnouPopis: 'Změny platí hned. Když chcete připravit víc změn a zveřejnit je najednou, upravujte nanečisto.',
+    zacitNanecisto: 'Upravovat nanečisto', nanecistoPopis: 'Nanečisto — změn zatím: {n}. Hráči nic neuvidí, dokud změny nezveřejníte.',
+    zverejnitZmeny: 'Zveřejnit změny ({n})', zahoditZmeny: 'Zahodit návrh', konecNanecisto: 'Přestat upravovat nanečisto', zahoditOtazka: 'Zahodit všechny změny z návrhu?',
+    neprovedeno: 'Nezveřejněné změny: {n} — ty zápasy mezitím začaly.', vratitZmenu: 'Vrátit tuhle změnu', nanecistoZnacka: 'nanečisto',
+    kZavreno: 'Kurt {k}: zápas {cas} mimo dobu, kdy je kurt volný', kPrani: '{h}: zápas {cas} mimo čas, kdy může hrát',
+    omezeniNadpis: 'Kdy je kurt volný a přání hráčů na časy', omezeniPopis: 'V den turnaje. Prázdné = bez omezení. Rozpis nikdy neposune zápas před otevřením kurtu ani před čas, od kdy hráč může, a co je mimo, ukáže mřížka jako kolizi. Přání hráčů vidíte jen vy.',
+    hodinyKurtu: 'Kdy je kurt volný', praniHracu: 'Kdy hráč může hrát', od: 'od', do_: 'do', ulozitOmezeni: 'Uložit',
+    emailyPoslany: 'E-mail jde hráčům, kterým se zápas změnil: {e}.', bezUctu: 'Hráči bez účtu Skoretap: {b} — dejte jim vědět sami.',
+    jenStranka: 'Hráči uvidí změnu na stránce turnaje.', muze: 'může',
+    pevnyCas: 'Pevný čas', uvolnitCas: 'Zrušit pevný čas', pevnyZnacka: 'pevný čas'
+  };
+  function pasmo() { try { return Intl.DateTimeFormat().resolvedOptions().timeZone || 'Europe/Prague'; } catch (e) { return 'Europe/Prague'; } }
+  function cteni(k) { try { return localStorage.getItem('skoretap.turnaje.' + k); } catch (e) { return null; } }
+  function zapis(k, v) { try { localStorage.setItem('skoretap.turnaje.' + k, v); } catch (e) { /* nevadí */ } }
+  document.title = X.nadpis + ' — Skoretap';
+  document.getElementById('nadpis').textContent = X.nadpis;
+  document.getElementById('popis').textContent = X.popis;
+  var obsah = document.getElementById('obsah');
+  function el(tag, trida, text) { var e = document.createElement(tag); if (trida) e.className = trida; if (text != null) e.textContent = text; return e; }
+  function tlac(text, trida, akce) { var b = el('button', trida || 'tlacitko', text); b.type = 'button'; b.onclick = akce; return b; }
+  function pole(popis, vstup) { var l = el('label', '', popis); l.appendChild(vstup); return l; }
+  function vstup(typ, hodnota) { var i = el('input'); i.type = typ || 'text'; if (hodnota != null) i.value = hodnota; return i; }
+  function hhmm(ms) { return new Date(ms).toLocaleTimeString(en ? 'en-GB' : 'cs-CZ', { hour: '2-digit', minute: '2-digit' }); }
+  var org = null, obnova = null;
+
+  async function start() {
+    obsah.textContent = '';
+    if (!relace()) return neprihlasen();
+    try { org = await rpc('tur_poradatel', {}); }
+    catch (e) { if (String(e.message) === 'odhlasen') return neprihlasen(); return obsah.appendChild(el('p', 'chyba', X.chyba)); }
+    seznam();
+  }
+  function neprihlasen() {
+    obsah.textContent = '';
+    obsah.appendChild(el('p', '', X.neprihlasen));
+    var a = el('a', 'hlavni', X.prihlasit); a.href = 'ucet.html?zpet=turnaje'; obsah.appendChild(a);
+  }
+  function stranka() { obsah.textContent = ''; if (obnova) { clearInterval(obnova); obnova = null; } return obsah; }
+
+  // ------------------------------------------------ seznam
+  async function seznam() {
+    var s = stranka();
+    s.appendChild(tlac(X.novy, 'hlavni', formular));
+    s.appendChild(el('h2', '', X.moje));
+    var tt;
+    try { tt = await rpc('fedw_turnaje', { p_federace: org }); } catch (e) { return s.appendChild(el('p', 'chyba', X.chyba)); }
+    if (!tt.length) return s.appendChild(el('p', '', X.zadny));
+    tt.forEach(function (t) {
+      var k = el('div', 'karta radek');
+      var p = el('div'); p.style.flex = '1';
+      p.appendChild(el('div', '', t.nazev || t.cislo));
+      var sub = [t.misto, t.zacatek ? new Date(t.zacatek).toLocaleDateString(en ? 'en-GB' : 'cs-CZ') : '', t.format ? X.f[t.format] : '', t.zruseno ? X.zruseny : ''].filter(Boolean).join(' · ');
+      var d = el('div', 'pozn', sub); p.appendChild(d);
+      k.appendChild(p);
+      k.appendChild(tlac(X.otevrit, 'hlavni', function () { detail(t.cislo); }));
+      s.appendChild(k);
+    });
+  }
+
+  // ------------------------------------------------ nový turnaj
+  function formular() {
+    var s = stranka();
+    s.appendChild(tlac(X.zpet, 'tlacitko', seznam));
+    s.appendChild(el('h2', '', X.novy));
+    var k = el('div', 'karta'); s.appendChild(k);
+    var zitra = new Date(Date.now() + 86400000); zitra.setHours(9, 0, 0, 0);
+    var mistni = new Date(zitra.getTime() - zitra.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
+    var f = {
+      nazev: vstup('text'), misto: vstup('text'), zacatek: vstup('datetime-local', mistni),
+      delka: vstup('number', 20), prestavka: vstup('number', 5), kurty: vstup('text', '1, 2'),
+      format: el('select'), pocitani: el('select'), body: vstup('number', 24),
+      seznam: el('textarea'), kol: vstup('number', ''), skupin: vstup('number', ''), postupuje: vstup('number', 2),
+      konec: vstup('datetime-local', ''), playoff: el('select'), o3: vstup('checkbox'), rezim: el('select')
+    };
+    [['', X.bezPlayoff], ['pavouk', X.pPavouk], ['final4', X.pFinal4], ['pasma', X.pPasma]].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; f.playoff.appendChild(o); });
+    f.playoff.value = 'pavouk';
+    [['auto', X.rAuto], ['skupina', X.rSkupina]].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; f.rezim.appendChild(o); });
+    T.FORMATY.forEach(function (x) { var o = el('option', '', X.f[x]); o.value = x; f.format.appendChild(o); });
+    [['body', X.body], ['sety1', X.sety1], ['sety2', X.sety2], ['sety2stb', X.sety2stb]].forEach(function (x) { var o = el('option', '', x[1]); o.value = x[0]; f.pocitani.appendChild(o); });
+    var r1 = el('div', 'radek'); r1.appendChild(pole(X.nazev, f.nazev)); r1.appendChild(pole(X.misto, f.misto)); k.appendChild(r1);
+    var r2 = el('div', 'radek'); r2.appendChild(pole(X.zacatek, f.zacatek)); r2.appendChild(pole(X.delka, f.delka)); r2.appendChild(pole(X.prestavka, f.prestavka)); r2.appendChild(pole(X.kurty, f.kurty)); k.appendChild(r2);
+    // Grand Padel: délku zápasu může spočítat systém z času konce turnaje.
+    var r2b = el('div', 'radek'); r2b.appendChild(pole(X.konec, f.konec)); var delkaInfo = el('p', 'pozn'); r2b.appendChild(delkaInfo); k.appendChild(r2b);
+    var r3 = el('div', 'radek'); r3.appendChild(pole(X.format, f.format)); r3.appendChild(pole(X.pocitani, f.pocitani));
+    var bodyPole = pole(X.body, f.body); r3.appendChild(bodyPole); k.appendChild(r3);
+    var r4 = el('div', 'radek');
+    var kolPole = pole(X.kol, f.kol), skupinPole = pole(X.skupin, f.skupin), postupPole = pole(X.postupuje, f.postupuje);
+    var playoffPole = pole(X.playoff, f.playoff), rezimPole = pole(X.rezim, f.rezim);
+    var o3Pole = el('label', ''); o3Pole.style.flexDirection = 'row'; o3Pole.style.alignItems = 'center'; o3Pole.appendChild(f.o3); o3Pole.appendChild(document.createTextNode(' ' + X.o3));
+    [kolPole, skupinPole, postupPole, playoffPole, o3Pole, rezimPole].forEach(function (x) { r4.appendChild(x); }); k.appendChild(r4);
+    var seznamPopis = el('p', 'pozn'); k.appendChild(seznamPopis); k.appendChild(f.seznam);
+    var losDvojic = tlac(X.losDvojic, 'tlacitko', function () {
+      // Jednotlivci → dvojice (Grand Padel): s „(M)" / „(Ž)" u jména nejdřív mix. Lichý zůstane sám a ohlásí se chybou.
+      var lide = f.seznam.value.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+      f.seznam.value = T.rozlosujDvojice(lide).map(function (d) { return d.join(' / '); }).join('\n'); prepocti();
+    });
+    k.appendChild(losDvojic);
+    var losPopis = el('p', 'pozn', X.losPopis); k.appendChild(losPopis);
+    var odhad = el('p', 'pozn'), zprava = el('p', 'chyba');
+    k.appendChild(odhad); k.appendChild(zprava);
+    var tl = tlac(X.vylosovat, 'hlavni', vylosuj); k.appendChild(tl);
+    // Nebo nejdřív přihlášky odkazem (058, krok 3) — los až z přihlášených.
+    var r5 = el('div', 'radek');
+    var kapacita = vstup('number', ''), uzaverka = vstup('datetime-local', '');
+    kapacita.min = 2; r5.appendChild(pole(X.kapacita, kapacita)); r5.appendChild(pole(X.uzaverka, uzaverka));
+    k.appendChild(el('h3', '', X.nebo));
+    k.appendChild(el('p', 'pozn', X.prihlaskyPopis));
+    k.appendChild(r5);
+    var tlP = tlac(X.otevritPrihlasky, 'hlavni', otevriPrihlasky); k.appendChild(tlP);
+
+    async function otevriPrihlasky() {
+      var n = nastaveni();
+      if (!n.kurty.length) { zprava.textContent = X.ch.kurty; return; }
+      tlP.disabled = true; tlP.textContent = X.pracuji;
+      try {
+        n.kola = [];
+        delete n.delkaZKonce;
+        // Kdo je už v seznamu, přidá se jako ruční přihláška.
+        var predem = T.jePoHracich(n) ? (n.hraci || []).map(function (h) { return [h, '']; }) : (n.tymy || []).map(function (t) { return [t[0] || '', t[1] || '']; });
+        delete n.hraci; delete n.tymy;
+        var cislo = 'T' + Date.now().toString(36).toUpperCase();
+        var nazev = f.nazev.value.trim() || X.f[n.format];
+        await rpc('fedw_turnaj_uloz', { p_federace: org, p_cislo: cislo, p_nazev: nazev, p_misto: f.misto.value.trim(), p_nastaveni: n });
+        await rpc('fedw_prihlasky_nastav', { p_federace: org, p_cislo: cislo, p_otevreno: true,
+          p_kapacita: Number(kapacita.value) >= 2 ? Number(kapacita.value) : null,
+          p_uzaverka: uzaverka.value ? new Date(uzaverka.value).toISOString() : null });
+        for (var i = 0; i < predem.length; i++) {
+          if (predem[i][0]) await rpc('fedw_prihlaska_pridej', { p_federace: org, p_cislo: cislo, p_jmeno: predem[i][0], p_partner: predem[i][1] });
+        }
+        detail(cislo);
+      } catch (e) { zprava.textContent = X.chyba + ' (' + e.message + ')'; tlP.disabled = false; tlP.textContent = X.otevritPrihlasky; }
+    }
+
+    function nastaveni() {
+      var fmt = f.format.value;
+      var radky = f.seznam.value.split(/\r?\n/).map(function (x) { return x.trim(); }).filter(Boolean);
+      var p = f.pocitani.value;
+      var n = {
+        format: fmt, kurty: f.kurty.value.split(',').map(function (x) { return x.trim(); }).filter(Boolean),
+        zacatek: f.zacatek.value ? new Date(f.zacatek.value).toISOString() : null,
+        delkaMin: Number(f.delka.value) || 20, prestavkaMin: Number(f.prestavka.value) || 0,
+        pocitani: p === 'body' ? { typ: 'body', do: Number(f.body.value) || 24 }
+          : { typ: 'sety', shoda: 'star_point', sety: p === 'sety1' ? 1 : 2, stb: p === 'sety2stb' },
+        seed: Math.floor(Math.random() * 1e9),
+        pasmo: pasmo(),  // časové pásmo pro e-maily hráčům (059)
+        posun: true  // rozpis se posouvá podle skutečných časů z kurtu (058, mřížka část 3)
+      };
+      if (T.jePoHracich(n)) { n.hraci = radky; if (Number(f.kol.value)) n.kol = Number(f.kol.value); }
+      else {
+        n.tymy = radky.map(function (r) { return r.split('/').map(function (x) { return x.trim(); }).filter(Boolean); });
+        if (fmt === 'skupiny') { n.skupin = Number(f.skupin.value) || T.doporucenoSkupin(n.tymy.length); n.postupuje = Number(f.postupuje.value) || 2; }
+        if (fmt === 'kazdy') n.postupuje = Number(f.postupuje.value) || 4;
+        n.playoff = f.playoff.value ? { typ: f.playoff.value, o3: f.o3.checked || f.playoff.value !== 'pavouk' } : null;
+        if (fmt === 'skupiny') n.rezimKurtu = f.rezim.value;
+      }
+      // Délka zápasu z konce turnaje (když je zadaný).
+      n.delkaZKonce = null;
+      if (f.konec.value && n.zacatek && !T.chybaNastaveni(n)) {
+        try {
+          n.kola = T.prvniLos(n);
+          n.delkaZKonce = T.delkaZKonce(n, new Date(f.konec.value).toISOString());
+          if (n.delkaZKonce.delkaMin) n.delkaMin = n.delkaZKonce.delkaMin;
+          delete n.kola;
+        } catch (e) { /* chybu ukáže kontrola */ }
+      }
+      return n;
+    }
+    function chyba(n) {
+      if (!T.jePoHracich(n)) {
+        var spatna = n.tymy.findIndex(function (t) { return t.length !== 2; });
+        if (spatna >= 0) return X.ch.dvojice.replace('{r}', n.tymy[spatna].join(' / ') || '—');
+      }
+      var c = T.chybaNastaveni(n);
+      return c ? X.ch[c] : null;
+    }
+    function prepocti() {
+      var fmt = f.format.value, poHracich = fmt === 'americano' || fmt === 'mexicano';
+      seznamPopis.textContent = poHracich ? X.hraci : X.tymy;
+      losDvojic.hidden = poHracich;
+      kolPole.hidden = fmt !== 'americano';
+      skupinPole.hidden = rezimPole.hidden = fmt !== 'skupiny';
+      postupPole.hidden = !(fmt === 'skupiny' || (fmt === 'kazdy' && f.playoff.value === 'pavouk'));
+      playoffPole.hidden = poHracich;
+      o3Pole.hidden = poHracich || f.playoff.value !== 'pavouk';
+      losPopis.hidden = poHracich;
+      bodyPole.hidden = f.pocitani.value !== 'body';
+      var n = nastaveni(); var c = chyba(n);
+      delkaInfo.textContent = '';
+      if (n.delkaZKonce) {
+        if (n.delkaZKonce.chyba) { c = c || X.nestihne; delkaInfo.textContent = ''; }
+        else { delkaInfo.textContent = X.delkaDopocitana.replace('{m}', n.delkaMin); f.delka.value = n.delkaMin; }
+      }
+      zprava.textContent = f.seznam.value.trim() ? (c || '') : '';
+      odhad.textContent = '';
+      if (!c) {
+        try {
+          n.kola = T.prvniLos(n);
+          var konec = T.konecTurnaje(n);
+          if (konec && fmt !== 'mexicano') odhad.textContent = X.odhad.replace('{k}', n.kola.length).replace('{cas}', hhmm(konec));
+          if (fmt === 'skupiny' && !f.skupin.value) f.skupin.placeholder = String(n.skupin);
+        } catch (e) { zprava.textContent = e.message; }
+      }
+      tl.disabled = !!c || !f.seznam.value.trim();
+    }
+    Object.values(f).forEach(function (x) { x.addEventListener('input', prepocti); x.addEventListener('change', prepocti); });
+    prepocti();
+
+    async function vylosuj() {
+      var n = nastaveni(); var c = chyba(n) || (n.delkaZKonce && n.delkaZKonce.chyba ? X.nestihne : null);
+      if (c) { zprava.textContent = c; return; }
+      delete n.delkaZKonce;
+      tl.disabled = true; tl.textContent = X.pracuji;
+      try {
+        n.kola = T.prvniLos(n);
+        var cislo = 'T' + Date.now().toString(36).toUpperCase();
+        var nazev = f.nazev.value.trim() || X.f[n.format];
+        await rpc('fedw_turnaj_uloz', { p_federace: org, p_cislo: cislo, p_nazev: nazev, p_misto: f.misto.value.trim(), p_nastaveni: n });
+        await rpc('fedw_nahraj', { p_federace: org, p_turnaj: { cislo: cislo, nazev: nazev, misto: f.misto.value.trim() }, p_zapasy: T.zapasyKol(n, cislo) });
+        detail(cislo);
+      } catch (e) { zprava.textContent = X.chyba + ' (' + e.message + ')'; tl.disabled = false; tl.textContent = X.vylosovat; }
+    }
+  }
+
+  // ------------------------------------------------ detail turnaje
+  async function detail(cislo) {
+    var s = stranka();
+    var t, n, zapasy = [], prihl = null;
+    // Mřížka rozpisu (058): pohled si stránka pamatuje, výběr a posun mřížky přežijí obnovení.
+    var pohled = cteni('pohled') === 'mrizka' ? 'mrizka' : 'seznam', vybrany = null, posunMrizky = null, hlaskaMrizky = '', infoMrizky = '', otevrenoOmezeni = false;
+    var hlavicka = el('div'); s.appendChild(hlavicka);
+    var telo = el('div'); s.appendChild(telo);
+
+    async function uloz() { if (!n.pasmo) n.pasmo = pasmo(); await rpc('fedw_turnaj_uloz', { p_federace: org, p_cislo: cislo, p_nazev: t.nazev, p_misto: t.misto, p_nastaveni: n }); }
+
+    async function nacti() {
+      try {
+        t = await rpc('fedw_turnaj', { p_federace: org, p_cislo: cislo });
+        // Rozehraný zápas, který se táhne, posouvá další i bez nové zprávy z kurtu.
+        if (t.nastaveni && t.nastaveni.posun === true && !t.zruseno) await rpc('fedw_turnaj_prepocet', { p_federace: org, p_cislo: cislo }).catch(function () {});
+        zapasy = await rpc('fedw_zapasy', { p_federace: org, p_turnaj_cislo: cislo });
+      } catch (e) { return; }
+      n = t.nastaveni;
+      if (!n.kola) n.kola = [];
+      if (!n.kola.length) {
+        try { prihl = await rpc('fedw_prihlasky', { p_federace: org, p_cislo: cislo }); } catch (e) { /* zkusí se znovu */ }
+      }
+      // Pavouk se doplňuje sám: jakmile má zápas oba soupeře, jde na server.
+      if (T.pavouky(n).length && !t.zruseno) {
+        var nove = T.noveZapasyPavouka(n, cislo, zapasy);
+        if (nove.length) {
+          try {
+            await rpc('fedw_nahraj', { p_federace: org, p_turnaj: { cislo: cislo, nazev: t.nazev, misto: t.misto }, p_zapasy: nove });
+            zapasy = await rpc('fedw_zapasy', { p_federace: org, p_turnaj_cislo: cislo });
+          } catch (e) { /* zkusí se při dalším obnovení */ }
+        }
+      }
+      kresli();
+    }
+
+    function kresli() {
+      hlavicka.textContent = '';
+      hlavicka.appendChild(tlac(X.zpet, 'tlacitko', seznam));
+      hlavicka.appendChild(el('h2', '', (t.nazev || cislo) + (t.misto ? ' · ' + t.misto : '') + (t.zruseno ? ' · ' + X.zruseny : '')));
+      var r = el('div', 'radek');
+      r.appendChild(el('span', 'kod', X.kodTurnaje + ': ' + t.kod));
+      r.appendChild(tlac(X.tisk, 'hlavni', function () { tiskQr(); }));
+      if (!t.zruseno) r.appendChild(tlac(X.zrusit, 'tlacitko', async function () {
+        if (!confirm(X.zrusitOtazka)) return;
+        await rpc('fedw_zrus_turnaj', { p_federace: org, p_cislo: cislo }).catch(function () {}); nacti();
+      }));
+      hlavicka.appendChild(r);
+      hlavicka.appendChild(el('p', 'pozn', X.f[n.format] + ' · ' + X.obnoveno));
+      kresliVerejne();
+      telo.textContent = '';
+      if (!n.kola.length) return kresliPrihlasky();
+      kresliPoradi();
+      kresliAkce();
+      if (T.pavouky(n).length) kresliPavouk();
+      kresliRozpis();
+    }
+
+    function kresliRozpis() {
+      var r = el('div', 'radek');
+      r.appendChild(el('h2', '', X.rozpis));
+      [['seznam', X.seznamP], ['mrizka', X.mrizkaP]].forEach(function (x) {
+        r.appendChild(tlac(x[1], pohled === x[0] ? 'hlavni' : 'tlacitko', function () { pohled = x[0]; zapis('pohled', x[0]); vybrany = null; kresli(); }));
+      });
+      telo.appendChild(r);
+      if (!t.zruseno) {
+        var rp = el('div', 'radek');
+        rp.appendChild(el('p', 'pozn', n.posun === true ? X.posunAno : X.posunNe));
+        rp.appendChild(tlac(n.posun === true ? X.posunVypnout : X.posunZapnout, 'tlacitko', async function () {
+          n.posun = n.posun !== true;
+          try { await uloz(); } catch (e) { n.posun = !n.posun; return; }
+          nacti();
+        }));
+        telo.appendChild(rp);
+      }
+      if (pohled === 'mrizka') kresliMrizkuRozpisu(); else kresliKola();
+    }
+
+    // Fáze zápasu podle čísla: kolo, skupina, pavouk.
+    function faze(cz) {
+      var m = /\/K(\d+)-(\d+)$/.exec(cz);
+      if (m) {
+        var mz = n.kola[m[1] - 1] && n.kola[m[1] - 1].zapasy[m[2] - 1];
+        if (mz && mz.skupina != null) return X.skupina + ' ' + String.fromCharCode(65 + mz.skupina);
+        return X.kolo.replace('{k}', m[1]);
+      }
+      return /P3M$/.test(cz) ? X.o3zapas : X.pavouk;
+    }
+    function jmenaTymu(x) { return (x || []).map(function (h) { return h.jmeno || h.cislo || ''; }).join(' / '); }
+
+    function textKolize(k, puvodni) {
+      var cas = hhmm(k.od) + '–' + hhmm(k.do);
+      var hraci = (k.hraci || []).map(function (h) { return puvodni[h] || h; }).join(', ');
+      if (k.typ === 'kurt') return X.kKurt.replace('{k}', k.kurt).replace('{cas}', cas);
+      if (k.typ === 'hrac') return X.kHrac.replace('{h}', hraci).replace('{cas}', cas);
+      if (k.typ === 'zavreno') return X.kZavreno.replace('{k}', k.kurt).replace('{cas}', cas);
+      if (k.typ === 'prani') return X.kPrani.replace('{h}', hraci).replace('{cas}', cas);
+      return X.kPauza.replace('{h}', hraci).replace('{m}', Math.max(0, Math.round((k.do - k.od) / 60000))).replace('{p}', n.prestavkaMin || 0);
+    }
+
+    // O kolik minut se nezačatý zápas posunul proti plánu pořadatele (0 = neposunul).
+    function posunutoMin(z) {
+      if (z.stav !== 'planovany' || !z.kdy || !z.kdy_plan) return 0;
+      return Math.round((Date.parse(z.kdy) - Date.parse(z.kdy_plan)) / 60000);
+    }
+
+    // Úpravy nanečisto (058, mřížka část 4): změny se drží jen v této stránce
+    // (a v prohlížeči, přežijí obnovení), hráči nic nevidí, dokud je
+    // pořadatel nezveřejní — pak jdou na server najednou a s jedním oznámením.
+    function klicNavrhu() { return 'navrh.' + org + '.' + cislo; }
+    function klicNanecisto() { return 'nanecisto.' + org + '.' + cislo; }
+    function nactiNavrh() { try { return JSON.parse(cteni(klicNavrhu()) || '{}') || {}; } catch (e) { return {}; } }
+    function ulozNavrh(x) { zapis(klicNavrhu(), JSON.stringify(x)); }
+    function omezeni() { return { kurty: n.kurtyHodiny || {}, prani: n.prani || {} }; }
+
+    function kresliMrizkuRozpisu() {
+      var ted = Date.now();
+      var nanecisto = cteni(klicNanecisto()) === '1';
+      var navrh = nanecisto ? nactiNavrh() : {};
+      var sN = M.sNavrhem(zapasy, navrh);
+      if (sN.neplatne.length) { sN.neplatne.forEach(function (c) { delete navrh[c]; }); ulozNavrh(navrh); }
+      var zz = sN.zapasy, pocetZmen = Object.keys(navrh).length;
+      var puvodni = {};
+      zz.forEach(function (z) { (z.tym_a || []).concat(z.tym_b || []).forEach(function (h) { var j = h.jmeno || h.cislo || ''; puvodni[j.trim().toLowerCase()] = j.trim(); }); });
+      var chyby = M.kolize(zz, n.delkaMin, n.prestavkaMin || 0, ted, omezeni());
+      var chybne = new Set(); chyby.forEach(function (k) { chybne.add(k.a); chybne.add(k.b); });
+      var podle = new Map(zz.map(function (z) { return [z.cislo, z]; }));
+      var lze = !t.zruseno;
+      var vyb = vybrany && podle.get(vybrany);
+      if (vyb && !M.lzePresunout(vyb)) { vybrany = null; vyb = null; }
+
+      // Nanečisto, nebo rovnou
+      if (lze) {
+        var rn = el('div', 'radek');
+        if (!nanecisto) {
+          rn.appendChild(el('p', 'pozn', X.rovnouPopis));
+          rn.appendChild(tlac(X.zacitNanecisto, 'tlacitko', function () { zapis(klicNanecisto(), '1'); kresli(); }));
+        } else {
+          rn.appendChild(el('p', 'ok', X.nanecistoPopis.replace('{n}', pocetZmen)));
+          var tz = tlac(X.zverejnitZmeny.replace('{n}', pocetZmen), 'hlavni', async function () {
+            tz.disabled = true;
+            var zmeny = Object.keys(navrh).map(function (c) { var x = navrh[c]; var o = { cislo: c, kurt: x.kurt, kdy: x.kdy }; if (x.delka != null) o.delka = x.delka; return o; });
+            try {
+              var v = await rpc('fedw_rozpis_zverejni', { p_federace: org, p_cislo: cislo, p_zmeny: zmeny });
+              ulozNavrh({});
+              hlaskaMrizky = (v && v.neprovedeno && v.neprovedeno.length) ? X.neprovedeno.replace('{n}', v.neprovedeno.length) : '';
+              infoMrizky = !v ? '' : v.zapnuto ? X.emailyPoslany.replace('{e}', v.emailu || 0) + (v.bez_uctu ? ' ' + X.bezUctu.replace('{b}', v.bez_uctu) : '') : X.jenStranka;
+              zapis(klicNanecisto(), '0');
+            } catch (e) { hlaskaMrizky = X.chyba; tz.disabled = false; }
+            nacti();
+          });
+          tz.disabled = !pocetZmen; rn.appendChild(tz);
+          rn.appendChild(tlac(pocetZmen ? X.zahoditZmeny : X.konecNanecisto, 'tlacitko', function () {
+            if (pocetZmen && !confirm(X.zahoditOtazka)) return;
+            ulozNavrh({}); zapis(klicNanecisto(), '0'); kresli();
+          }));
+        }
+        telo.appendChild(rn);
+      }
+
+      var info = el('div', 'radek');
+      info.appendChild(el('p', vyb ? 'ok' : 'pozn', vyb ? X.mzVybrano.replace('{z}', jmenaTymu(vyb.tym_a) + ' — ' + jmenaTymu(vyb.tym_b)) : X.mzNavod));
+      if (vyb && !nanecisto) info.appendChild(tlac(vyb.pevny_cas ? X.uvolnitCas : X.pevnyCas, 'tlacitko', async function () {
+        var cz = vyb.cislo, pevny = !vyb.pevny_cas;
+        vybrany = null;
+        try { if (!(await rpc('fedw_zapas_pevny', { p_federace: org, p_cislo: cz, p_pevny: pevny }))) hlaskaMrizky = X.nepresunuto; }
+        catch (e) { hlaskaMrizky = X.chyba; }
+        nacti();
+      }));
+      if (vyb && navrh[vyb.cislo]) info.appendChild(tlac(X.vratitZmenu, 'tlacitko', function () { delete navrh[vyb.cislo]; ulozNavrh(navrh); vybrany = null; kresli(); }));
+      if (vyb) info.appendChild(tlac(X.mzZrusit, 'tlacitko', function () { vybrany = null; kresli(); }));
+      if (lze) telo.appendChild(info);
+      var zprava = el('p', 'chyba');
+      var kam = el('div'); telo.appendChild(kam);
+      kresliMrizku(kam, {
+        zapasy: zz, kurty: n.kurty, delkaMin: n.delkaMin, ted: ted, en: en, X: X.mz, hodiny: n.kurtyHodiny,
+        chybne: chybne, vybrany: vybrany, prestavkaMin: n.prestavkaMin || 0,
+        popis: function (z) {
+          var w = M.okno(z, n.delkaMin, ted);
+          var sk = z.stav === 'planovany' ? '' : ' · ' + skoreTextem(z);
+          var o = z.nanecisto ? 0 : posunutoMin(z);
+          var zn = z.nanecisto ? ' · ' + X.nanecistoZnacka : z.pevny_cas ? ' · ' + X.pevnyZnacka : (o ? ' · ' + (o > 0 ? '+' : '') + o + ' min' : '');
+          return { maly: (w ? hhmm(w.od) + '–' + hhmm(w.do) + ' · ' : '') + faze(z.cislo) + zn + sk, a: jmenaTymu(z.tym_a), b: jmenaTymu(z.tym_b) };
+        },
+        naZapas: lze ? function (z) { vybrany = vybrany === z.cislo ? null : z.cislo; kresli(); } : null,
+        naMisto: lze ? function (kurt, ms) { if (vybrany) presunZapas(vybrany, kurt, ms, null); } : null,
+        naTah: lze ? function (z, kurt, ms, delka) { presunZapas(z.cislo, kurt, ms, delka); } : null
+      });
+      zprava.textContent = hlaskaMrizky || '';
+      if (infoMrizky) { var inf = el('p', 'ok', infoMrizky); kam.parentNode.insertBefore(inf, kam); infoMrizky = ''; }
+      // Posun ťuknutím i tahem. Nanečisto jen do návrhu (kolize jsou vidět
+      // v mřížce); rovnou se nejdřív zeptá, když by vznikla kolize.
+      async function presunZapas(cz, kurt, ms, delka) {
+        if (nanecisto) {
+          var pred = navrh[cz] || {};
+          navrh[cz] = { kurt: kurt, kdy: new Date(ms).toISOString() };
+          var d0 = delka != null ? delka : pred.delka;
+          if (d0 != null) navrh[cz].delka = d0;
+          ulozNavrh(navrh); vybrany = null; kresli();
+          return;
+        }
+        var po = M.presun(zapasy, cz, kurt, ms, delka);
+        var nove = M.kolizeZapasu(M.kolize(po, n.delkaMin, n.prestavkaMin || 0, Date.now(), omezeni()), cz);
+        if (nove.length && !confirm(X.poPresunu + '\n' + nove.map(function (k) { return '– ' + textKolize(k, puvodni); }).join('\n') + '\n\n' + X.presto)) return;
+        // Nové místo je vidět hned; server ho potvrdí při načtení.
+        zapasy = po; vybrany = null; hlaskaMrizky = ''; kresli();
+        try {
+          var arg = { p_federace: org, p_cislo: cz, p_kurt: kurt, p_kdy: new Date(ms).toISOString() };
+          if (delka != null) arg.p_delka = delka;
+          var ok = await rpc('fedw_zapas_presun', arg);
+          if (!ok) hlaskaMrizky = X.nepresunuto;
+        } catch (e) { hlaskaMrizky = X.chyba; }
+        nacti();
+      }
+      var obal = kam.querySelector('.mz-obal');
+      if (obal) {
+        if (posunMrizky != null) obal.scrollLeft = posunMrizky;
+        obal.addEventListener('scroll', function () { posunMrizky = obal.scrollLeft; });
+      }
+      telo.appendChild(zprava);
+      telo.appendChild(el('h3', '', X.chybyRozpisu));
+      if (!chyby.length) telo.appendChild(el('p', 'pozn', X.bezChyb));
+      chyby.forEach(function (k) { telo.appendChild(el('p', 'chyba', textKolize(k, puvodni))); });
+      if (lze) kresliOmezeni(puvodni);
+    }
+
+    // Kdy je kurt volný a přání hráčů na časy — v den turnaje, hodiny:minuty.
+    // Prázdné = bez omezení. Přání vidí jen pořadatel (z veřejné stránky se odstraní).
+    function kresliOmezeni(puvodni) {
+      var det = el('details'); telo.appendChild(det);
+      if (otevrenoOmezeni) det.open = true;
+      det.addEventListener('toggle', function () { otevrenoOmezeni = det.open; });
+      det.appendChild(el('summary', '', X.omezeniNadpis));
+      det.appendChild(el('p', 'pozn', X.omezeniPopis));
+      var den = n.zacatek ? new Date(n.zacatek) : new Date();
+      var denText = den.getFullYear() + '-' + String(den.getMonth() + 1).padStart(2, '0') + '-' + String(den.getDate()).padStart(2, '0');
+      var naIso = function (v) { return v ? new Date(denText + 'T' + v).toISOString() : null; };
+      var zIso = function (iso) { if (!iso) return ''; var d = new Date(iso); return String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); };
+      var pole = [];
+      var radek = function (nazev, druh, klic, hod) {
+        var r = el('div', 'radek');
+        r.appendChild(el('span', 'omezeni-nazev', nazev));
+        var od = el('input'); od.type = 'time'; od.value = zIso(hod && hod.od); od.setAttribute('aria-label', nazev + ' ' + X.od);
+        var dO = el('input'); dO.type = 'time'; dO.value = zIso(hod && hod.do); dO.setAttribute('aria-label', nazev + ' ' + X.do_);
+        r.appendChild(el('span', 'pozn', X.od)); r.appendChild(od); r.appendChild(el('span', 'pozn', X.do_)); r.appendChild(dO);
+        det.appendChild(r);
+        pole.push({ druh: druh, klic: klic, od: od, do: dO });
+      };
+      det.appendChild(el('h3', '', X.hodinyKurtu));
+      Array.from(new Set((n.kurty || []).concat(zapasy.map(function (z) { return z.kurt; }).filter(Boolean)))).forEach(function (k) {
+        radek(X.mz.kurt + ' ' + k, 'kurty', k, (n.kurtyHodiny || {})[k]);
+      });
+      det.appendChild(el('h3', '', X.praniHracu));
+      Object.keys(puvodni).sort(function (a, b) { return puvodni[a].localeCompare(puvodni[b]); }).forEach(function (h) {
+        radek(puvodni[h], 'prani', h, (n.prani || {})[h]);
+      });
+      var hl = el('p', 'chyba');
+      det.appendChild(tlac(X.ulozitOmezeni, 'hlavni', async function () {
+        otevrenoOmezeni = true;
+        var kurtyHodiny = {}, prani = {};
+        pole.forEach(function (p) {
+          if (!p.od.value && !p.do.value) return;
+          var x = {}; if (p.od.value) x.od = naIso(p.od.value); if (p.do.value) x.do = naIso(p.do.value);
+          (p.druh === 'kurty' ? kurtyHodiny : prani)[p.klic] = x;
+        });
+        var stare = [n.kurtyHodiny, n.prani];
+        n.kurtyHodiny = kurtyHodiny; n.prani = prani;
+        try { await uloz(); } catch (e) { n.kurtyHodiny = stare[0]; n.prani = stare[1]; hl.textContent = X.chyba; return; }
+        nacti();
+      }));
+      det.appendChild(hl);
+    }
+
+    function skoreTextem(z) {
+      var s = z.skore || {};
+      if (Array.isArray(s.body) && !s.sety) return s.body[0] + ':' + s.body[1];
+      return (s.sety || []).map(function (x) { return x[0] + ':' + x[1]; }).join(' ');
+    }
+
+    function kresliPoradi() {
+      telo.appendChild(el('h2', '', X.poradi));
+      T.poradi(n, cislo, zapasy).forEach(function (p) {
+        if (p.skupina !== null) telo.appendChild(el('h3', '', X.skupina + ' ' + String.fromCharCode(65 + p.skupina)));
+        var tb = el('table'); var h = el('tr');
+        var poHracich = T.jePoHracich(n);
+        var sloupce = poHracich ? [X.misto_t, X.hraje, X.bodyS, X.vyhry, X.zapasu] : [X.misto_t, X.hraje, X.vyhry, X.setyS, X.gemyS, X.zapasu];
+        sloupce.forEach(function (x) { h.appendChild(el('th', '', x)); }); tb.appendChild(h);
+        p.tabulka.forEach(function (r) {
+          var tr = el('tr');
+          var hodnoty = poHracich ? [r.misto, r.hrac, r.body, r.vyhry, r.zapasy] : [r.misto, T.jmeno(n, r.tym), r.vyhry, r.sety, r.gemy, r.zapasy];
+          hodnoty.forEach(function (x) { tr.appendChild(el('td', '', String(x))); }); tb.appendChild(tr);
+        });
+        var obal = el('div', 'tabulka'); obal.appendChild(tb); telo.appendChild(obal);
+      });
+    }
+
+    function kresliAkce() {
+      if (t.zruseno) return;
+      var r = el('div', 'radek'), zprava = el('span', 'chyba');
+      if (n.format === 'mexicano' && T.koloHotove(n, cislo, zapasy, n.kola.length - 1)) {
+        r.appendChild(tlac(X.dalsiKolo, 'hlavni', async function () {
+          try {
+            n.kola.push(T.dalsiKoloMexicana(n, cislo, zapasy));
+            await uloz();
+            await rpc('fedw_nahraj', { p_federace: org, p_turnaj: { cislo: cislo, nazev: t.nazev, misto: t.misto }, p_zapasy: T.zapasyKol(n, cislo, n.kola.length - 1) });
+            nacti();
+          } catch (e) { n.kola.pop(); zprava.textContent = X.chyba; }
+        }));
+      }
+      // Playoff (Grand Padel): pavouk, Final Four, pásma. Starší turnaj skupin bez volby = pavouk.
+      var typPlayoff = n.playoff ? n.playoff.typ : (n.format === 'skupiny' && n.playoff === undefined ? 'pavouk' : null);
+      if (typPlayoff && !T.pavouky(n).length && (n.format === 'skupiny' || n.format === 'kazdy') && T.skupinyHotove(n, cislo, zapasy)) {
+        r.appendChild(tlac(X.playoffSpustit[typPlayoff] || X.playoff, 'hlavni', async function () {
+          try { n.playoff = n.playoff || { typ: typPlayoff, o3: false }; n.pavouky = T.zalozPlayoff(n, cislo, zapasy); await uloz(); nacti(); }
+          catch (e) { delete n.pavouky; zprava.textContent = X.chyba; }
+        }));
+      }
+      r.appendChild(zprava);
+      if (r.children.length > 1) telo.appendChild(r);
+    }
+
+    // Veřejné výsledky (058, krok 4): stránka, televize v areálu, okénko na web.
+    function kresliVerejne() {
+      var k = el('div', 'karta'); hlavicka.appendChild(k);
+      var r = el('div', 'radek');
+      r.appendChild(el('strong', '', X.verejne));
+      r.appendChild(tlac(t.verejny ? X.skrytVerejne : X.zverejnit, t.verejny ? 'tlacitko' : 'hlavni', async function () {
+        await rpc('fedw_verejny', { p_federace: org, p_turnaj_cislo: cislo, p_ano: !t.verejny }).catch(function () {});
+        nacti();
+      }));
+      k.appendChild(r);
+      k.appendChild(el('p', 'pozn', t.verejny ? X.verejnePopisAno : X.verejnePopisNe));
+      if (!t.verejny) return;
+      var zaklad = 'https://skoretap.com/vysledky.html?t=' + t.kod;
+      [[X.odkazStranka, zaklad], [X.odkazTv, zaklad + '&tv=1'],
+       [X.odkazOkenko, '<iframe src="' + zaklad + '&okenko=1" style="width:100%;height:640px;border:0" title="Skoretap"></iframe>']]
+        .forEach(function (x) {
+          var rr = el('div', 'radek');
+          var v = vstup('text', x[1]); v.readOnly = true; v.style.flex = '1 1 260px';
+          rr.appendChild(pole(x[0], v));
+          rr.appendChild(tlac(X.kopirovat, 'tlacitko', function () { v.select(); try { navigator.clipboard.writeText(x[1]); } catch (e) { document.execCommand('copy'); } }));
+          k.appendChild(rr);
+        });
+    }
+
+    // Přihlášky (058, krok 3): odkaz pro hráče, nastavení, seznam, los z přihlášených.
+    function kresliPrihlasky() {
+      if (!prihl) return telo.appendChild(el('p', 'chyba', X.chyba));
+      var odkaz = 'https://skoretap.com/turnaj.html?t=' + t.kod;
+      telo.appendChild(el('h2', '', X.prihlasky));
+      var k = el('div', 'karta'); telo.appendChild(k);
+      k.appendChild(el('p', 'pozn', X.odkazPopis));
+      var r = el('div', 'radek');
+      var vo = vstup('text', odkaz); vo.readOnly = true; vo.style.flex = '1 1 260px'; r.appendChild(vo);
+      r.appendChild(tlac(X.kopirovat, 'tlacitko', function () { vo.select(); try { navigator.clipboard.writeText(odkaz); } catch (e) { document.execCommand('copy'); } }));
+      k.appendChild(r);
+      // Nastavení přihlášek
+      var r2 = el('div', 'radek');
+      var kap = vstup('number', prihl.kapacita || ''); kap.min = 2;
+      var uz = vstup('datetime-local', prihl.uzaverka ? new Date(Date.parse(prihl.uzaverka) - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 16) : '');
+      r2.appendChild(pole(X.kapacita, kap)); r2.appendChild(pole(X.uzaverka, uz));
+      r2.appendChild(tlac(X.ulozit, 'tlacitko', function () { nastav(prihl.otevreno); }));
+      r2.appendChild(tlac(prihl.otevreno ? X.zavritPrihlasky : X.otevritPrihlasky, 'tlacitko', function () { nastav(!prihl.otevreno); }));
+      k.appendChild(r2);
+      k.appendChild(el('p', prihl.otevreno ? 'ok' : 'pozn', prihl.otevreno ? X.prihlaskyOtevrene : X.prihlaskyZavrene));
+      async function nastav(otevreno) {
+        await rpc('fedw_prihlasky_nastav', { p_federace: org, p_cislo: cislo, p_otevreno: otevreno,
+          p_kapacita: Number(kap.value) >= 2 ? Number(kap.value) : null,
+          p_uzaverka: uz.value ? new Date(uz.value).toISOString() : null }).catch(function () {});
+        nacti();
+      }
+      // Startovné (058, krok 6): QR platba hráčů přímo na účet pořadatele.
+      var ks = el('div', 'karta'); telo.appendChild(ks);
+      ks.appendChild(el('strong', '', X.startovneNadpis));
+      ks.appendChild(el('p', 'pozn', X.startovnePopis));
+      var rs = el('div', 'radek');
+      var castka = vstup('number', prihl.startovne || ''); castka.min = 0; castka.step = '1';
+      var mena = el('select'); ['CZK', 'EUR'].forEach(function (m) { var o = el('option', '', m); o.value = m; mena.appendChild(o); });
+      mena.value = prihl.mena || (en ? 'EUR' : 'CZK');
+      var iban = vstup('text', prihl.iban ? P.hezkyIban(prihl.iban) : ''); iban.placeholder = 'CZ65 0800 0000 …';
+      var prijemce = vstup('text', prihl.prijemce || ''); prijemce.maxLength = 70;
+      rs.appendChild(pole(X.castka, castka)); rs.appendChild(pole(X.mena, mena)); rs.appendChild(pole('IBAN', iban)); rs.appendChild(pole(X.prijemce, prijemce));
+      ks.appendChild(rs);
+      var zpravaS = el('p', 'chyba'); ks.appendChild(zpravaS);
+      ks.appendChild(tlac(X.ulozit, 'tlacitko', async function () {
+        var c = Number(castka.value) || 0;
+        if (c > 0 && !P.platnyIban(iban.value)) { zpravaS.textContent = X.spatnyIban; return; }
+        try { await rpc('fedw_startovne', { p_federace: org, p_cislo: cislo, p_castka: c, p_mena: mena.value, p_iban: P.cistyIban(iban.value), p_prijemce: prijemce.value }); nacti(); }
+        catch (e) { zpravaS.textContent = X.chyba; }
+      }));
+      // Seznam
+      var lide = prihl.prihlasky.filter(function (p) { return p.stav !== 'odhlasen'; });
+      var prihlaseni = lide.filter(function (p) { return p.stav === 'prihlasen'; });
+      telo.appendChild(el('h2', '', X.prihlaseni + ' · ' + prihlaseni.length + (prihl.kapacita ? ' / ' + prihl.kapacita : '')));
+      var tb = el('table');
+      lide.forEach(function (p, i) {
+        var tr = el('tr');
+        tr.appendChild(el('td', '', String(i + 1)));
+        var tdj = el('td', '', p.partner ? p.jmeno + ' / ' + p.partner : p.jmeno);
+        if (p.muze_od || p.muze_do) tdj.appendChild(el('div', 'pozn', X.muze + ' ' + (p.muze_od ? hhmm(p.muze_od) : '…') + '–' + (p.muze_do ? hhmm(p.muze_do) : '…')));
+        tr.appendChild(tdj);
+        tr.appendChild(el('td', p.stav === 'nahradnik' ? 'pozn' : '', p.stav === 'nahradnik' ? X.nahradnik : (p.rucne ? X.rucne : '')));
+        if (prihl.startovne) {
+          // VS = číslo přihlášky; zaplaceno označí pořadatel, až peníze dorazí.
+          var tdp = el('td');
+          tdp.appendChild(el('div', 'pozn', 'VS ' + p.vs));
+          tdp.appendChild(tlac(p.zaplaceno ? X.zaplaceno : X.nezaplaceno, p.zaplaceno ? 'hlavni' : 'tlacitko', async function () {
+            await rpc('fedw_zaplaceno', { p_federace: org, p_id: p.id, p_ano: !p.zaplaceno }).catch(function () {}); nacti();
+          }));
+          tr.appendChild(tdp);
+        }
+        var ak = el('td');
+        if (p.stav === 'nahradnik') ak.appendChild(tlac(X.posunout, 'tlacitko', async function () { await rpc('fedw_prihlaska_stav', { p_federace: org, p_id: p.id, p_stav: 'prihlasen' }).catch(function () {}); nacti(); }));
+        ak.appendChild(tlac(X.odebrat, 'tlacitko', async function () { await rpc('fedw_prihlaska_stav', { p_federace: org, p_id: p.id, p_stav: 'odhlasen' }).catch(function () {}); nacti(); }));
+        tr.appendChild(ak);
+        tb.appendChild(tr);
+      });
+      var obal = el('div', 'tabulka'); obal.appendChild(tb); telo.appendChild(obal);
+      // Ruční přidání (hráč bez účtu)
+      var r3 = el('div', 'radek');
+      var j1 = vstup('text', ''); j1.placeholder = T.jePoHracich(n) ? X.jmenoHrace : X.hrac1;
+      r3.appendChild(j1);
+      var j2 = vstup('text', ''); j2.placeholder = X.hrac2;
+      if (!T.jePoHracich(n)) r3.appendChild(j2);
+      r3.appendChild(tlac(X.pridat, 'tlacitko', async function () {
+        if (!j1.value.trim()) return;
+        await rpc('fedw_prihlaska_pridej', { p_federace: org, p_cislo: cislo, p_jmeno: j1.value.trim(), p_partner: j2.value.trim() }).catch(function () {});
+        nacti();
+      }));
+      telo.appendChild(r3);
+      // Los z přihlášených
+      var zprava = el('p', 'chyba');
+      telo.appendChild(tlac(X.vylosovatPrihlasene, 'hlavni', async function () {
+        if (T.jePoHracich(n)) n.hraci = prihlaseni.map(function (p) { return p.jmeno; });
+        else n.tymy = prihlaseni.map(function (p) { return [p.jmeno, p.partner].filter(Boolean); });
+        if (n.format === 'skupiny' && n.tymy) { n.skupin = n.skupin || T.doporucenoSkupin(n.tymy.length); n.postupuje = n.postupuje || 2; }
+        // „Kdy můžu hrát" z přihlášek jde do přání v mřížce (059 → 058, část 4).
+        prihlaseni.forEach(function (p) {
+          if (!p.muze_od && !p.muze_do) return;
+          n.prani = n.prani || {};
+          [p.jmeno, p.partner].filter(Boolean).forEach(function (j) { var x = {}; if (p.muze_od) x.od = p.muze_od; if (p.muze_do) x.do = p.muze_do; n.prani[j.trim().toLowerCase()] = x; });
+        });
+        var spatna = !T.jePoHracich(n) && n.tymy.find(function (x) { return x.length !== 2; });
+        var c = spatna ? X.ch.dvojice.replace('{r}', spatna.join(' / ')) : (T.chybaNastaveni(n) ? X.ch[T.chybaNastaveni(n)] : null);
+        if (c) { zprava.textContent = c; delete n.hraci; delete n.tymy; return; }
+        try {
+          n.kola = T.prvniLos(n);
+          await uloz();
+          await rpc('fedw_prihlasky_nastav', { p_federace: org, p_cislo: cislo, p_otevreno: false, p_kapacita: prihl.kapacita, p_uzaverka: prihl.uzaverka });
+          await rpc('fedw_nahraj', { p_federace: org, p_turnaj: { cislo: cislo, nazev: t.nazev, misto: t.misto }, p_zapasy: T.zapasyKol(n, cislo) });
+          nacti();
+        } catch (e) { n.kola = []; zprava.textContent = X.chyba + ' (' + e.message + ')'; }
+      }));
+      telo.appendChild(zprava);
+    }
+
+    function nazevKolaPavouka(k, kol) {
+      var od = kol - k;
+      return od === 1 ? X.finale : od === 2 ? X.semifinale : od === 3 ? X.ctvrtfinale : X.kolo_p.replace('{k}', k + 1);
+    }
+    function kresliPavouk() {
+      var m = new Map(zapasy.map(function (z) { return [z.cislo, z]; }));
+      var playoffy = T.stavPlayoffu(n, cislo, zapasy);
+      playoffy.forEach(function (p) {
+        // Pásma mají nadpis podle umístění, o které se hraje.
+        telo.appendChild(el('h2', '', playoffy.length > 1 ? X.pasmo.replace('{od}', p.od).replace('{do}', p.od + 3) : X.pavouk));
+        p.kola.forEach(function (kolo, k) {
+          telo.appendChild(el('h3', '', nazevKolaPavouka(k, p.kola.length)));
+          var tb = el('table');
+          kolo.forEach(function (z, i) {
+            if (z.volny) return;
+            var cz = p.predpona + (k + 1) + '-' + (i + 1);
+            tb.appendChild(radekZapasu(m.get(cz), cz, z.a ? T.jmeno(n, z.a) : '…', z.b ? T.jmeno(n, z.b) : '…'));
+          });
+          var obal = el('div', 'tabulka'); obal.appendChild(tb); telo.appendChild(obal);
+        });
+        if (p.o3zapas) {
+          telo.appendChild(el('h3', '', X.o3zapas));
+          var tb3 = el('table');
+          tb3.appendChild(radekZapasu(m.get(p.o3zapas.cislo), p.o3zapas.cislo, p.o3zapas.a ? T.jmeno(n, p.o3zapas.a) : '…', p.o3zapas.b ? T.jmeno(n, p.o3zapas.b) : '…'));
+          telo.appendChild(tb3);
+        }
+        p.mista.forEach(function (id, i) { telo.appendChild(el('p', i === 0 ? 'ok' : 'pozn', (p.od + i) + '. ' + T.jmeno(n, id))); });
+      });
+    }
+
+    function kresliKola() {
+      var m = new Map(zapasy.map(function (z) { return [z.cislo, z]; }));
+      n.kola.forEach(function (kolo, k) {
+        telo.appendChild(el('h2', '', X.kolo.replace('{k}', k + 1)));
+        var tb = el('table'); var h = el('tr');
+        [X.kurt, X.cas, X.hraje, '', X.vysledek].forEach(function (x) { h.appendChild(el('th', '', x)); }); tb.appendChild(h);
+        kolo.zapasy.forEach(function (z, i) {
+          var cz = cislo + '/K' + (k + 1) + '-' + (i + 1);
+          var strana = function (x) { return (Array.isArray(x) ? x : [x]).map(function (id) { return T.jmeno(n, id); }).join(' / '); };
+          tb.appendChild(radekZapasu(m.get(cz), cz, strana(z.a), strana(z.b)));
+        });
+        var obal = el('div', 'tabulka'); obal.appendChild(tb); telo.appendChild(obal);
+        if (kolo.pauza && kolo.pauza.length) telo.appendChild(el('p', 'pozn', X.pauza + kolo.pauza.map(function (id) { return T.jmeno(n, id); }).join(', ')));
+      });
+    }
+
+    // Řádek zápasu: kurt, čas, hráči, stav a výsledek; ruční zápis výsledku.
+    function radekZapasu(z, cz, a, b) {
+      var tr = el('tr');
+      tr.appendChild(el('td', '', z ? z.kurt : ''));
+      tr.appendChild(el('td', '', z && z.kdy ? hhmm(Date.parse(z.kdy)) : ''));
+      var hr = el('td'); hr.appendChild(el('div', '', a)); hr.appendChild(el('div', '', b)); tr.appendChild(hr);
+      tr.appendChild(el('td', z && z.stav === 'bezi' ? 'bezi' : 'pozn', z ? (X[z.stav] || X.zruseny_z) : ''));
+      var td = el('td', 'vysl');
+      if (z && z.stav !== 'zruseny' && !t.zruseno) {
+        var body = n.pocitani && n.pocitani.typ === 'body';
+        var s = z.skore || {};
+        if (body) {
+          var ia = vstup('number', Array.isArray(s.body) ? s.body[0] : ''), ib = vstup('number', Array.isArray(s.body) ? s.body[1] : '');
+          td.appendChild(ia); td.appendChild(document.createTextNode(' : ')); td.appendChild(ib);
+          td.appendChild(tlac(X.ulozit, 'tlacitko', function () {
+            if (ia.value === '' || ib.value === '') return;
+            zapisVysledek(cz, { body: [Number(ia.value), Number(ib.value)] });
+          }));
+        } else {
+          var is = vstup('text', (s.sety || []).map(function (x) { return x[0] + ':' + x[1]; }).join(' '));
+          is.className = 'sety'; is.placeholder = X.setyNapoveda;
+          td.appendChild(is);
+          td.appendChild(tlac(X.ulozit, 'tlacitko', function () {
+            var sety = is.value.trim().split(/\s+/).map(function (x) { var m = /^(\d+)[:\-](\d+)$/.exec(x); return m ? [Number(m[1]), Number(m[2])] : null; });
+            if (!sety.length || sety.some(function (x) { return !x; })) { is.style.borderColor = 'var(--cervena)'; return; }
+            zapisVysledek(cz, { sety: sety });
+          }));
+        }
+      }
+      tr.appendChild(td);
+      return tr;
+    }
+
+    async function zapisVysledek(cz, skore) {
+      try { await rpc('fedw_vysledek', { p_federace: org, p_cislo: cz, p_skore: skore, p_duvod: null }); } catch (e) { alert(X.chyba); }
+      nacti();
+    }
+
+    // QR na kurty a na recepci (jako stránka pro federace).
+    function tiskQr() {
+      var tisk = document.getElementById('tisk'); tisk.textContent = '';
+      var mriz = el('div', 'qr-mrizka'); tisk.appendChild(mriz);
+      function karta(nadpis, text, odkaz, popis) {
+        var k = el('div', 'qr-karta');
+        k.appendChild(el('div', '', t.nazev || cislo));
+        k.appendChild(el('div', 'kurt', nadpis));
+        var q = el('div', 'qr'); k.appendChild(q);
+        new QRCode(q, { text: odkaz, width: 180, height: 180, correctLevel: QRCode.CorrectLevel.M });
+        if (text) k.appendChild(el('p', '', text));
+        k.appendChild(el('p', '', popis));
+        mriz.appendChild(k);
+      }
+      karta(X.recepce, X.kodTurnaje + ': ' + t.kod, 'https://skoretap.com/f.html?t=' + t.kod, X.recepcePopis);
+      n.kurty.forEach(function (k) {
+        karta(X.kurt + ' ' + k, '', 'https://skoretap.com/f.html?t=' + t.kod + '&k=' + encodeURIComponent(k), X.qrPopis);
+      });
+      tisk.hidden = false;
+      setTimeout(function () { window.print(); tisk.hidden = true; }, 300);
+    }
+
+    await nacti();
+    // Během tahu v mřížce se neobnovuje — překreslení by tah utrhlo.
+    obnova = setInterval(function () { if (!document.body.classList.contains('mz-tazeni')) nacti(); }, 10000);
+  }
+
+  start();
+</script>
+</body>
+</html>

@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Výsledky turnaje — Skoretap</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  Veřejné výsledky turnaje (rozhodnuti/058, krok 4):
+    skoretap.com/vysledky.html?t=KOD            stránka turnaje
+    skoretap.com/vysledky.html?t=KOD&tv=1       televize v areálu (velké, bez ovládání)
+    skoretap.com/vysledky.html?t=KOD&okenko=1   okénko na web klubu (do <iframe>)
+  Jen když pořadatel turnaj zveřejnil (tur_verejny, migrace 022). Pořadí,
+  pavouk a kola počítá mozek turnajů (app/turnaje/) tady v prohlížeči.
+  Obnovuje se samo. Všechno se kreslí jako text, nikdy jako HTML.
+-->
+<style>
+  :root { --pozadi: #14141A; --karta: rgba(255,255,255,.07); --text: #FFFFFF; --tlumeny: rgba(255,255,255,.62); --micek: #C8F000; --cara: rgba(255,255,255,.12); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 1000px; margin: 0 auto; padding: 18px 16px 40px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 14px; text-decoration: none; }
+  h1 { font-size: 28px; margin: 12px 0 4px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--tlumeny); margin: 26px 0 10px; }
+  h3 { font-size: 15px; margin: 16px 0 6px; }
+  p, .pozn { color: var(--tlumeny); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; }
+  th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--cara); vertical-align: middle; }
+  th { color: var(--tlumeny); font-weight: 600; font-size: 13px; }
+  td.cislo { text-align: right; font-variant-numeric: tabular-nums; }
+  .tabulka { width: 100%; overflow-x: auto; }
+  .kurty { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; }
+  .kurt { background: var(--karta); border-radius: 16px; padding: 14px 16px; }
+  .kurt.bezi { outline: 2px solid var(--micek); }
+  .kurt .nazev { color: var(--tlumeny); font-size: 13px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .kurt .tym { display: flex; justify-content: space-between; gap: 10px; font-size: 17px; margin-top: 6px; }
+  .kurt .skore { font-weight: 800; font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .kurt .stav { color: var(--micek); font-size: 12px; font-weight: 800; margin-top: 6px; }
+  .vitez { font-weight: 800; }
+  .ziva { color: var(--micek); font-weight: 800; }
+  .pata { margin-top: 30px; font-size: 13px; color: var(--tlumeny); }
+  .oznameni { background: var(--karta); border-left: 4px solid var(--micek); border-radius: 12px; padding: 12px 16px; margin: 16px 0; }
+  .oznameni b { color: var(--text); } .oznameni p { margin: 4px 0; color: var(--text); }
+  body.tv .oznameni { font-size: 1.4vw; }
+  .pata a { color: var(--micek); }
+  /* Televize: velké, na celou obrazovku, bez odkazů */
+  body.tv main { max-width: none; padding: 2.2vw 3vw; }
+  body.tv h1 { font-size: 3.2vw; }
+  body.tv h2 { font-size: 1.3vw; }
+  body.tv table { font-size: 1.5vw; }
+  body.tv .kurty { grid-template-columns: repeat(auto-fill, minmax(26vw, 1fr)); gap: 1.2vw; }
+  body.tv .kurt .tym { font-size: 1.9vw; }
+  body.tv .kurt .nazev, body.tv .kurt .stav { font-size: 1.1vw; }
+  body.tv .sloupce { display: grid; grid-template-columns: 3fr 2fr; gap: 3vw; }
+  body.tv .pata, body.tv .jen-stranka { display: none; }
+  /* Okénko na web klubu: malé, průhledné okraje */
+  body.okenko main { padding: 10px; }
+  body.okenko h1 { font-size: 20px; }
+  body.okenko .jen-stranka { display: none; }
+</style>
+</head>
+<body>
+<main>
+  <a class="znacka jen-stranka" href="/">SKORETAP</a>
+  <div id="obsah"></div>
+  <p class="pata" id="pata"></p>
+</main>
+<script type="module">
+  import { SERVER, KLIC } from './app/ucet.js';
+  import * as T from './app/turnaje/turnaj.mjs';
+  import { kresliMrizku } from './app/turnaje/mrizka-kresli.mjs';
+  import { okno } from './app/turnaje/mrizka.mjs';
+  var q = new URLSearchParams(location.search);
+  var kod = (q.get('t') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+  var tv = q.get('tv') === '1', okenko = q.get('okenko') === '1';
+  if (tv) document.body.classList.add('tv');
+  if (okenko) document.body.classList.add('okenko');
+  var en = !/^cs|^sk/.test((q.get('lang') || navigator.language || 'cs').toLowerCase());
+  document.documentElement.lang = en ? 'en' : 'cs';
+  var X = en ? {
+    neni: 'This tournament is not public, or the link is incomplete.', zruseno: 'The tournament was cancelled.',
+    hrajeSe: 'Now on court', dalsi: 'Next', poradi: 'Standings', skupina: 'Group', pavouk: 'Knockout', kolo: 'Round {k}',
+    finale: 'Final', semifinale: 'Semi-final', ctvrtfinale: 'Quarter-final', kolo_p: 'Round {k}', vitez: 'Winner',
+    kurt: 'Court', hraje: 'LIVE', dohrano: 'final', bodyS: 'Pts', vyhry: 'W', zapasu: 'P', setyS: 'Sets', gemyS: 'Games', hrac: 'Player', tym: 'Pair',
+    pata: 'Live scores from the court with Skoretap — skoretap.com', o3: 'Match for 3rd place', pasmo: 'Places {od}–{do}', volno: 'free', skrec: 'retired', nenastoupil: 'no-show',
+    zmenaRozpisu: 'Schedule changed at {cas}', zmenaRadek: '{z}: now court {k} at {t} (was court {k0} at {t0})',
+    rozpis: 'Schedule', mz: { kurt: 'Court', bezCasu: 'No time yet — these matches go on as courts free up.', hrajeSe: 'playing', hotovo: 'finished', planovano: 'scheduled', chyba: '' }
+  } : {
+    neni: 'Tenhle turnaj není zveřejněný, nebo odkaz není celý.', zruseno: 'Turnaj je zrušený.',
+    hrajeSe: 'Teď na kurtech', dalsi: 'Další zápasy', poradi: 'Pořadí', skupina: 'Skupina', pavouk: 'Pavouk', kolo: '{k}. kolo',
+    finale: 'Finále', semifinale: 'Semifinále', ctvrtfinale: 'Čtvrtfinále', kolo_p: '{k}. kolo', vitez: 'Vítěz',
+    kurt: 'Kurt', hraje: 'HRAJE SE', dohrano: 'konec', bodyS: 'Body', vyhry: 'V', zapasu: 'Z', setyS: 'Sety', gemyS: 'Gemy', hrac: 'Hráč', tym: 'Dvojice',
+    pata: 'Skóre živě z kurtu se Skoretapem — skoretap.com', o3: 'O 3. místo', pasmo: 'O {od}.–{do}. místo', volno: 'volno', skrec: 'skreč', nenastoupil: 'nenastoupil',
+    zmenaRozpisu: 'Změna rozpisu v {cas}', zmenaRadek: '{z}: nově kurt {k} v {t} (bylo kurt {k0} v {t0})',
+    rozpis: 'Rozpis', mz: { kurt: 'Kurt', bezCasu: 'Zatím bez času — tyhle zápasy se hrají, jak se kurty uvolní.', hrajeSe: 'hraje se', hotovo: 'odehráno', planovano: 'naplánováno', chyba: '' }
+  };
+  var obsah = document.getElementById('obsah');
+  document.getElementById('pata').textContent = X.pata;
+  function el(tag, trida, text) { var e = document.createElement(tag); if (trida) e.className = trida; if (text != null) e.textContent = text; return e; }
+  function hhmm(iso) { return new Date(iso).toLocaleTimeString(en ? 'en-GB' : 'cs-CZ', { hour: '2-digit', minute: '2-digit' }); }
+
+  async function nacti() {
+    var d = null;
+    try {
+      var odp = await fetch(SERVER + '/rest/v1/rpc/tur_verejny', {
+        method: 'POST', headers: { apikey: KLIC, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_kod: kod })
+      });
+      if (odp.ok) d = await odp.json();
+    } catch (e) { return; } // bez signálu zůstane poslední stav
+    kresli(d);
+  }
+
+  // Skóre zápasu jako text: „6:4 2:1 (30:15)", u Americana „12:9".
+  function skore(z) {
+    var s = z.skore || {};
+    if (Array.isArray(s.body) && !s.sety) return s.body[0] + ':' + s.body[1];
+    var t = (s.sety || []).map(function (x) { return x[0] + ':' + x[1]; }).join('  ');
+    if (z.stav === 'bezi' && Array.isArray(s.body)) t += '  (' + s.body.join(':') + ')';
+    return t;
+  }
+  function strana(n, x) { return (Array.isArray(x) ? x : [x]).map(function (id) { return T.jmeno(n, id); }).join(' / '); }
+
+  function kresli(d) {
+    obsah.textContent = '';
+    if (kod.length !== 8 || !d) { obsah.appendChild(el('p', '', X.neni)); return; }
+    var n = d.nastaveni || {}; n.kola = n.kola || []; n.kurty = n.kurty || [];
+    var cislo = (d.zapasy[0] && d.zapasy[0].cislo.split('/')[0]) || '';
+    document.title = (d.nazev || 'Skoretap') + ' — Skoretap';
+    obsah.appendChild(el('h1', '', d.nazev));
+    obsah.appendChild(el('p', '', [d.misto, d.poradatel].filter(Boolean).join(' · ')));
+    if (d.zruseno) { obsah.appendChild(el('p', '', X.zruseno)); return; }
+    if (!n.kola.length) return;
+
+    var podle = new Map(d.zapasy.map(function (z) { return [z.cislo, z]; }));
+    // Všechny zápasy s hráči: kola i pavouk.
+    var vse = [];
+    n.kola.forEach(function (k, r) { k.zapasy.forEach(function (m, i) {
+      var c = cislo + '/K' + (r + 1) + '-' + (i + 1);
+      vse.push({ z: podle.get(c), a: strana(n, m.a), b: strana(n, m.b), popis: X.kolo.replace('{k}', r + 1) });
+    }); });
+    // Playoff: pavouk, Final Four nebo pásma (i zápas o 3. místo).
+    var playoffy = T.stavPlayoffu(n, cislo, d.zapasy);
+    playoffy.forEach(function (p) {
+      p.kola.forEach(function (kolo, k) { kolo.forEach(function (m, i) {
+        if (m.volny || !m.a || !m.b) return;
+        vse.push({ z: podle.get(p.predpona + (k + 1) + '-' + (i + 1)), a: T.jmeno(n, m.a), b: T.jmeno(n, m.b), popis: nazevKola(k, p.kola.length) });
+      }); });
+      if (p.o3zapas && p.o3zapas.a && p.o3zapas.b) vse.push({ z: podle.get(p.o3zapas.cislo), a: T.jmeno(n, p.o3zapas.a), b: T.jmeno(n, p.o3zapas.b), popis: X.o3 });
+    });
+
+    // Oznámení o změně rozpisu (058, mřížka část 4): poslední, nejvýš 6 hodin
+    // staré. Nové místo a čas se berou ze zápasu (mezitím se mohl posunout).
+    var ozn = (d.oznameni || [])[0];
+    if (!okenko && ozn && Date.parse(d.ted) - Date.parse(ozn.kdy) < 6 * 3600000) {
+      var popisy = new Map(vse.filter(function (x) { return x.z; }).map(function (x) { return [x.z.cislo, x]; }));
+      var box = el('div', 'oznameni'); box.appendChild(el('b', '', X.zmenaRozpisu.replace('{cas}', hhmm(ozn.kdy))));
+      (ozn.zmeny || []).slice(0, 12).forEach(function (zm) {
+        var x = popisy.get(zm.cislo); if (!x || !x.z) return;
+        box.appendChild(el('p', '', X.zmenaRadek.replace('{z}', x.a + ' – ' + x.b).replace('{k}', x.z.kurt).replace('{t}', x.z.kdy ? hhmm(x.z.kdy) : '…')
+          .replace('{k0}', zm.kurt_pred || '…').replace('{t0}', zm.kdy_pred ? hhmm(zm.kdy_pred) : '…')));
+      });
+      if (box.childNodes.length > 1) obsah.appendChild(box);
+    }
+
+    var sloupce = el('div', 'sloupce'); obsah.appendChild(sloupce);
+    var vlevo = el('div'), vpravo = el('div'); sloupce.appendChild(vlevo); sloupce.appendChild(vpravo);
+
+    // Kurty: co se hraje teď, jinak další zápas na kurtu.
+    vlevo.appendChild(el('h2', '', X.hrajeSe));
+    var kurty = el('div', 'kurty'); vlevo.appendChild(kurty);
+    var nazvyKurtu = Array.from(new Set(n.kurty.concat(vse.map(function (x) { return x.z && x.z.kurt; }).filter(Boolean))));
+    nazvyKurtu.forEach(function (k) {
+      var naKurtu = vse.filter(function (x) { return x.z && x.z.kurt === k; });
+      var bezi = naKurtu.find(function (x) { return x.z.stav === 'bezi'; });
+      var dalsi = naKurtu.filter(function (x) { return x.z.stav === 'planovany'; })
+        .sort(function (p, q2) { return (p.z.kdy || '9').localeCompare(q2.z.kdy || '9'); })[0];
+      var x = bezi || dalsi;
+      var karta = el('div', 'kurt' + (bezi ? ' bezi' : ''));
+      karta.appendChild(el('div', 'nazev', X.kurt + ' ' + k + (x && !bezi && x.z.kdy ? ' · ' + hhmm(x.z.kdy) : '')));
+      if (!x) karta.appendChild(el('div', 'pozn', X.volno));
+      else {
+        var sk = bezi ? skore(x.z) : '';
+        var r1 = el('div', 'tym'); r1.appendChild(el('span', '', x.a)); karta.appendChild(r1);
+        var r2 = el('div', 'tym'); r2.appendChild(el('span', '', x.b)); karta.appendChild(r2);
+        if (sk) { var s = el('div', 'tym'); s.appendChild(el('span', 'skore', sk)); karta.appendChild(s); }
+        karta.appendChild(el('div', 'stav', bezi ? X.hraje : x.popis));
+      }
+      kurty.appendChild(karta);
+    });
+
+    // Pořadí
+    vpravo.appendChild(el('h2', '', X.poradi));
+    T.poradi(n, cislo, d.zapasy).forEach(function (p) {
+      if (p.skupina !== null) vpravo.appendChild(el('h3', '', X.skupina + ' ' + String.fromCharCode(65 + p.skupina)));
+      var poHracich = T.jePoHracich(n);
+      var tb = el('table'), h = el('tr');
+      (poHracich ? ['#', X.hrac, X.bodyS, X.vyhry] : ['#', X.tym, X.vyhry, X.setyS, X.gemyS]).forEach(function (x) { h.appendChild(el('th', '', x)); });
+      tb.appendChild(h);
+      p.tabulka.forEach(function (r) {
+        var tr = el('tr');
+        var hodnoty = poHracich ? [r.misto, r.hrac, r.body, r.vyhry] : [r.misto, T.jmeno(n, r.tym), r.vyhry, plus(r.sety), plus(r.gemy)];
+        hodnoty.forEach(function (x, i) { tr.appendChild(el('td', i === 1 ? '' : 'cislo', String(x))); });
+        tb.appendChild(tr);
+      });
+      var o = el('div', 'tabulka'); o.appendChild(tb); vpravo.appendChild(o);
+    });
+
+    // Playoff
+    playoffy.forEach(function (p) {
+      vlevo.appendChild(el('h2', '', playoffy.length > 1 ? X.pasmo.replace('{od}', p.od).replace('{do}', p.od + 3) : X.pavouk));
+      p.kola.forEach(function (kolo, k) {
+        var zapasy = kolo.filter(function (m) { return !m.volny; });
+        if (!zapasy.length) return;
+        vlevo.appendChild(el('h3', '', nazevKola(k, p.kola.length)));
+        var tb = el('table');
+        kolo.forEach(function (m, i) {
+          if (m.volny) return;
+          var z = podle.get(p.predpona + (k + 1) + '-' + (i + 1));
+          tb.appendChild(radek(m.a ? T.jmeno(n, m.a) : '…', m.b ? T.jmeno(n, m.b) : '…', z, m.vitez ? (m.vitez === m.a ? 0 : 1) : null));
+        });
+        vlevo.appendChild(tb);
+      });
+      if (p.o3zapas) {
+        vlevo.appendChild(el('h3', '', X.o3));
+        var tb3 = el('table'), o = p.o3zapas;
+        tb3.appendChild(radek(o.a ? T.jmeno(n, o.a) : '…', o.b ? T.jmeno(n, o.b) : '…', podle.get(o.cislo), o.vitez ? (o.vitez === o.a ? 0 : 1) : null));
+        vlevo.appendChild(tb3);
+      }
+      p.mista.forEach(function (id, i) { vlevo.appendChild(el('p', i === 0 ? 'vitez' : 'pozn', (p.od + i) + '. ' + T.jmeno(n, id))); });
+    });
+
+    // Rozpis v mřížce kurty × čas (058) — jen na stránce, ke čtení.
+    if (!tv && !okenko) {
+      var sPopisem = new Map(vse.filter(function (x) { return x.z; }).map(function (x) { return [x.z.cislo, x]; }));
+      if (sPopisem.size) {
+        vlevo.appendChild(el('h2', '', X.rozpis));
+        var kamM = el('div'); vlevo.appendChild(kamM);
+        var tedM = Date.parse(d.ted) || Date.now();
+        var delkaM = n.delkaMin || 30;
+        kresliMrizku(kamM, {
+          zapasy: Array.from(sPopisem.values()).map(function (x) { return x.z; }), kurty: n.kurty, delkaMin: delkaM, ted: tedM, en: en, X: X.mz, hodiny: n.kurtyHodiny,
+          popis: function (z) {
+            var x = sPopisem.get(z.cislo), w = okno(z, delkaM, tedM);
+            var sk = z.stav === 'planovany' ? '' : ' · ' + skore(z);
+            return { maly: (w ? hhmm(w.od) + '–' + hhmm(w.do) + ' · ' : '') + x.popis + sk, a: x.a, b: x.b };
+          }
+        });
+      }
+    }
+
+    // Kola (jen na stránce, televize ukazuje kurty a pořadí)
+    if (!tv && !okenko) {
+      for (var r = n.kola.length - 1; r >= 0; r--) {
+        vlevo.appendChild(el('h2', 'jen-stranka', X.kolo.replace('{k}', r + 1)));
+        var tb2 = el('table', 'jen-stranka');
+        n.kola[r].zapasy.forEach(function (m, i) {
+          var z = podle.get(cislo + '/K' + (r + 1) + '-' + (i + 1));
+          var v = T.vysledek(z);
+          tb2.appendChild(radek(strana(n, m.a), strana(n, m.b), z, v.hotovo ? v.vitez : null));
+        });
+        vlevo.appendChild(tb2);
+      }
+    }
+  }
+
+  function radek(a, b, z, vitez) {
+    var tr = el('tr');
+    var td = el('td');
+    td.appendChild(el('div', vitez === 0 ? 'vitez' : '', a));
+    td.appendChild(el('div', vitez === 1 ? 'vitez' : '', b));
+    tr.appendChild(td);
+    var s = z ? skore(z) : '';
+    if (z && z.duvod) s += ' (' + (/^skrec/.test(z.duvod) ? X.skrec : /^nenastoupil/.test(z.duvod) ? X.nenastoupil : '…') + ')';
+    // Živé skóre jen barvou — nápis by se v úzké tabulce lámal.
+    tr.appendChild(el('td', z && z.stav === 'bezi' ? 'ziva cislo' : 'cislo', s));
+    return tr;
+  }
+  function plus(x) { return x > 0 ? '+' + x : String(x); }
+  function nazevKola(k, kol) {
+    var od = kol - k;
+    return od === 1 ? X.finale : od === 2 ? X.semifinale : od === 3 ? X.ctvrtfinale : X.kolo_p.replace('{k}', k + 1);
+  }
+
+  nacti();
+  setInterval(nacti, tv ? 10000 : 15000);
+</script>
+</body>
+</html>

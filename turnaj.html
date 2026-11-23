@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Turnaj — Skoretap</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  Přihláška do turnaje odkazem: skoretap.com/turnaj.html?t=<kód turnaje>
+  (rozhodnuti/058, krok 3). Přihlásit se jde jen s účtem Skoretap; jméno je
+  z profilu. U dvojic hráč přihlásí i spoluhráče — kódem hráče, nebo jménem.
+  Funkce tur_* (migrace 021). Všechno se kreslí jako text, nikdy jako HTML.
+-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+  :root { --pozadi: #14141A; --karta: rgba(255,255,255,.07); --text: #FFFFFF; --tlumeny: rgba(255,255,255,.62); --micek: #C8F000; --cara: rgba(255,255,255,.12); --cervena: #FF3B2F; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 24px 16px 56px; }
+  a { color: var(--micek); }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 14px; text-decoration: none; }
+  h1 { font-size: 28px; margin: 14px 0 4px; }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--tlumeny); margin: 28px 0 10px; }
+  p, .pozn { color: var(--tlumeny); }
+  .hlavni { display: block; width: 100%; text-align: center; border: 0; border-radius: 999px; padding: 15px; background: var(--micek); color: #14141A; font: inherit; font-weight: 800; font-size: 17px; cursor: pointer; text-decoration: none; margin: 14px 0; }
+  .hlavni:disabled { opacity: .4; }
+  .tlacitko { border: 1px solid var(--cara); background: transparent; color: var(--text); border-radius: 999px; padding: 10px 16px; font: inherit; cursor: pointer; }
+  .karta { background: var(--karta); border-radius: 16px; padding: 14px 16px; margin: 12px 0; }
+  .muze { display: flex; gap: 8px; align-items: center; } .muze input { flex: 1; }
+  input { font: inherit; width: 100%; background: rgba(255,255,255,.06); color: var(--text); border: 1px solid var(--cara); border-radius: 12px; padding: 11px 12px; margin: 4px 0 10px; }
+  label { font-size: 14px; color: var(--tlumeny); }
+  .chyba { color: var(--cervena); }
+  .ok { color: var(--micek); font-weight: 700; }
+  ol { padding-left: 22px; }
+  li { margin: 4px 0; }
+  li.ja { color: var(--micek); font-weight: 700; }
+  li.nahradnik { color: var(--tlumeny); }
+  .qr { background: #fff; display: inline-block; padding: 12px; border-radius: 12px; margin: 8px 0; }
+  .ucet { font-family: ui-monospace, Menlo, Consolas, monospace; color: var(--text); }
+</style>
+</head>
+<body>
+<main>
+  <a class="znacka" href="/">SKORETAP</a>
+  <div id="obsah"></div>
+</main>
+<script type="module">
+  import { relace, rpc } from './app/ucet.js';
+  import * as P from './app/turnaje/platba.mjs';
+  import { UPOZORNENI_HRACUM } from './app/funkce.js';
+  var en = !/^cs|^sk/.test((new URLSearchParams(location.search).get('lang') || navigator.language || 'cs').toLowerCase());
+  document.documentElement.lang = en ? 'en' : 'cs';
+  var X = en ? {
+    turnaj: 'Tournament', poradatel: 'Organiser', prihlasit: 'Sign in to register', prihlasitPopis: 'Registration needs a Skoretap account — the same as in the app. Your name comes from your profile.',
+    prihlasSe: 'Register', odhlasSe: 'Withdraw', odhlasOtazka: 'Withdraw from the tournament?',
+    partner: 'Your partner', partnerJmeno: 'Partner\'s name', partnerKod: 'or partner\'s player code (6 characters, in the Skoretap app under My account)',
+    prihlaseni: 'Registered', nahradnici: 'Waiting list', mista: '{o} of {k} places taken', mistaBez: '{o} registered',
+    jsiPrihlasen: 'You are registered.', jsiNahradnik: 'You are on the waiting list. If a place frees up, you move up automatically.',
+    zavreno: 'Registration is closed.', vylosovano: 'The tournament has been drawn — registration is closed.', zruseno: 'The tournament was cancelled.',
+    uzaverka: 'Registration closes {d}.',
+    neexistuje: 'This tournament does not exist, or the link is incomplete.',
+    ch: { zavreno: 'Registration is closed.', uz_jsi: 'You (or your partner) are already registered.', neznamy_kod: 'No player has this code.', partner_uz_je: 'Your partner is already registered.', chybi_partner: 'Enter your partner\'s name or player code.' },
+    chyba: 'Something went wrong. Try again.',
+    f: { americano: 'Americano', mexicano: 'Mexicano', kazdy: 'Round robin', skupiny: 'Groups + knockout' },
+    soukromi: 'The organiser sees your name and your partner\'s name. Other registered players see the list of names.',
+    muze: 'When can you play? (optional — only the organiser sees it)', od: 'from', do_: 'to', spatnyCas: 'The end must be after the start.',
+    startovne: 'Entry fee {c}', startovnePopis: 'You pay the organiser directly from your bank — Skoretap does not handle the money.',
+    zaplatit: 'Scan the QR code in your banking app:', ucet: 'Account', vs: 'Reference (variable symbol)', zaplaceno: 'Paid — the organiser confirmed your payment.', ceka: 'Waiting for payment. The organiser marks it once the money arrives.',
+    nahradnikPlatba: 'You are on the waiting list — pay only once you move up.'
+  } : {
+    turnaj: 'Turnaj', poradatel: 'Pořadatel', prihlasit: 'Přihlásit se a zapsat do turnaje', prihlasitPopis: 'Přihláška potřebuje účet Skoretap — stejný jako v aplikaci. Jméno se vezme z tvého profilu.',
+    prihlasSe: 'Přihlásit se do turnaje', odhlasSe: 'Odhlásit se', odhlasOtazka: 'Odhlásit se z turnaje?',
+    partner: 'Tvůj spoluhráč', partnerJmeno: 'Jméno spoluhráče', partnerKod: 'nebo kód hráče spoluhráče (6 znaků, v aplikaci Skoretap v Můj účet)',
+    prihlaseni: 'Přihlášení', nahradnici: 'Náhradníci', mista: 'obsazeno {o} z {k} míst', mistaBez: 'přihlášených: {o}',
+    jsiPrihlasen: 'Jsi přihlášený.', jsiNahradnik: 'Jsi náhradník. Když se uvolní místo, postoupíš sám.',
+    zavreno: 'Přihlášky jsou zavřené.', vylosovano: 'Turnaj je vylosovaný — přihlášky jsou zavřené.', zruseno: 'Turnaj je zrušený.',
+    uzaverka: 'Přihlášky se zavřou {d}.',
+    neexistuje: 'Tenhle turnaj neexistuje, nebo odkaz není celý.',
+    ch: { zavreno: 'Přihlášky jsou zavřené.', uz_jsi: 'Ty (nebo tvůj spoluhráč) už v turnaji jsi.', neznamy_kod: 'Hráč s tímhle kódem neexistuje.', partner_uz_je: 'Tvůj spoluhráč už je přihlášený.', chybi_partner: 'Napiš jméno spoluhráče, nebo jeho kód hráče.' },
+    chyba: 'Něco se nepovedlo. Zkus to znovu.',
+    f: { americano: 'Americano', mexicano: 'Mexicano', kazdy: 'Každý s každým', skupiny: 'Skupiny + pavouk' },
+    soukromi: 'Pořadatel uvidí tvoje jméno a jméno spoluhráče. Ostatní přihlášení vidí seznam jmen.',
+    muze: 'Kdy můžeš hrát? (nepovinné — vidí jen pořadatel)', od: 'od', do_: 'do', spatnyCas: 'Konec musí být po začátku.',
+    startovne: 'Startovné {c}', startovnePopis: 'Platíš přímo pořadateli ze své banky — Skoretap peníze nedrží.',
+    zaplatit: 'Naskenuj QR kód v bankovní aplikaci:', ucet: 'Účet', vs: 'Variabilní symbol', zaplaceno: 'Zaplaceno — pořadatel platbu potvrdil.', ceka: 'Čeká na zaplacení. Pořadatel ji označí, až peníze dorazí.',
+    nahradnikPlatba: 'Jsi náhradník — plať, až postoupíš.'
+  };
+  var obsah = document.getElementById('obsah');
+  function el(tag, trida, text) { var e = document.createElement(tag); if (trida) e.className = trida; if (text != null) e.textContent = text; return e; }
+  function datum(iso) { var d = new Date(iso); return d.toLocaleDateString(en ? 'en-GB' : 'cs-CZ', { weekday: 'short', day: 'numeric', month: 'numeric' }) + ' ' + d.toLocaleTimeString(en ? 'en-GB' : 'cs-CZ', { hour: '2-digit', minute: '2-digit' }); }
+  var kod = (new URLSearchParams(location.search).get('t') || '').toUpperCase().replace(/[^A-Z0-9]/g, '');
+
+  async function nacti() {
+    obsah.textContent = '';
+    if (kod.length !== 8) return obsah.appendChild(el('p', 'chyba', X.neexistuje));
+    if (!relace()) {
+      obsah.appendChild(el('h1', '', X.turnaj));
+      obsah.appendChild(el('p', '', X.prihlasitPopis));
+      var a = el('a', 'hlavni', X.prihlasit); a.href = 'ucet.html?zpet=turnaj&t=' + kod; obsah.appendChild(a);
+      return;
+    }
+    var t;
+    try { t = await rpc('tur_nahled', { p_kod: kod }); }
+    catch (e) { if (String(e.message) === 'odhlasen') { location.reload(); return; } return obsah.appendChild(el('p', 'chyba', X.chyba)); }
+    if (!t) return obsah.appendChild(el('p', 'chyba', X.neexistuje));
+    kresli(t);
+  }
+
+  function kresli(t) {
+    obsah.textContent = '';
+    obsah.appendChild(el('h1', '', t.nazev || X.turnaj));
+    var info = [t.zacatek ? datum(t.zacatek) : '', t.misto, X.f[t.format] || ''].filter(Boolean).join(' · ');
+    obsah.appendChild(el('p', '', info));
+    if (t.poradatel) obsah.appendChild(el('p', 'pozn', X.poradatel + ': ' + t.poradatel));
+
+    var ja = t.prihlasky.find(function (p) { return p.ja; });
+    var stav = el('div', 'karta'); obsah.appendChild(stav);
+    if (t.zruseno) stav.appendChild(el('p', 'chyba', X.zruseno));
+    else if (ja) {
+      stav.appendChild(el('p', 'ok', ja.stav === 'nahradnik' ? X.jsiNahradnik : X.jsiPrihlasen));
+      if (!t.vylosovano) {
+        var o = el('button', 'tlacitko', X.odhlasSe); o.type = 'button';
+        o.onclick = async function () { if (!confirm(X.odhlasOtazka)) return; await rpc('tur_odhlas', { p_kod: kod }).catch(function () {}); nacti(); };
+        stav.appendChild(o);
+      }
+    } else if (t.vylosovano) stav.appendChild(el('p', '', X.vylosovano));
+    else if (!t.otevreno) stav.appendChild(el('p', '', X.zavreno));
+    else formular(stav, t);
+    platba(t, ja);
+    if (t.otevreno && t.uzaverka && !t.vylosovano) obsah.appendChild(el('p', 'pozn', X.uzaverka.replace('{d}', datum(t.uzaverka))));
+
+    var prihlaseni = t.prihlasky.filter(function (p) { return p.stav === 'prihlasen'; });
+    var nahradnici = t.prihlasky.filter(function (p) { return p.stav === 'nahradnik'; });
+    obsah.appendChild(el('h2', '', X.prihlaseni + ' · ' + (t.kapacita ? X.mista.replace('{o}', t.obsazeno).replace('{k}', t.kapacita) : X.mistaBez.replace('{o}', t.obsazeno))));
+    seznam(prihlaseni, '');
+    if (nahradnici.length) { obsah.appendChild(el('h2', '', X.nahradnici)); seznam(nahradnici, 'nahradnik'); }
+  }
+
+  // Startovné (058, krok 6): QR platba přímo na účet pořadatele, VS = číslo přihlášky.
+  function castka(t) { return Number(t.startovne).toLocaleString(en ? 'en-GB' : 'cs-CZ', { style: 'currency', currency: t.mena }); }
+  function platba(t, ja) {
+    if (!t.startovne) return;
+    var k = el('div', 'karta'); obsah.appendChild(k);
+    k.appendChild(el('p', 'ok', X.startovne.replace('{c}', castka(t))));
+    k.appendChild(el('p', 'pozn', X.startovnePopis));
+    if (!ja) return;
+    if (ja.zaplaceno) { k.appendChild(el('p', 'ok', X.zaplaceno)); return; }
+    if (ja.stav === 'nahradnik') { k.appendChild(el('p', 'pozn', X.nahradnikPlatba)); return; }
+    var text = P.qrPlatby({ iban: t.iban, castka: Number(t.startovne), mena: t.mena, vs: ja.vs, zprava: t.nazev, prijemce: t.prijemce });
+    if (text && window.QRCode) {
+      k.appendChild(el('p', '', X.zaplatit));
+      var q = el('div', 'qr'); k.appendChild(q);
+      new QRCode(q, { text: text, width: 200, height: 200, correctLevel: QRCode.CorrectLevel.M });
+    }
+    var u = el('p'); u.appendChild(document.createTextNode(X.ucet + ': ')); u.appendChild(el('span', 'ucet', P.hezkyIban(t.iban))); k.appendChild(u);
+    if (t.prijemce) k.appendChild(el('p', 'pozn', t.prijemce));
+    var v = el('p'); v.appendChild(document.createTextNode(X.vs + ': ')); v.appendChild(el('span', 'ucet', String(ja.vs))); k.appendChild(v);
+    k.appendChild(el('p', 'pozn', X.ceka));
+  }
+
+  function seznam(lide, trida) {
+    var ol = el('ol');
+    lide.forEach(function (p) { ol.appendChild(el('li', (p.ja ? 'ja ' : '') + trida, p.partner ? p.jmeno + ' / ' + p.partner : p.jmeno)); });
+    obsah.appendChild(ol);
+  }
+
+  function formular(kam, t) {
+    var jmeno = el('input'), kodP = el('input'), zprava = el('p', 'chyba');
+    if (t.ve_dvojicich) {
+      kam.appendChild(el('label', '', X.partner));
+      jmeno.placeholder = X.partnerJmeno; jmeno.maxLength = 80; kam.appendChild(jmeno);
+      kam.appendChild(el('label', '', X.partnerKod));
+      kodP.maxLength = 8; kodP.autocapitalize = 'characters'; kam.appendChild(kodP);
+    }
+    // Kdy můžu hrát (rozhodnuti/059): časy v den turnaje, vidí jen pořadatel.
+    var mOd = el('input'), mDo = el('input'); mOd.type = 'time'; mDo.type = 'time';
+    if (UPOZORNENI_HRACUM) {
+      kam.appendChild(el('label', '', X.muze));
+      var rm = el('div', 'muze'); rm.appendChild(el('span', 'pozn', X.od)); rm.appendChild(mOd); rm.appendChild(el('span', 'pozn', X.do_)); rm.appendChild(mDo);
+      kam.appendChild(rm);
+    }
+    var den = t.zacatek ? new Date(t.zacatek) : new Date();
+    var denText = den.getFullYear() + '-' + String(den.getMonth() + 1).padStart(2, '0') + '-' + String(den.getDate()).padStart(2, '0');
+    var naIso = function (v) { return v ? new Date(denText + 'T' + v).toISOString() : null; };
+    var b = el('button', 'hlavni', X.prihlasSe); b.type = 'button';
+    b.onclick = async function () {
+      b.disabled = true; zprava.textContent = '';
+      try {
+        var arg = { p_kod: kod, p_partner_jmeno: jmeno.value.trim() || null, p_partner_kod: kodP.value.trim() || null };
+        if (UPOZORNENI_HRACUM && (mOd.value || mDo.value)) { arg.p_muze_od = naIso(mOd.value); arg.p_muze_do = naIso(mDo.value); }
+        var v = await rpc('tur_prihlas', arg);
+        if (v === 'spatny_cas') { zprava.textContent = X.spatnyCas; b.disabled = false; return; }
+        if (v === 'prihlasen' || v === 'nahradnik') return nacti();
+        zprava.textContent = X.ch[v] || X.chyba;
+      } catch (e) { zprava.textContent = X.chyba; }
+      b.disabled = false;
+    };
+    kam.appendChild(b); kam.appendChild(zprava);
+    kam.appendChild(el('p', 'pozn', X.soukromi));
+  }
+
+  nacti();
+</script>
+</body>
+</html>

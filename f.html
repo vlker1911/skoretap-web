@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Skoretap — zápas federace</title>
+<link rel="icon" href="/app/ikona-192.png">
+<!--
+  QR na kurtu a odkaz na zápas federace (rozhodnuti/055):
+  skoretap.com/f.html?t=<kód turnaje>&k=<kurt>, nebo ?z=<kód zápasu>.
+  Na Androidu s aplikací se odkaz otevře rovnou v ní (assetlinks.json).
+  Sem se dostane jen telefon bez aplikace — stránka řekne, co dál.
+  Nic neposílá, nic nečte ze serveru.
+-->
+<style>
+  :root { --pozadi: #14141A; --text: #FFFFFF; --tlumeny: rgba(255,255,255,.72); --micek: #C8F000; --karta: rgba(255,255,255,.06); }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 560px; margin: 0 auto; padding: 32px 16px 64px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .06em; font-size: 14px; }
+  h1 { font-size: 28px; margin: 8px 0 16px; }
+  p { color: var(--tlumeny); }
+  .tlacitko { display: block; text-align: center; background: var(--micek); color: #14141A; font-weight: 800; text-decoration: none; padding: 16px; border-radius: 999px; margin: 20px 0 12px; font-size: 18px; }
+  .karta { background: var(--karta); border-radius: 16px; padding: 4px 20px 12px; margin: 16px 0; }
+  hr { border: 0; border-top: 1px solid rgba(255,255,255,.12); margin: 40px 0; }
+  a { color: var(--micek); }
+  .kurt { font-weight: 800; color: var(--text); }
+</style>
+</head>
+<body>
+<main>
+<div class="znacka">SKORETAP</div>
+<h1>Zápas federace</h1>
+<p id="cs-co">Tímhle kódem se zapisuje skóre zápasu federace<span id="cs-kurt"></span>.</p>
+<a class="tlacitko" href="stahnout.html">Stáhnout aplikaci Skoretap pro Android</a>
+<div class="karta">
+  <p>Zapisovat skóre zápasu federace jde zatím jen v aplikaci pro Android. Stáhni ji,
+  přihlas se a pak znovu naskenuj QR na kurtu — aplikace zápas otevře sama.</p>
+  <p>Na iPhonu zatím zapisovat nejde. Ať zapisuje někdo z hráčů s Androidem.</p>
+</div>
+
+<hr>
+
+<div class="znacka">SKORETAP</div>
+<h1>Federation match</h1>
+<p>This code is for keeping score of a federation match<span id="en-kurt"></span>.</p>
+<a class="tlacitko" href="stahnout.html">Get the Skoretap app for Android</a>
+<div class="karta">
+  <p>For now, federation matches can be scored only in the Android app. Install it,
+  sign in, then scan the QR code on the court again — the app opens the match.</p>
+  <p>Scoring on iPhone is not available yet. Let a player with an Android phone keep score.</p>
+</div>
+</main>
+<script>
+  var q = new URLSearchParams(location.search);
+  var kurt = (q.get('k') || '').slice(0, 40);
+  if (kurt) {
+    document.getElementById('cs-kurt').textContent = ' na kurtu ' + kurt;
+    document.getElementById('en-kurt').textContent = ' on court ' + kurt;
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<meta property="og:title" content="Zápas ve Skoretapu">
+<meta property="og:description" content="Skóre, sety a průběh zápasu v padelu.">
+<title>Zápas — Skoretap</title>
+<link rel="icon" href="/app/ikona-192.png">
+<link rel="apple-touch-icon" href="/app/ikona-180.png">
+<!--
+  Stránka jednoho zveřejněného zápasu (rozhodnuti/049).
+    https://skoretap.com/zapas.html?z=<id>     (&lang=en anglicky)
+  Data jsou ze serverové funkce `zapas`: tatáž zpráva, kterou telefon posílá
+  na padelcesko.cz (prenos-na-web.md, kapitola 3). Jména jsou jen ta, která
+  pustil telefon. Všechno se kreslí jako text (textContent), nikdy jako HTML:
+  zpráva přišla zvenku (ponauceni.md, 23). Stránka nic neukládá.
+-->
+<style>
+  :root { --pozadi: #14141A; --karta: rgba(255,255,255,.06); --text: #FFFFFF; --tlumeny: rgba(255,255,255,.62); --micek: #C8F000; --cara: rgba(255,255,255,.1); --cervena: #FF3B2F; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--pozadi); color: var(--text); font: 16px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 760px; margin: 0 auto; padding: 18px 16px 40px; }
+  a { color: var(--micek); }
+  .hlava { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .znacka { color: var(--micek); font-weight: 800; letter-spacing: .08em; font-size: 14px; text-decoration: none; }
+  .stavZapasu { font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--tlumeny); }
+  .stavZapasu.zive { color: var(--text); }
+  .tecka { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--cervena); margin-right: 6px; vertical-align: middle; }
+  h1 { font-size: 26px; line-height: 1.2; margin: 18px 0 4px; overflow-wrap: anywhere; }
+  .obnoveno { color: var(--tlumeny); font-size: 13px; margin: 0 0 16px; }
+  .tabule { background: var(--karta); border-radius: 16px; padding: 6px 14px; }
+  .radek { display: flex; align-items: center; gap: 10px; padding: 10px 0; }
+  .radek + .radek { border-top: 1px solid var(--cara); }
+  .prouzek { width: 6px; align-self: stretch; border-radius: 3px; flex: none; }
+  .jmena { flex: 1; min-width: 0; font-weight: 700; font-size: 17px; overflow-wrap: anywhere; }
+  .micek { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--micek); margin-left: 8px; vertical-align: middle; }
+  .cisla { display: flex; gap: 6px; font-variant-numeric: tabular-nums; flex: none; }
+  .cisla span { min-width: 30px; text-align: center; font-size: 20px; font-weight: 700; color: var(--tlumeny); }
+  .cisla .vyhral { color: var(--text); }
+  .cisla .gemy { color: var(--text); }
+  .cisla .body { min-width: 46px; background: var(--micek); color: #14141A; border-radius: 8px; }
+  .popisky { display: flex; justify-content: flex-end; gap: 6px; padding-top: 6px; font-size: 11px; color: var(--tlumeny); text-transform: uppercase; letter-spacing: .04em; }
+  .popisky span { min-width: 30px; text-align: center; }
+  .popisky .body { min-width: 46px; }
+  .casy { color: var(--tlumeny); font-size: 14px; margin: 12px 2px 0; }
+  .casy strong { color: var(--text); }
+  h2 { font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--tlumeny); margin: 30px 0 10px; }
+  .sety { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .sety button { font: inherit; font-size: 14px; font-weight: 700; padding: 7px 14px; border-radius: 999px; border: 1px solid var(--cara); background: transparent; color: var(--text); cursor: pointer; }
+  .sety button[aria-pressed="true"] { background: var(--micek); color: #14141A; border-color: var(--micek); }
+  .gem { background: var(--karta); border-radius: 12px; padding: 10px 12px; margin-bottom: 8px; border-left: 5px solid transparent; }
+  .gem .nahore { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--tlumeny); }
+  .gem .vysledek { font-weight: 800; color: var(--text); white-space: nowrap; }
+  .gem .vysledek.brejk { color: var(--cervena); }
+  .gem .body { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .pilulka { font-size: 10px; font-weight: 800; background: var(--cara); color: var(--text); border-radius: 4px; padding: 1px 4px; margin-left: 3px; vertical-align: 1px; }
+  dl { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin: 0; }
+  dt { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--tlumeny); }
+  dd { margin: 2px 0 0; }
+  .zprava { color: var(--tlumeny); margin: 40px 0; }
+  footer { margin-top: 36px; color: var(--tlumeny); font-size: 13px; }
+  footer a { margin-right: 14px; }
+</style>
+</head>
+<body>
+<main>
+  <div class="hlava">
+    <a class="znacka" href="/">SKORETAP</a>
+    <span class="stavZapasu" id="stav"></span>
+  </div>
+  <div id="obsah"><p class="zprava" id="zprava"></p></div>
+  <footer>
+    <p id="zdroj"></p>
+    <a href="/" id="odkazDomu">skoretap.com</a><a href="/soukromi.html" id="odkazZasady"></a>
+  </footer>
+</main>
+<script>
+  var FUNKCE = 'https://pvnajakrgtbzbuqxjecx.supabase.co/functions/v1/zapas';
+  var p = new URLSearchParams(location.search);
+  var id = (p.get('z') || '').toLowerCase();
+  // Jazyk jako na celém webu: z odkazu (?lang=), z volby na skoretap.com,
+  // z prohlížeče. 26 jazyků; vše mimo češtinu je angličtina + slovník.
+  var JAZYKY = ['cs', 'en', 'de', 'es', 'fr', 'it', 'pt', 'nl', 'sv', 'da', 'nb', 'fi', 'pl', 'sk', 'hu', 'ro', 'hr', 'sl', 'el', 'tr', 'uk', 'ar', 'ja', 'zh', 'id', 'ru'];
+  var jazyk = (function () {
+    var kod = function (t) { var k = String(t || '').toLowerCase().split('-')[0]; return k === 'in' ? 'id' : (k === 'no' || k === 'nn') ? 'nb' : k; };
+    var v = p.get('lang');
+    try { v = v || localStorage.getItem('skoretap.jazyk'); } catch (e) { /* bez paměti */ }
+    if (v && JAZYKY.indexOf(kod(v)) >= 0) return kod(v);
+    var s = navigator.languages || [navigator.language];
+    for (var i = 0; i < s.length; i++) if (JAZYKY.indexOf(kod(s[i])) >= 0) return kod(s[i]);
+    return 'en';
+  })();
+  var en = jazyk !== 'cs';
+  document.documentElement.lang = jazyk;
+
+  var T = en ? {
+    zive: 'Live', dohrano: 'Finished', proti: 'vs', a: 'and', set: 'set', gemy: 'Games', body: 'Points',
+    hralo: 'Played', celkem: 'total', minut: 'min', prubeh: 'Game by game', pravidla: 'Match rules',
+    gem: 'game', podaval: 'served', tieBreak: 'tie-break', brejk: 'BREAK', gemVyhrany: 'GAME',
+    obnoveno: 'Updated', ted: 'just now', pred: function (n, j) { return n + ' ' + j + ' ago'; },
+    nacitam: 'Loading the match…', neni: 'Match not found. The player may have taken it off the web.',
+    spatne: 'The match address in the link is not right.', chyba: 'Could not load. Trying again…',
+    zdroj: 'One of the players keeps score in the Skoretap app; their phone is the source of truth, this page is a copy.',
+    zasady: 'Privacy', titulek: 'Match — Skoretap',
+    tymy: { modra: 'Blue team', cervena: 'Red team', zelena: 'Green team', zluta: 'Yellow team', bila: 'White team', cerna: 'Black team' },
+    pravidlo: { shoda: 'Deuce', format: 'Format', viteznych_setu: 'Sets to win', rozhodujici_set: 'Deciding set' },
+    hodnota: { star_point: 'Star point', golden_point: 'Golden point', vyhoda: 'Advantage', normalni: 'Normal set', super_tie_break: 'Super tie-break', klasicky: 'Classic match', americano: 'Americano', volne: 'Free play', volne_sety: 'Free play in sets' }
+  } : {
+    zive: 'Živě', dohrano: 'Dohráno', proti: 'proti', a: 'a', set: 'set', gemy: 'Gemy', body: 'Body',
+    hralo: 'Hrálo se', celkem: 'celkem', minut: 'min', prubeh: 'Po gemech', pravidla: 'Na co se hraje',
+    gem: 'gem', podaval: 'podával', tieBreak: 'tie-break', brejk: 'BREJK', gemVyhrany: 'GEM',
+    obnoveno: 'Aktualizováno', ted: 'právě teď', pred: function (n, j) { return 'před ' + n + ' ' + j; },
+    nacitam: 'Načítám zápas…', neni: 'Zápas tu není. Hráč ho mohl stáhnout z webu.',
+    spatne: 'Adresa zápasu v odkazu není správně.', chyba: 'Nepodařilo se načíst. Zkouším znovu…',
+    zdroj: 'Skóre počítá jeden z hráčů v aplikaci Skoretap. Jeho telefon je zdroj pravdy, tahle stránka je kopie.',
+    zasady: 'Zásady soukromí', titulek: 'Zápas — Skoretap',
+    tymy: { modra: 'Modrý tým', cervena: 'Červený tým', zelena: 'Zelený tým', zluta: 'Žlutý tým', bila: 'Bílý tým', cerna: 'Černý tým' },
+    pravidlo: { shoda: 'Shoda', format: 'Formát', viteznych_setu: 'Vítězných setů', rozhodujici_set: 'Rozhodující set' },
+    hodnota: { star_point: 'star point', golden_point: 'golden point', vyhoda: 'na výhodu', normalni: 'normální', super_tie_break: 'supertiebreak', klasicky: 'klasický zápas', americano: 'americano', volne: 'volná hra', volne_sety: 'volná hra na sety' }
+  };
+  // Stejné barvy jako v aplikaci (Motiv.kt) a v okénku klubu.
+  var BARVY = { modra: '#003D7C', cervena: '#E30613', zelena: '#1E7A3C', zluta: '#E0B400', bila: '#E9E9EE', cerna: '#3A3A46' };
+
+  var data = null;      // poslední zpráva ze serveru
+  var upraveno = null;  // kdy přišla
+  var vybranySet = null;
+  var casovac = null;
+
+  function el(tag, trida, text) {
+    var e = document.createElement(tag);
+    if (trida) e.className = trida;
+    if (text != null) e.textContent = text;
+    return e;
+  }
+
+  function tym(i) { return ((data && data.tymy) || [])[i] || {}; }
+  function nazevTymu(i) {
+    var t = tym(i);
+    if (t.hraci && t.hraci.length) return t.hraci.join(' ' + T.a + ' ');
+    return T.tymy[t.barva] || '?';
+  }
+  // Kdo podával: jméno hráče, když ho telefon pustil, jinak tým.
+  function kdoPodaval(i, hrac) {
+    var t = tym(i);
+    if (t.hraci && t.hraci[hrac]) return t.hraci[hrac];
+    return T.tymy[t.barva] || '?';
+  }
+  // Minuty jako v aplikaci (Casy.minuty): na celou minutu, ale aspoň jedna.
+  function minuty(s) { return s > 0 ? Math.max(1, Math.round(s / 60)) : 0; }
+  function delka(s) {
+    var m = minuty(s);
+    return m >= 60 ? Math.floor(m / 60) + ':' + String(m % 60).padStart(2, '0') + ' h' : m + ' ' + T.minut;
+  }
+
+  function radekTabule(i, sloupce) {
+    var st = data.stav || {};
+    var r = el('div', 'radek');
+    var pr = el('span', 'prouzek'); pr.style.background = BARVY[tym(i).barva] || '#888';
+    r.appendChild(pr);
+    var j = el('span', 'jmena', nazevTymu(i));
+    if (!data.ukonceno && st.podava && st.podava.tym === i) j.appendChild(el('span', 'micek'));
+    r.appendChild(j);
+    var c = el('span', 'cisla');
+    (st.sety || []).forEach(function (s) {
+      c.appendChild(el('span', s[i] > s[1 - i] ? 'vyhral' : '', String(s[i])));
+    });
+    if (sloupce.gemy) c.appendChild(el('span', 'gemy', String((st.gemy || [0, 0])[i])));
+    if (sloupce.body) c.appendChild(el('span', 'body', String((st.body || ['', ''])[i])));
+    r.appendChild(c);
+    return r;
+  }
+
+  function tabule() {
+    var st = data.stav || {};
+    var format = (data.pravidla || {}).format;
+    var g = st.gemy || [0, 0];
+    var sloupce = {
+      // Americano gemy nemá. Jinak gemy, dokud se hraje, a u dohraného
+      // zápasu jen rozehraný set, který se už nedohrál (Roman 11. 11. 2026).
+      gemy: format !== 'americano' && (!data.ukonceno || g[0] + g[1] > 0),
+      body: !data.ukonceno || format === 'americano'
+    };
+    var k = el('div', 'tabule');
+    var pop = el('div', 'popisky');
+    (st.sety || []).forEach(function (s, n) { pop.appendChild(el('span', '', (n + 1) + '.')); });
+    if (sloupce.gemy) pop.appendChild(el('span', '', T.gemy));
+    if (sloupce.body) pop.appendChild(el('span', 'body', T.body));
+    k.appendChild(pop);
+    k.appendChild(radekTabule(0, sloupce));
+    k.appendChild(radekTabule(1, sloupce));
+    return k;
+  }
+
+  function casy() {
+    var c = data.casy || {};
+    if (!(c.celkem_s > 0)) return null;
+    var p = el('p', 'casy');
+    p.appendChild(document.createTextNode(T.hralo + ' '));
+    (c.sety_s || []).forEach(function (s, n) {
+      p.appendChild(document.createTextNode((n + 1) + '. ' + T.set + ' ' + delka(s) + ' · '));
+    });
+    p.appendChild(document.createTextNode(T.celkem + ' '));
+    p.appendChild(el('strong', '', delka(c.celkem_s)));
+    return p;
+  }
+
+  function gemKarta(g) {
+    var k = el('div', 'gem');
+    var vitez = typeof g.vitez === 'number' ? g.vitez : null;
+    if (vitez !== null) k.style.borderLeftColor = BARVY[tym(vitez).barva] || 'transparent';
+    var nahore = el('div', 'nahore');
+    var kdo = g.tie_break ? T.tieBreak : kdoPodaval(g.podava, g.podava_hrac || 0);
+    var trvani = g.trvani_s > 0 ? ' · ' + delka(g.trvani_s) : '';
+    nahore.appendChild(el('span', '', g.gem + '. ' + T.gem + (g.tie_break ? ' · ' + kdo : ' · ' + T.podaval + ' ' + kdo) + trvani));
+    if (vitez !== null) {
+      var brejk = !g.tie_break && vitez !== g.podava;
+      nahore.appendChild(el('span', 'vysledek' + (brejk ? ' brejk' : ''), (brejk ? T.brejk : T.gemVyhrany) + ' ' + (g.skore || '')));
+    }
+    k.appendChild(nahore);
+    var b = el('div', 'body');
+    (g.body || []).forEach(function (bod, n) {
+      var s = el('span', '', String(bod));
+      String((g.znacky || [])[n] || '').split(' ').forEach(function (z) {
+        if (z) s.appendChild(el('span', 'pilulka', z));
+      });
+      b.appendChild(s);
+    });
+    k.appendChild(b);
+    return k;
+  }
+
+  function prubeh() {
+    var gemy = data.gemy_prubeh || [];
+    if (!gemy.length) return null;
+    var sety = [];
+    gemy.forEach(function (g) { if (sety.indexOf(g.set) < 0) sety.push(g.set); });
+    if (vybranySet === null || sety.indexOf(vybranySet) < 0) vybranySet = sety[sety.length - 1];
+    var o = el('section');
+    o.appendChild(el('h2', '', T.prubeh));
+    if (sety.length > 1) {
+      var tl = el('div', 'sety');
+      sety.forEach(function (s) {
+        var b = el('button', '', s + '. ' + T.set);
+        b.type = 'button';
+        b.setAttribute('aria-pressed', String(s === vybranySet));
+        b.onclick = function () { vybranySet = s; vykresli(); };
+        tl.appendChild(b);
+      });
+      o.appendChild(tl);
+    }
+    gemy.filter(function (g) { return g.set === vybranySet; }).forEach(function (g) { o.appendChild(gemKarta(g)); });
+    return o;
+  }
+
+  function pravidla() {
+    var pr = data.pravidla || {};
+    var klice = Object.keys(T.pravidlo).filter(function (k) { return pr[k] != null; });
+    if (!klice.length) return null;
+    var o = el('section');
+    o.appendChild(el('h2', '', T.pravidla));
+    var dl = el('dl');
+    klice.forEach(function (k) {
+      var d = el('div');
+      d.appendChild(el('dt', '', T.pravidlo[k]));
+      var v = pr[k];
+      d.appendChild(el('dd', '', typeof v === 'string' ? (T.hodnota[v] || v) : String(v)));
+      dl.appendChild(d);
+    });
+    o.appendChild(dl);
+    return o;
+  }
+
+  function stav() {
+    var s = document.getElementById('stav');
+    s.textContent = '';
+    s.className = 'stavZapasu' + (data.ukonceno ? '' : ' zive');
+    if (!data.ukonceno) s.appendChild(el('span', 'tecka'));
+    s.appendChild(document.createTextNode(data.ukonceno ? T.dohrano : T.zive));
+  }
+
+  function kdy() {
+    if (!upraveno) return '';
+    var min = Math.round((Date.now() - Date.parse(upraveno)) / 60000);
+    if (min < 1) return T.obnoveno + ' ' + T.ted;
+    if (min < 120) return T.obnoveno + ' ' + T.pred(min, 'min');
+    return T.obnoveno + ' ' + new Date(upraveno).toLocaleString(jazyk === 'en' ? 'en-GB' : jazyk === 'cs' ? 'cs-CZ' : jazyk, { day: 'numeric', month: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+  }
+
+  function vykresli() {
+    var o = document.getElementById('obsah');
+    o.textContent = '';
+    var nadpis = nazevTymu(0) + ' ' + T.proti + ' ' + nazevTymu(1);
+    document.title = nadpis + ' — Skoretap';
+    stav();
+    o.appendChild(el('h1', '', nadpis));
+    o.appendChild(el('p', 'obnoveno', kdy()));
+    o.appendChild(tabule());
+    [casy(), prubeh(), pravidla()].forEach(function (x) { if (x) o.appendChild(x); });
+  }
+
+  function hlaska(text) {
+    var o = document.getElementById('obsah');
+    o.textContent = '';
+    o.appendChild(el('p', 'zprava', text));
+  }
+
+  function nacti() {
+    fetch(FUNKCE + '?z=' + encodeURIComponent(id))
+      .then(function (r) {
+        if (r.status === 404) throw new Error('neni');
+        if (!r.ok) throw new Error('chyba');
+        return r.json();
+      })
+      .then(function (d) {
+        if (!d || !d.zprava || !d.zprava.stav) throw new Error('chyba');
+        data = d.zprava;
+        upraveno = d.upraveno;
+        vykresli();
+        // Dohraný zápas se už nemění — přestane se ptát.
+        if (data.ukonceno && casovac) { clearInterval(casovac); casovac = null; }
+      })
+      .catch(function (e) {
+        if (e.message === 'neni') {
+          data = null;
+          document.getElementById('stav').textContent = '';
+          hlaska(T.neni);
+          if (casovac) { clearInterval(casovac); casovac = null; }
+        } else if (!data) {
+          hlaska(T.chyba);
+        }
+      });
+  }
+
+  function spust() {
+    document.title = T.titulek;
+    document.getElementById('zdroj').textContent = T.zdroj;
+    document.getElementById('odkazZasady').textContent = T.zasady;
+    if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/.test(id)) {
+      hlaska(T.spatne);
+    } else {
+      hlaska(T.nacitam);
+      nacti();
+      // Živé skóre: každých 5 vteřin. Funkce odpověď krátce drží (3 s).
+      casovac = setInterval(nacti, 5000);
+    }
+  }
+  // Jiný jazyk než čeština a angličtina: anglické texty přeloží slovník
+  // (app/jazyky.js). Odkaz na zápas posílá hráč přátelům — každý ho má
+  // vidět ve svém jazyce. Bez slovníku (nebo bez modulů) zůstane anglicky.
+  if (jazyk !== 'cs' && jazyk !== 'en') {
+    import('./app/jazyky.js').then(function (J) {
+      document.documentElement.dir = jazyk === 'ar' ? 'rtl' : 'ltr';
+      return J.nactiSlovnik(jazyk, 'app/').then(function (sl) {
+        T = J.preloz(T, sl);
+        // „před 5 min" umí prohlížeč říct v každém jazyce sám.
+        try {
+          var rtf = new Intl.RelativeTimeFormat(jazyk, { numeric: 'auto' });
+          T.pred = function (n) { return rtf.format(-n, 'minute'); };
+        } catch (e) { /* starý prohlížeč: anglicky */ }
+      });
+    }).catch(function () { /* anglicky */ }).then(spust);
+  } else {
+    spust();
+  }
+</script>
+</body>
+</html>
